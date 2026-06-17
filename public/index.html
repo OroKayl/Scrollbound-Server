@@ -226,7 +226,7 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .islot.tier-epic{border-color:#6a40b0!important;box-shadow:0 0 6px rgba(140,80,220,.4);}
 .islot.tier-legendary{border-color:#b03020!important;animation:pulse-leg 1.5s infinite;}
 @keyframes pulse-leg{0%,100%{box-shadow:0 0 8px rgba(200,64,32,.5);}50%{box-shadow:0 0 16px rgba(200,64,32,.9);}}
-.tip-box{display:none;position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#141428;border:1px solid #3a3a60;border-radius:5px;padding:5px 9px;white-space:nowrap;z-index:50;font-size:11px;color:#cdc8b8;pointer-events:none;}
+.tip-box{display:none;position:absolute;bottom:calc(100% + 5px);right:0;background:#141428;border:1px solid #3a3a60;border-radius:5px;padding:5px 9px;white-space:normal;width:160px;z-index:50;font-size:11px;line-height:1.4;color:#cdc8b8;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.6);}
 .islot:hover .tip-box{display:block;}
 #log-wrap{border-top:1px solid #252538;height:160px;overflow-y:auto;padding:5px 8px;}
 #log-hdr{font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;position:sticky;top:0;background:#0f0f1c;padding:2px 0;}
@@ -535,12 +535,12 @@ const ITEMS={
   cooked_salmon:{n:'Cooked Salmon',e:'🐠',val:120,tier:'common'},
   cooked_lobster:{n:'Cooked Lobster',e:'🦞',val:200,tier:'uncommon'},
   cooked_shark:{n:'Cooked Shark',e:'🦈',val:500,tier:'rare'},
-  burnt_food:{n:'Burnt Food',e:'🔥',val:0,tier:'common'},
+  burnt_food:{n:'Burnt Scraps',e:'🔥',val:3,tier:'common',usable:true},
   potato:{n:'Potato',e:'🥔',val:8,tier:'common'},
-  herb_guam:{n:'Guam Herb',e:'🌿',val:40,tier:'common'},
-  herb_tarromin:{n:'Tarromin Herb',e:'🌿',val:80,tier:'uncommon'},
-  herb_harralander:{n:'Harralander',e:'🌿',val:160,tier:'uncommon'},
-  herb_avantoe:{n:'Avantoe Herb',e:'🌿',val:40,tier:'uncommon'},
+  herb_guam:{n:'Marshleaf',e:'🌿',val:40,tier:'common'},
+  herb_tarromin:{n:'Bitterroot',e:'🌿',val:80,tier:'uncommon'},
+  herb_harralander:{n:'Sunclover',e:'🌿',val:160,tier:'uncommon'},
+  herb_avantoe:{n:'Mistbloom',e:'🌿',val:40,tier:'uncommon'},
   xp_potion:{n:'XP Potion',e:'🧪',val:200,tier:'uncommon',usable:true},
   combat_potion:{n:'Combat Potion',e:'⚗️',val:350,tier:'uncommon',usable:true},
   drop_potion:{n:'Drop Potion',e:'🫧',val:400,tier:'uncommon',usable:true},
@@ -689,16 +689,16 @@ const ACTIONS={
   cook_lobster:{loc:'estate',skill:'cooking',n:'Cook Lobster',e:'🦞',req:40,xp:120,ms:2500,drops:[{id:'cooked_lobster',qty:1,ch:.9},{id:'burnt_food',qty:1,ch:.1}],needs:[{id:'raw_lobster',qty:1}]},
   cook_shark:{loc:'estate',skill:'cooking',n:'Cook Shark',e:'🦈',req:80,xp:210,ms:3500,drops:[{id:'cooked_shark',qty:1,ch:.95},{id:'burnt_food',qty:1,ch:.05}],needs:[{id:'raw_shark',qty:1}]},
   farm_potato:{loc:'estate',skill:'farming',n:'Grow Potatoes',e:'🥔',req:1,xp:25,ms:3000,drops:[{id:'potato',qty:3,ch:1}]},
-  farm_guam:{loc:'estate',skill:'farming',n:'Grow Guam',e:'🌿',req:9,xp:50,ms:5000,drops:[{id:'herb_guam',qty:2,ch:1}]},
-  farm_tarromin:{loc:'estate',skill:'farming',n:'Grow Tarromin',e:'🌿',req:19,xp:80,ms:7000,drops:[{id:'herb_tarromin',qty:2,ch:1}]},
-  farm_harralander:{loc:'estate',skill:'farming',n:'Grow Harralander',e:'🌿',req:26,xp:110,ms:9000,drops:[{id:'herb_harralander',qty:1,ch:1}]},
+  farm_guam:{loc:'estate',skill:'farming',n:'Grow Marshleaf',e:'🌿',req:9,xp:50,ms:5000,drops:[{id:'herb_guam',qty:2,ch:1}]},
+  farm_tarromin:{loc:'estate',skill:'farming',n:'Grow Bitterroot',e:'🌿',req:19,xp:80,ms:7000,drops:[{id:'herb_tarromin',qty:2,ch:1}]},
+  farm_harralander:{loc:'estate',skill:'farming',n:'Grow Sunclover',e:'🌿',req:26,xp:110,ms:9000,drops:[{id:'herb_harralander',qty:1,ch:1}]},
   herb_xp:{loc:'estate',skill:'herblore',n:'Brew XP Potion',e:'🧪',req:3,xp:25,ms:2000,drops:[{id:'xp_potion',qty:1,ch:1}],needs:[{id:'herb_guam',qty:2}]},
   herb_combat:{loc:'estate',skill:'herblore',n:'Brew Combat Potion',e:'⚗️',req:12,xp:50,ms:3000,drops:[{id:'combat_potion',qty:1,ch:1}],needs:[{id:'herb_tarromin',qty:2}]},
   herb_drop:{loc:'estate',skill:'herblore',n:'Brew Drop Potion',e:'🫧',req:22,xp:75,ms:4000,drops:[{id:'drop_potion',qty:1,ch:1}],needs:[{id:'herb_harralander',qty:2}]},
   herb_speed:{loc:'estate',skill:'herblore',n:'Brew Speed Potion',e:'💨',req:35,xp:95,ms:4500,drops:[{id:'speed_potion',qty:1,ch:1}],needs:[{id:'herb_avantoe',qty:2}]},
   herb_defense:{loc:'estate',skill:'herblore',n:'Brew Defense Potion',e:'🛡️',req:40,xp:100,ms:5000,drops:[{id:'defense_potion',qty:1,ch:1}],needs:[{id:'herb_avantoe',qty:1},{id:'herb_harralander',qty:1}]},
   herb_teleport:{loc:'estate',skill:'herblore',n:'Brew Teleport Potion',e:'🌀',req:55,xp:140,ms:6000,drops:[{id:'teleport_potion',qty:1,ch:1}],needs:[{id:'herb_avantoe',qty:2},{id:'herb_harralander',qty:1}]},
-  farm_avantoe:{loc:'estate',skill:'farming',n:'Grow Avantoe',e:'🌿',req:40,xp:150,ms:12000,drops:[{id:'herb_avantoe',qty:2,ch:1}]},
+  farm_avantoe:{loc:'estate',skill:'farming',n:'Grow Mistbloom',e:'🌿',req:40,xp:150,ms:12000,drops:[{id:'herb_avantoe',qty:2,ch:1}]},
   fletch_shafts:{loc:'estate',skill:'fletching',n:'Cut Arrow Shafts',e:'🪵',req:1,xp:5,ms:800,drops:[{id:'arrow_shafts',qty:15,ch:1}],needs:[{id:'normal_log',qty:1}]},
   fletch_bronze:{loc:'estate',skill:'fletching',n:'Fletch Bronze Arrows',e:'➶',req:5,xp:15,ms:1500,drops:[{id:'bronze_arrows',qty:10,ch:1}],needs:[{id:'arrow_shafts',qty:10}]},
   fletch_iron:{loc:'estate',skill:'fletching',n:'Fletch Iron Arrows',e:'➶',req:15,xp:37,ms:2000,drops:[{id:'iron_arrows',qty:10,ch:1}],needs:[{id:'arrow_shafts',qty:10},{id:'iron_bar',qty:1}]},
@@ -812,7 +812,7 @@ const ACTIONS={
   coast_pearl:{loc:'the_coast',skill:'fishing',n:'Pearl Net',e:'🔮',req:70,xp:190,ms:9000,drops:[{id:'sea_pearl',qty:1,ch:.3},{id:'raw_shark',qty:1,ch:.8}]},
 };
 
-const GLOBAL_RARES=[{id:'scroll_basic',ch:.030},{id:'scroll_perm',ch:.003},{id:'scroll_dungeon',ch:.0015},{id:'vault_key',ch:.0002}];
+const GLOBAL_RARES=[{id:'scroll_basic',ch:.006},{id:'scroll_perm',ch:.0010},{id:'scroll_dungeon',ch:.0005},{id:'vault_key',ch:.0002}];
 const GATHER_SKILLS=new Set(['woodcutting','mining','fishing','farming']);
 
 // Bonus gem drops while mining — richer the deeper / rarer the location.
@@ -1002,7 +1002,7 @@ function rollDrops(key,task){
     (GEM_DROPS[ac.loc]||[]).forEach(d=>{if(Math.random()<d.ch*dropMult){addItem(d.id,1);gained.push({id:d.id,qty:1});}});
   }
   GLOBAL_RARES.forEach(r=>{if(Math.random()<r.ch*dropMult){addItem(r.id,1);gained.push({id:r.id,qty:1});}});
-  if(ac&&GATHER_SKILLS.has(ac.skill)&&Math.random()<0.005*dropMult){addItem('scroll_bounty',1);gained.push({id:'scroll_bounty',qty:1});}
+  if(ac&&GATHER_SKILLS.has(ac.skill)&&Math.random()<0.0015*dropMult){addItem('scroll_bounty',1);gained.push({id:'scroll_bounty',qty:1});}
   return gained;
 }
 
@@ -1296,6 +1296,15 @@ function upgradePoi(tid){
   awardClanXp(50);
   updateGold();renderInventory();renderClan();drawMapCanvas();saveGame();
 }
+function abandonPoi(tid){
+  if(G.territories[tid]!=='player')return;
+  const t=TERRITORIES.find(x=>x.id===tid);
+  if(!confirm(`Abandon ${t.n}? You lose its buff and tithe. Any garrison you stationed is returned to your bag.`))return;
+  if(typeof returnGarrison==='function')returnGarrison(tid);
+  G.territories[tid]=null;
+  addLog(`You abandoned ${t.n} — it's unclaimed again.`,'info');
+  renderClan();drawMapCanvas();updateGold();renderInventory();saveGame();
+}
 function renderHoldings(){
   const owned=playerTerritories();
   if(!owned.length)return `<div style="font-size:11px;color:#4a5a6a;padding:2px;">You hold no POIs yet. Capture territory below to earn empire-wide bonuses.</div>`;
@@ -1323,7 +1332,7 @@ function poiRow(t){
     right=`<span class="tr-action tr-raid" onclick="confirmRaid('${t.id}')">DECLARE</span>`;
   }
   const pips=isPlayer?`<div class="bld-level" style="margin-top:4px;">${Array.from({length:POI_UPGRADES.length},(_,i)=>`<div class="bld-pip ${i<lvl?'filled':''}"></div>`).join('')}</div>`:'';
-  const garLine=isPlayer?`<div class="tr-garrison" onclick="openGarrison('${t.id}')">⚔ Garrison ${garrisonOf(t.id).length}/${garrisonCap()}${garrisonPower(t.id)?` · +${garrisonPower(t.id)} def`:''} ▸</div>`:'';
+  const garLine=isPlayer?`<div class="tr-garrison" onclick="openGarrison('${t.id}')">⚔ Garrison ${garrisonOf(t.id).length}/${garrisonCap()}${garrisonPower(t.id)?` · +${garrisonPower(t.id)} def`:''} ▸</div><div class="tr-garrison" style="color:#9a5a5a;" onclick="abandonPoi('${t.id}')">✕ Abandon this POI</div>`:'';
   return `<div class="territory-row"><span class="tr-icon">${t.e}</span><div class="tr-body"><div class="tr-name">${t.n}${skillName?` <span style="color:#5a7a9a;font-size:9px;">${skillName}</span>`:''}${isPlayer?` <span style="color:#c8a020;font-size:9px;">T${lvl}</span>`:''}</div><div class="tr-holder" style="color:${holderColor};">${holderName}${isPlayer?` · 🛡 ${poiDefense(t.id)} def`:''}</div>${buffLine}${pips}${garLine}</div>${right}</div>`;
 }
 function renderTerritoryRows(){
@@ -1495,6 +1504,27 @@ function addLog(msg,cls=''){G.logs.unshift({msg,cls});if(G.logs.length>80)G.logs
 function renderLog(){const el=document.getElementById('log-lines');if(!el)return;el.innerHTML=G.logs.slice(0,40).map(l=>`<div class="log-line ${l.cls}">${l.msg}</div>`).join('');}
 function $p(id){return document.getElementById(id);}
 function updateGold(){const e=$p('hdr-gold');if(e)e.textContent=`🪙 ${G.gold.toLocaleString()}`;}
+function renderClasses(){
+  const el=$p('class-panel');if(!el)return;
+  el.innerHTML=Object.entries(CLASSES).map(([id,cls])=>{
+    const xp=G.classXp[id]||0,lvl=xpToLevel(xp),into=xpIntoLevel(xp,lvl),needed=xpForNext(lvl),pct=lvl>=99?100:Math.round(into/needed*100);
+    const isActive=G.activeClass===id;
+    const bonusPct=Math.round(classScale(lvl)*20);
+    return `<div class="cls-card ${isActive?'cls-active':''}" onclick="setActiveClass('${id}')">
+      <div class="cls-head"><span class="cls-ico" style="color:${cls.col}">${cls.e}</span><div class="cls-info"><div class="cls-name" style="color:${cls.col}">${cls.n}${isActive?' <span class="cls-badge">ACTIVE</span>':''}</div><div class="cls-lvl">Lv ${lvl}${bonusPct>0?' &middot; +'+bonusPct+'% XP to its skills':''}</div></div></div>
+      <div class="cls-bar"><div class="cls-fill" style="width:${pct}%;background:${cls.col}"></div></div>
+      <div class="cls-desc">${cls.desc}<br><span style="color:#5a8a5a;">${cls.passive}</span></div>
+      <div class="cls-pvp">Siege: Scout ×${cls.pvpBonus.scout} &middot; Attack ×${cls.pvpBonus.attack} &middot; Sustain ×${cls.pvpBonus.sustain}</div>
+    </div>`;
+  }).join('')+`<p style="font-size:10px;color:#4a5a6a;padding:4px;line-height:1.5;">Tap a class to make it active (tap again to turn off). You level all four by training their skills — switch anytime.</p>`;
+}
+function setActiveClass(id){
+  G.activeClass=(G.activeClass===id?null:id);
+  const hdr=$p('hdr-class');
+  if(hdr){if(G.activeClass){hdr.textContent=CLASSES[G.activeClass].e+' '+CLASSES[G.activeClass].n;hdr.style.display='inline-block';}else{hdr.style.display='none';}}
+  addLog(G.activeClass?`Active class: ${CLASSES[G.activeClass].e} ${CLASSES[G.activeClass].n}`:'Class deactivated.','info');
+  renderClasses();saveGame();
+}
 function showTab(tab){
   $p('action-wrap').classList.toggle('show',tab==='actions');
   $p('map-wrap').classList.toggle('show',tab==='map');
@@ -1527,7 +1557,7 @@ function renderSkills(){
     return `<div class="skill-row ${G.activeSkill===id?'sel':''}" data-skill="${id}" onclick="selectSkill('${id}')"><span class="s-icon">${sk.e}</span><div class="s-info"><div class="s-name">${sk.n}${cape}</div><div class="s-lvl">${lvl}</div><div class="s-bar"><div class="s-fill" style="width:${pct}%;background:${sk.col}"></div></div><div class="s-xptext">${lvl<99?into.toLocaleString()+'/'+needed.toLocaleString()+' xp':'MAX'}</div></div></div>`;
   }).join('');
 }
-function selectSkill(id){G.activeSkill=id;renderSkills();renderActions();drawCanvas();}
+function selectSkill(id){G.activeSkill=id;renderSkills();renderActions();drawCanvas();showTab('actions');}
 function renderActions(){
   const el=$p('action-list');if(!el)return;
   $p('action-title').textContent=`${SKILLS[G.activeSkill]?.n||''} — ${LOCATIONS[G.currentLocation]?.n||''}`;
@@ -1815,11 +1845,11 @@ function renderMarket(){
   el.innerHTML=`<div class="mk-head">🏛️ The Free City Market <span style="font-weight:400;color:#5a6a7a;">— prices drift; sell into demand, buy the dips. Owning Goldfields boosts your sales. (Real player trading arrives with the server.)</span></div>${rows}`;
 }
 /* GUILD BANK — shared stash; POI fortification can draw from it ("GM builds defenses") */
-function bankTypes(){return Object.keys(G.guildBank).filter(k=>G.guildBank[k]>0).length;}
+function bankTypes(){if(!G.guildBank)G.guildBank={};return Object.keys(G.guildBank).filter(k=>G.guildBank[k]>0).length;}
 function ownedQty(id){return (G.inv[id]||0)+(G.guildBank[id]||0);}
 function hasCombined(needs){return needs.every(n=>ownedQty(n.id)>=n.qty);}
 function spendCombined(needs){needs.forEach(n=>{let q=n.qty;const fi=Math.min(q,G.inv[n.id]||0);if(fi)removeItem(n.id,fi);q-=fi;if(q>0){G.guildBank[n.id]=(G.guildBank[n.id]||0)-q;if(G.guildBank[n.id]<=0)delete G.guildBank[n.id];}});}
-function bankDeposit(id,qty){const n=Math.min(qty,G.inv[id]||0);if(n<=0)return;removeItem(id,n);G.guildBank[id]=(G.guildBank[id]||0)+n;addLog(`Deposited ${n}× ${ITEMS[id]?.n||id} to the guild bank.`,'');renderInventory();openBank();saveGame();}
+function bankDeposit(id,qty){if(!G.guildBank)G.guildBank={};const n=Math.min(qty,G.inv[id]||0);if(n<=0)return;removeItem(id,n);G.guildBank[id]=(G.guildBank[id]||0)+n;addLog(`Deposited ${n}× ${ITEMS[id]?.n||id} to the guild bank.`,'');renderInventory();openBank();saveGame();}
 function bankWithdraw(id,qty){const n=Math.min(qty,G.guildBank[id]||0);if(n<=0)return;if(!(G.inv[id]>0)&&invCount()>=INV_SIZE){addLog('Inventory full.','info');return;}G.guildBank[id]-=n;if(G.guildBank[id]<=0)delete G.guildBank[id];addItem(id,n);renderInventory();openBank();saveGame();}
 function openBank(){
   const inBank=Object.entries(G.guildBank).filter(([id,q])=>q>0).map(([id,q])=>({e:ITEMS[id]?.e||'?',name:`Withdraw ${ITEMS[id]?.n||id} (${q})`,desc:'Move to your bag',onclick:`bankWithdraw('${id}',${q})`}));
@@ -1860,6 +1890,7 @@ function useItem(id){
   else if(id==='scroll_perm')openPermModal();
   else if(id==='scroll_dungeon')openDungeonModal();
   else if(id==='scroll_bounty'){if(!removeItem('scroll_bounty',1))return;addEffect('boon',1.75,10*60*1000);addLog('✨ Bounty Scroll unfurled — +75% XP & drops for 10 minutes!','epic');}
+  else if(id==='burnt_food'){if(!removeItem('burnt_food',1))return;G.xp.farming=(G.xp.farming||0)+20;addLog('Composted Burnt Scraps — +20 Farming XP.','good');renderSkills();}
   else if(id==='vault_key')openVaultModal();
   else if(id==='xp_potion'){if(!removeItem('xp_potion',1))return;addEffect('xp',1.5,5*60*1000);addLog('XP Potion — +50% XP for 5 minutes!','epic');}
   else if(id==='combat_potion'){if(!removeItem('combat_potion',1))return;addEffect('combat',1.25,5*60*1000);addLog('Combat Potion — +25% combat for 5 minutes!','epic');}
