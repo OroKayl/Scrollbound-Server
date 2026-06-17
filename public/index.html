@@ -15,6 +15,19 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #hdr-class{background:#1a1a2e;border:1px solid #3a5a6a;border-radius:3px;padding:2px 7px;font-size:10px;color:#80a0d0;display:none;}
 #hdr-offline{flex:1;text-align:right;font-size:11px;color:#6a9a6a;font-style:italic;}
 .hdr-btn{background:#181828;border:1px solid #2a2a48;color:#7a8a9a;border-radius:4px;padding:3px 9px;font-size:11px;cursor:pointer;}
+#sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:center;justify-content:center;}
+#sb-overlay.show{display:flex;}
+#sb-box{background:#0f0f1c;border:1px solid #2a4a6a;border-radius:10px;padding:22px;width:380px;max-width:92vw;}
+#sb-box h3{font-family:Georgia,serif;font-size:18px;color:#6aa0d0;margin-bottom:8px;}
+#sb-box #sb-msg{font-size:12px;color:#7a8a9a;line-height:1.5;margin-bottom:14px;}
+#sb-box .sb-l{display:block;font-size:10px;letter-spacing:1px;color:#5a6a7a;text-transform:uppercase;margin:8px 0 3px;}
+#sb-box input{width:100%;background:#0a0a14;border:1px solid #2a2a40;color:#cdc8b8;border-radius:5px;padding:8px 10px;font-size:14px;outline:none;}
+#sb-box input:focus{border-color:#6aa0d0;}
+#sb-err{color:#d05050;font-size:11px;min-height:14px;margin:6px 0;}
+.sb-row2{display:flex;gap:8px;margin-top:6px;}
+#sb-login{flex:1;background:#0a1a2a;border:1px solid #3a6a9a;color:#8ac0f0;border-radius:6px;padding:9px;font-size:13px;cursor:pointer;font-family:Georgia,serif;letter-spacing:1px;}
+#sb-login:hover{background:#0f2438;}
+#sb-cancel{background:#161620;border:1px solid #2a2a40;color:#6a7a8a;border-radius:6px;padding:9px 12px;font-size:12px;cursor:pointer;}
 .hdr-btn:hover{background:#22223a;}
 #effects-bar{background:#0a0f18;border-bottom:1px solid #1e2a38;padding:4px 14px;gap:10px;flex-shrink:0;flex-wrap:wrap;display:none;}
 #effects-bar.show{display:flex;}
@@ -305,8 +318,22 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
   <span id="hdr-offline"></span>
   <button class="hdr-btn" onclick="saveGame()">Save</button>
   <button class="hdr-btn" onclick="if(confirm('Reset all progress?'))resetGame()">Reset</button>
+  <button class="hdr-btn" id="hdr-online" onclick="sbOnlineClick()" style="border-color:#2a4a6a;color:#6aa0d0;">🌐 Go Online</button>
 </div>
 <div id="effects-bar"></div>
+<div id="sb-overlay"><div id="sb-box">
+  <h3 id="sb-title">🌐 Enter the Shared World</h3>
+  <p id="sb-msg">Log in to play on the live server with your friends. Your AI rivals are still there too.</p>
+  <label class="sb-l">Your name</label>
+  <input id="sb-name" maxlength="20" placeholder="Adventurer" autocomplete="off">
+  <label class="sb-l">Invite code</label>
+  <input id="sb-code" maxlength="32" placeholder="code from your guild leader" autocomplete="off">
+  <div id="sb-err"></div>
+  <div class="sb-row2">
+    <button id="sb-login" onclick="sbLogin()">Enter World</button>
+    <button id="sb-cancel" onclick="sbCloseOverlay()">Play offline</button>
+  </div>
+</div></div>
 <div id="main">
   <div id="skills-panel"><h4>Skills</h4><div id="skill-list"></div></div>
   <div id="center">
@@ -2038,6 +2065,75 @@ function endSeason(){
 function gameTick(){tickEffects();}
 function autoGatherTick(){territoryTick();checkSeasonEnd();}
 function warTick(){marketDrift();}
+/* ===== ONLINE / SHARED WORLD (Phase B — additive; solo play works with no server) ===== */
+const SB={token:null,playerId:null,name:null,world:null,_loops:false};
+function sbApi(path,body){
+  const opts={method:body?'POST':'GET',headers:{'Content-Type':'application/json'}};
+  if(SB.token)opts.headers['Authorization']='Bearer '+SB.token;
+  if(body)opts.body=JSON.stringify(body);
+  return fetch(path,opts).then(r=>r.json().then(j=>r.ok?j:Promise.reject(j)));
+}
+function sbOnlineClick(){
+  if(SB.token){sbWorldModal();return;}
+  $p('sb-name').value=G.name||localStorage.getItem('sb_name')||'';
+  $p('sb-code').value=localStorage.getItem('sb_code')||'';
+  $p('sb-err').textContent='';
+  $p('sb-overlay').classList.add('show');
+}
+function sbCloseOverlay(){$p('sb-overlay').classList.remove('show');}
+function sbLogin(){
+  const name=($p('sb-name').value||'').trim(),code=($p('sb-code').value||'').trim();
+  if(!name||!code){$p('sb-err').textContent='Enter a name and invite code.';return;}
+  $p('sb-err').textContent='Connecting…';
+  sbApi('/api/login',{name,code}).then(res=>{
+    SB.token=res.token;SB.playerId=res.playerId;SB.name=res.name;SB.world=res.world;
+    try{localStorage.setItem('sb_token',res.token);localStorage.setItem('sb_name',name);localStorage.setItem('sb_code',code);}catch(e){}
+    sbCloseOverlay();
+    if(res.save){localStorage.setItem('scrollbound_v3',res.save);location.reload();return;}
+    sbSync();sbStartLoops();sbUpdateBtn();
+    addLog(`🌐 Online as ${name} — welcome to the shared world!`,'epic');
+  }).catch(err=>{$p('sb-err').textContent=(err&&err.error)||'Could not reach the server (is it deployed?).';});
+}
+function sbSync(){
+  if(!SB.token)return;
+  sbApi('/api/save',{save:localStorage.getItem('scrollbound_v3'),power:(typeof combatPower==='function'?combatPower():1),guild:(G.clan&&G.clan.name)||SB.name}).catch(()=>{});
+}
+function sbPoll(){
+  if(!SB.token)return;
+  sbApi('/api/state').then(r=>{SB.world=r.world;if(r.you)SB.playerId=r.you;sbUpdateBtn();}).catch(()=>{});
+}
+function sbStartLoops(){
+  if(SB._loops)return;SB._loops=true;
+  setInterval(sbSync,15000);setInterval(sbPoll,10000);sbPoll();
+}
+function sbUpdateBtn(){
+  const b=$p('hdr-online');if(!b)return;
+  if(!SB.token){b.textContent='🌐 Go Online';return;}
+  const online=SB.world&&SB.world.players?SB.world.players.filter(p=>p.online).length:1;
+  b.textContent=`🌍 World (${online} online)`;b.style.color='#6ad08a';b.style.borderColor='#2a6a4a';
+}
+function sbDeclare(poi){
+  sbApi('/api/siege/declare',{poiId:poi}).then(r=>{SB.world=r.world;addLog('⚔ Siege declared on the shared world — resolves at the next server window.','info');sbWorldModal();}).catch(err=>addLog((err&&err.error)||'Declare failed.','info'));
+}
+const SB_POI_NAMES={oakreach:'Oakreach Stands',tinford:'Tinford Pits',mistlake:'Mistlake Shallows',greenrow:'Greenrow Fields',emberforge:'Emberforge',blackpine:'Blackpine Deepwood',gravemount:'Gravemount Lode',drownreach:'Drownreach Coast',thornwild:'Thornwild Expanse',cinderpeak:'Cinderpeak Foundry',shadefen:'Shadefen Hollow',glimmerdeep:'Glimmerdeep'};
+function sbWorldModal(){
+  if(!SB.token){sbOnlineClick();return;}
+  const w=SB.world||{territories:{},players:[],sieges:{}};
+  const next=w.nextSiege?Math.max(0,Math.round((w.nextSiege-Date.now())/60000)):'?';
+  const online=(w.players||[]).filter(p=>p.online).map(p=>p.name).join(', ')||'just you';
+  const opts=Object.keys(SB_POI_NAMES).map(poi=>{
+    const o=w.territories&&w.territories[poi];
+    const mine=o&&o.type==='player'&&o.id===SB.playerId;
+    const ownerTxt=o?(mine?'You hold it':`${o.type==='ai'?'🤖':'🧑'} ${o.name}`):'Unclaimed';
+    const decl=((w.sieges&&w.sieges[poi])||[]).length;
+    return {e:mine?'🟢':o?(o.type==='ai'?'🤖':'⚔️'):'⬜',name:`${SB_POI_NAMES[poi]} — ${ownerTxt}`,desc:mine?'Held by your guild':`${decl?decl+' attacker(s) queued · ':''}Tap to declare a siege`,onclick:mine?'closeModal()':`sbDeclare('${poi}')`};
+  });
+  showModal(`🌍 Shared World — season ${w.season||1}`,`Online: ${online}. Next siege window in ~${next} min. Declare a siege on any POI you don't hold; the server resolves all guilds (players + AI) together.`,opts);
+}
+function sbInit(){
+  const t=localStorage.getItem('sb_token');
+  if(t){SB.token=t;SB.name=localStorage.getItem('sb_name');sbStartLoops();sbUpdateBtn();}
+}
 function boot(){
   const raw=localStorage.getItem('scrollbound_v3');
   if(raw){try{loadGame(JSON.parse(raw));}catch(e){console.warn('Save load failed',e);}}
@@ -2055,6 +2151,7 @@ function boot(){
   setInterval(gameTick,80);
   setInterval(()=>{autoGatherTick();saveGame();},2000);
   setInterval(warTick,30000);
+  sbInit();
 }
 boot();
 </script>
