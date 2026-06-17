@@ -27,13 +27,16 @@ const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'data.json');
 
 // --- world seed (must match the client's POI + clan ids) ---
 const POIS = ['oakreach','tinford','mistlake','greenrow','emberforge','blackpine','gravemount','drownreach','thornwild','cinderpeak','shadefen','glimmerdeep'];
+// AI clans start FRESH (like new accounts) and grow to track the testers' average power.
+// `factor` = relative strength target (some clans push harder than others).
 const AI_CLANS = {
-  ironpeak:  { n: 'Iron Peak',   power: 45 },
-  thornwall: { n: 'Thornwall',   power: 55 },
-  tideborn:  { n: 'The Tideborn',power: 35 },
-  goldcrest: { n: 'Goldcrest',   power: 30 },
-  ashveil:   { n: 'Ashveil',     power: 40 },
+  ironpeak:  { n: 'Iron Peak',    factor: 1.05 },
+  thornwall: { n: 'Thornwall',    factor: 1.15 },
+  tideborn:  { n: 'The Tideborn', factor: 0.90 },
+  goldcrest: { n: 'Goldcrest',    factor: 0.80 },
+  ashveil:   { n: 'Ashveil',      factor: 1.00 },
 };
+const AI_START_POWER = 10; // everyone, AI and players, begins around here
 const INIT_OWNERS = { tinford:'ironpeak', greenrow:'goldcrest', blackpine:'thornwall', gravemount:'ironpeak', drownreach:'tideborn', cinderpeak:'ashveil', glimmerdeep:'goldcrest' };
 
 // --- persistence ---
@@ -41,6 +44,8 @@ let db = { players:{}, tokens:{}, world:{ territories:{}, sieges:{}, nextSiege:0
 function seedWorld() {
   POIS.forEach(p => { if (!(p in db.world.territories)) db.world.territories[p] = INIT_OWNERS[p] || null; });
   if (!db.world.nextSiege) db.world.nextSiege = Date.now() + SIEGE_PERIOD_MS;
+  db.world.ai = db.world.ai || {};
+  for (const id of Object.keys(AI_CLANS)) if (!(id in db.world.ai)) db.world.ai[id] = AI_START_POWER; // fresh start
 }
 function load() { try { db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')); } catch (e) { /* fresh */ } seedWorld(); }
 let saveTimer = null;
@@ -49,9 +54,25 @@ load();
 
 // --- helpers ---
 function guildPower(id) {
-  if (AI_CLANS[id]) return AI_CLANS[id].power;
+  if (AI_CLANS[id]) return Math.round(db.world.ai[id] || AI_START_POWER);
   const p = db.players[id];
-  return (p && p.power) || 10;
+  return (p && p.power) || AI_START_POWER;
+}
+// Average power of players seen in the last week (so AI tracks the active testers).
+function avgPlayerPower() {
+  const now = Date.now();
+  const ps = Object.values(db.players).filter(p => now - (p.lastSeen || 0) < 7 * 86400000);
+  if (!ps.length) return AI_START_POWER;
+  return ps.reduce((s, p) => s + (p.power || AI_START_POWER), 0) / ps.length;
+}
+// Each siege window, ease every AI clan 20% toward (avg player power × its factor).
+function growAI() {
+  const target = avgPlayerPower();
+  for (const id of Object.keys(AI_CLANS)) {
+    const cur = db.world.ai[id] || AI_START_POWER;
+    const goal = Math.max(AI_START_POWER, target * AI_CLANS[id].factor);
+    db.world.ai[id] = cur + (goal - cur) * 0.2;
+  }
 }
 function ownerInfo(id) {
   if (!id) return null;
@@ -137,6 +158,7 @@ app.post('/api/siege/cancel', (req, res) => {
 // --- server-authoritative siege resolution (everyone resolves together) ---
 function resolveSieges() {
   const w = db.world;
+  growAI(); // AI grows alongside the testers before each resolution
   // AI clans muster: each may declare on a random POI it doesn't already hold
   for (const aid of Object.keys(AI_CLANS)) {
     if (Math.random() < 0.5) continue;
