@@ -134,7 +134,7 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .clan-poi-list{border-top:1px solid #1a1a2a;padding-top:8px;}
 .clan-poi-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;margin-bottom:5px;background:#0a0a14;border:1px solid #1a1a28;}
 .clan-poi-row.held{border-color:#2a4a2a;background:#090f09;}
-.cpr-info{flex:1;min-width:0;}
+.cpr-info{flex:0 0 auto;min-width:120px;max-width:180px;}
 .clan-poi-row .cpr-name{font-size:13px;color:#b0a090;font-weight:600;}
 .clan-poi-row.held .cpr-name{color:#6ad08a;}
 .clan-poi-row .cpr-owner{font-size:11px;color:#4a5a4a;margin-top:2px;}
@@ -366,7 +366,6 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .to-lock{font-size:10px;color:#5a3a3a;font-style:italic;margin-top:2px;}
 
 /* ── SKILLS COMPACT GRID ─────────────────────────────── */
-#skills-panel{width:152px;}
 .sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:2px 0;}
 .sk-cell{background:#0c0c18;border:1px solid #1e1e30;border-radius:7px;padding:7px 3px 5px;text-align:center;cursor:pointer;position:relative;border-left:3px solid #2a2a3a;transition:background .1s;}
 .sk-cell:hover{background:#141424;}
@@ -2034,7 +2033,19 @@ function renderClanOnline(){
     const decl=((w.sieges&&w.sieges[poi])||[]).length;
     const btn=mine?`<span style="color:#4a7a4a;font-size:10px">Held</span>`
       :`<button class="clan-poi-btn" onclick="clanTabDeclare('${poi}')">⚔ Siege</button>`;
-    return `<div class="clan-poi-row ${mine?'held':''}"><div class="cpr-info"><div class="cpr-name">${SB_POI_NAMES[poi]}</div><div class="cpr-owner">${ownerTxt}${decl?' · '+decl+' siege(s) queued':''}</div></div>${btn}</div>`;
+    const info=SB_POI_INFO[poi]||{e:'🏛️',tag:'Territory',bonus:'',col:'#3a3a5a'};
+    return `<div class="clan-poi-row ${mine?'held':''}">
+      <div style="font-size:22px;line-height:1;flex-shrink:0">${info.e}</div>
+      <div class="cpr-info">
+        <div class="cpr-name">${SB_POI_NAMES[poi]}</div>
+        <div class="cpr-owner">${ownerTxt}${decl?' · '+decl+' siege(s) active':''}</div>
+      </div>
+      <div style="flex:1;min-width:0;padding:0 8px">
+        <span style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;background:${info.col}22;border:1px solid ${info.col};color:${info.col};white-space:nowrap">${info.tag}</span>
+        <div style="font-size:10px;color:#3a4a3a;margin-top:3px">${info.bonus}</div>
+      </div>
+      ${btn}
+    </div>`;
   }).join('');
 
   const codeHtml=SB.isOwner?`<div class="c-code-lbl">Invite code — share with friends:</div><div class="c-code">${clan?clan.inviteCode:'???'}</div>`:'';
@@ -2508,6 +2519,20 @@ function sbDeclare(poi){
   sbApi('/api/siege/declare',{poiId:poi}).then(r=>{SB.world=r.world;addLog('⚔ Siege declared on the shared world — resolves at the next server window.','info');sbWorldModal();}).catch(err=>addLog((err&&err.error)||'Declare failed.','info'));
 }
 const SB_POI_NAMES={oakreach:'Oakreach Stands',tinford:'Tinford Pits',mistlake:'Mistlake Shallows',greenrow:'Greenrow Fields',emberforge:'Emberforge',blackpine:'Blackpine Deepwood',gravemount:'Gravemount Lode',drownreach:'Drownreach Coast',thornwild:'Thornwild Expanse',cinderpeak:'Cinderpeak Foundry',shadefen:'Shadefen Hollow',glimmerdeep:'Glimmerdeep'};
+const SB_POI_INFO={
+  oakreach:  {e:'🌳',tag:'Gathering',bonus:'+XP to all gathering',col:'#2a5a2a'},
+  tinford:   {e:'⛏️',tag:'Mining',  bonus:'+XP & drops to mining',col:'#5a4a2a'},
+  mistlake:  {e:'🐟',tag:'Fishing', bonus:'+XP & drops to fishing',col:'#2a4a5a'},
+  greenrow:  {e:'🌾',tag:'Farming', bonus:'+XP to farming & cooking',col:'#3a5a2a'},
+  emberforge:{e:'🔥',tag:'Smithing',bonus:'+speed to smithing',col:'#6a3a2a'},
+  blackpine: {e:'🪵',tag:'Woodcutting',bonus:'+XP & drops to woodcutting',col:'#2a4a2a'},
+  gravemount:{e:'💎',tag:'Crafting',bonus:'+XP to mining & crafting',col:'#4a3a6a'},
+  drownreach:{e:'🌊',tag:'Coast',   bonus:'+drops to fishing & slayer',col:'#2a4a5a'},
+  thornwild: {e:'🐾',tag:'Slayer',  bonus:'+XP to slayer & combat',col:'#6a2a2a'},
+  cinderpeak:{e:'⚒️',tag:'Industry',bonus:'+XP to smithing & fletching',col:'#5a4a2a'},
+  shadefen:  {e:'🌿',tag:'Herblore',bonus:'+XP to herblore & farming',col:'#3a4a6a'},
+  glimmerdeep:{e:'✨',tag:'Magic',  bonus:'+XP to all skills',col:'#5a3a6a'},
+};
 const SKILL_NAMES_SHORT={woodcutting:'Wc',mining:'Min',fishing:'Fish',combat:'Cmbt',crafting:'Craft',cooking:'Cook',farming:'Farm',herblore:'Herb',slayer:'Slay',fletching:'Fltch',smithing:'Smith',jewelcrafting:'Jwl'};
 function sbWorldModal(){
   if(!SB.token){sbOnlineClick();return;}
