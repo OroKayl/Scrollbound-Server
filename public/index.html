@@ -5,16 +5,16 @@
 <title>Scrollbound</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;font-size:13px;}
+body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;font-size:14px;}
 #hdr{display:flex;align-items:center;gap:14px;padding:7px 14px;background:#10101c;border-bottom:1px solid #252538;flex-shrink:0;flex-wrap:wrap;}
 #hdr-title{font-family:Georgia,serif;font-size:17px;letter-spacing:3px;color:#c8a020;}
 #hdr-player{color:#9ab;font-size:12px;}
 #hdr-gold{color:#ffd700;font-weight:700;}
-#hdr-loc{color:#6a8a6a;font-size:11px;font-style:italic;}
+#hdr-loc{color:#6a8a6a;font-size:12px;font-style:italic;}
 #hdr-ironman{background:#1a1a2e;border:1px solid #4a3a6a;border-radius:3px;padding:2px 7px;font-size:10px;color:#a080d0;display:none;}
 #hdr-class{background:#1a1a2e;border:1px solid #3a5a6a;border-radius:3px;padding:2px 7px;font-size:10px;color:#80a0d0;display:none;}
 #hdr-offline{flex:1;text-align:right;font-size:11px;color:#6a9a6a;font-style:italic;}
-.hdr-btn{background:#181828;border:1px solid #2a2a48;color:#7a8a9a;border-radius:4px;padding:3px 9px;font-size:11px;cursor:pointer;}
+.hdr-btn{background:#181828;border:1px solid #2a2a48;color:#7a8a9a;border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer;}
 #sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:center;justify-content:center;}
 #sb-overlay.show{display:flex;}
 #sb-box{background:#0f0f1c;border:1px solid #2a4a6a;border-radius:10px;padding:22px;width:380px;max-width:92vw;}
@@ -26,6 +26,28 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #sb-err{color:#d05050;font-size:11px;min-height:14px;margin:6px 0;}
 .sb-row2{display:flex;gap:8px;margin-top:6px;}
 #sb-login{flex:1;background:#0a1a2a;border:1px solid #3a6a9a;color:#8ac0f0;border-radius:6px;padding:9px;font-size:13px;cursor:pointer;font-family:Georgia,serif;letter-spacing:1px;}
+/* clan overlay — same structure as sb-overlay */
+#sb-clan-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:310;display:none;align-items:center;justify-content:center;}
+#sb-clan-overlay.show{display:flex;}
+#sb-clan-box{background:#0f0f1c;border:1px solid #2a6a4a;border-radius:10px;padding:22px;width:420px;max-width:94vw;max-height:90vh;overflow-y:auto;}
+#sb-clan-box h3{font-family:Georgia,serif;font-size:17px;color:#6ad08a;margin-bottom:8px;}
+#sb-clan-box .sb-l{display:block;font-size:10px;letter-spacing:1px;color:#5a6a7a;text-transform:uppercase;margin:8px 0 3px;}
+#sb-clan-box input{width:100%;background:#0a0a14;border:1px solid #2a2a40;color:#cdc8b8;border-radius:5px;padding:8px 10px;font-size:14px;outline:none;box-sizing:border-box;}
+#sb-clan-box input:focus{border-color:#3a8a5a;}
+#sb-clan-err{color:#d05050;font-size:11px;min-height:14px;margin:6px 0;}
+.sb-clan-btn{background:#0a1a14;border:1px solid #2a6a4a;color:#6ad08a;border-radius:6px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:Georgia,serif;letter-spacing:.5px;}
+.sb-clan-btn:hover{background:#102a1c;}
+.sb-clan-btn.danger{border-color:#6a2a2a;color:#d08080;background:#1a0a0a;}
+.sb-clan-btn.danger:hover{background:#2a0f0f;}
+.sb-member-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a2a;font-size:12px;}
+.sb-member-row:last-child{border-bottom:none;}
+.sb-member-skills{font-size:10px;color:#5a7a5a;margin-top:2px;}
+.sb-invite-code{font-family:monospace;font-size:15px;color:#c8a020;background:#100e00;border:1px solid #3a3000;border-radius:4px;padding:4px 10px;letter-spacing:2px;display:inline-block;margin:4px 0;}
+/* world modal clan section */
+.sb-world-clan{background:#0c1a10;border:1px solid #2a4a2a;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;}
+.sb-world-clan b{color:#6ad08a;}
+.sb-world-online{background:#0c0f1a;border:1px solid #1a2a3a;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:11px;line-height:1.8;}
+.sb-world-online b{color:#6aa0d0;}
 #sb-login:hover{background:#0f2438;}
 #sb-cancel{background:#161620;border:1px solid #2a2a40;color:#6a7a8a;border-radius:6px;padding:9px 12px;font-size:12px;cursor:pointer;}
 .hdr-btn:hover{background:#22223a;}
@@ -37,17 +59,17 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .effect-pill.drops{background:#14100a;border:1px solid #6a4a2a;color:#d0a050;}
 #main{display:flex;flex:1;overflow:hidden;}
 #skills-panel{width:172px;background:#0f0f1c;border-right:1px solid #252538;padding:8px 6px;overflow-y:auto;flex-shrink:0;}
-#skills-panel h4{font-size:9px;color:#3a3a5a;letter-spacing:2px;margin:4px 2px 6px;text-transform:uppercase;}
+#skills-panel h4{font-size:10px;color:#3a3a5a;letter-spacing:2px;margin:4px 2px 6px;text-transform:uppercase;}
 .skill-row{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:6px;cursor:pointer;margin-bottom:2px;border:1px solid transparent;transition:background .1s;}
 .skill-row:hover{background:#181828;}
 .skill-row.sel{background:#171730;border-color:#c8a020;}
-.s-icon{font-size:17px;width:22px;text-align:center;flex-shrink:0;}
+.s-icon{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
 .s-info{flex:1;min-width:0;}
-.s-name{font-size:10px;color:#7a8a9a;}
+.s-name{font-size:12px;color:#7a8a9a;}
 .s-lvl{font-size:20px;font-weight:700;color:#ddd8c8;line-height:1.1;}
 .s-bar{height:3px;background:#1e1e30;border-radius:2px;margin-top:3px;}
 .s-fill{height:100%;border-radius:2px;transition:width .3s;}
-.s-xptext{font-size:9px;color:#3a3a5a;margin-top:1px;}
+.s-xptext{font-size:10px;color:#3a4a5a;margin-top:1px;}
 #center{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
 #canvas-wrap{height:170px;flex-shrink:0;position:relative;background:#08080f;border-bottom:1px solid #252538;}
 #game-canvas{display:block;width:100%;height:100%;}
@@ -55,24 +77,29 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #loc-sub{position:absolute;top:27px;left:12px;font-size:10px;color:#5a6a5a;}
 #travel-btn{position:absolute;top:8px;right:10px;background:#0f1a0f;border:1px solid #3a5a3a;color:#6a9a6a;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;}
 #travel-btn:hover{background:#162216;border-color:#5a8a5a;}
-#tab-bar{display:flex;border-bottom:1px solid #252538;flex-shrink:0;background:#0c0c18;}
-.tab-btn{flex:1;padding:7px 0;text-align:center;font-size:11px;color:#4a5a6a;cursor:pointer;letter-spacing:1px;border-bottom:2px solid transparent;}
-.tab-btn:hover{color:#8a9aaa;}
-.tab-btn.active{color:#c8a020;border-bottom-color:#c8a020;}
+#tab-bar{display:flex;border-bottom:2px solid #1a1a2a;flex-shrink:0;background:#090912;overflow-x:auto;scrollbar-width:none;}
+#tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{flex:1;min-width:54px;padding:9px 4px 7px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;border-bottom:3px solid transparent;transition:background .12s,border-color .12s;position:relative;}
+.tab-btn:hover{background:#0f0f20;}
+.tab-btn.active{background:#0d0d1e;border-bottom-color:#c8a020;}
+.tab-ico{font-size:18px;line-height:1;}
+.tab-lbl{font-size:10px;letter-spacing:.6px;color:#3a4a5a;text-transform:uppercase;font-family:'Segoe UI',sans-serif;}
+.tab-btn.active .tab-lbl{color:#c8a020;}
+.tab-btn:hover .tab-lbl{color:#6a7a8a;}
 #action-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #action-wrap.show{display:block;}
-#action-wrap h4{font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
-.act-card{display:flex;align-items:center;gap:9px;padding:7px 9px;background:#0f0f1c;border:1px solid #202033;border-radius:7px;cursor:pointer;margin-bottom:5px;transition:border-color .12s,background .12s;}
+#action-wrap h4{font-size:11px;color:#3a4a5a;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.act-card{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#0f0f1c;border:1px solid #202033;border-radius:8px;cursor:pointer;margin-bottom:6px;transition:border-color .12s,background .12s;}
 .act-card:hover:not(.locked){border-color:#5a5070;background:#141424;}
 .act-card.running{border-color:#c8a020!important;background:#161520;}
 .act-card.queued{border-color:#4a6a3a!important;background:#111a10;}
 .act-card.locked{opacity:.35;cursor:not-allowed;}
-.ac-ico{font-size:22px;width:26px;text-align:center;flex-shrink:0;}
+.ac-ico{font-size:24px;width:28px;text-align:center;flex-shrink:0;}
 .ac-body{flex:1;min-width:0;}
-.ac-name{font-size:13px;font-weight:600;color:#cdc8b8;}
-.ac-meta{font-size:10px;color:#4a5a6a;margin-top:1px;}
-.ac-drops{font-size:10px;color:#4a6a4a;margin-top:2px;}
-.ac-req{font-size:10px;color:#7a3a3a;font-style:italic;}
+.ac-name{font-size:14px;font-weight:600;color:#cdc8b8;}
+.ac-meta{font-size:12px;color:#4a5a6a;margin-top:2px;}
+.ac-drops{font-size:12px;color:#4a6a4a;margin-top:2px;}
+.ac-req{font-size:11px;color:#7a3a3a;font-style:italic;}
 #map-wrap{flex:1;overflow:hidden;display:none;position:relative;}
 #map-wrap.show{display:block;}
 #estate-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
@@ -80,9 +107,9 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .bld-card{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#0f0f1c;border:1px solid #202033;border-radius:7px;margin-bottom:6px;}
 .bld-icon{font-size:26px;flex-shrink:0;width:32px;text-align:center;}
 .bld-body{flex:1;}
-.bld-name{font-size:13px;font-weight:600;color:#cdc8b8;}
-.bld-desc{font-size:10px;color:#4a5a6a;margin-top:2px;}
-.bld-bonus{font-size:10px;color:#5a8a5a;margin-top:2px;}
+.bld-name{font-size:14px;font-weight:600;color:#cdc8b8;}
+.bld-desc{font-size:11px;color:#4a5a6a;margin-top:3px;}
+.bld-bonus{font-size:11px;color:#5a8a5a;margin-top:3px;}
 .bld-level{display:flex;gap:4px;margin-top:5px;}
 .bld-pip{width:18px;height:6px;border-radius:2px;background:#1a1a2a;}
 .bld-pip.filled{background:#c8a020;}
@@ -92,6 +119,39 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #map-canvas{display:block;width:100%;height:100%;}
 #clan-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #clan-wrap.show{display:block;}
+/* clan tab online view */
+.clan-online-hdr{background:#0c1a10;border:1px solid #2a4a2a;border-radius:8px;padding:12px 14px;margin-bottom:12px;}
+.clan-online-hdr h3{font-family:Georgia,serif;font-size:18px;color:#6ad08a;margin:0 0 4px;}
+.clan-online-hdr .c-meta{font-size:12px;color:#4a7a4a;}
+.clan-online-hdr .c-code{font-family:monospace;font-size:15px;color:#c8a020;background:#0e0c00;border:1px solid #3a3000;border-radius:4px;padding:3px 10px;letter-spacing:3px;display:inline-block;margin-top:2px;}
+.clan-online-hdr .c-code-lbl{font-size:11px;color:#4a6a4a;margin-top:5px;}
+.clan-member-list{margin-bottom:10px;}
+.clan-member-row{display:flex;align-items:flex-start;padding:8px 10px;border-radius:7px;margin-bottom:4px;background:#0a0a14;border:1px solid #1a1a28;}
+.clan-member-row .cm-dot{font-size:11px;margin-right:8px;padding-top:2px;flex-shrink:0;}
+.clan-member-row .cm-name{font-size:14px;color:#cdc8b8;font-weight:600;}
+.clan-member-row .cm-crown{font-size:12px;margin-left:3px;}
+.clan-member-row .cm-skills{font-size:11px;color:#4a7a4a;margin-top:3px;}
+.clan-poi-list{border-top:1px solid #1a1a2a;padding-top:8px;}
+.clan-poi-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;margin-bottom:5px;background:#0a0a14;border:1px solid #1a1a28;}
+.clan-poi-row.held{border-color:#2a4a2a;background:#090f09;}
+.cpr-info{flex:0 0 auto;min-width:120px;max-width:180px;}
+.clan-poi-row .cpr-name{font-size:13px;color:#b0a090;font-weight:600;}
+.clan-poi-row.held .cpr-name{color:#6ad08a;}
+.clan-poi-row .cpr-owner{font-size:11px;color:#4a5a4a;margin-top:2px;}
+.clan-poi-btn{background:#0a1a14;border:1px solid #2a5a3a;color:#6ad08a;border-radius:5px;padding:4px 12px;font-size:12px;cursor:pointer;flex-shrink:0;white-space:nowrap;}
+.clan-poi-btn:hover{background:#102a1c;}
+.clan-noclan{text-align:center;padding:24px 12px;}
+.clan-noclan p{color:#5a6a5a;font-size:14px;margin-bottom:12px;}
+.clan-form-wrap{background:#0c0c18;border:1px solid #2a2a40;border-radius:8px;padding:16px;margin:10px 0;}
+.clan-form-wrap .sb-l{display:block;font-size:11px;letter-spacing:.8px;color:#5a6a7a;text-transform:uppercase;margin:10px 0 4px;}
+.clan-form-wrap input{width:100%;background:#0a0a14;border:1px solid #2a2a40;color:#cdc8b8;border-radius:5px;padding:9px 11px;font-size:14px;outline:none;box-sizing:border-box;}
+.clan-form-wrap input:focus{border-color:#3a8a5a;}
+.clan-form-err{color:#d05050;font-size:12px;min-height:16px;margin:6px 0;}
+.clan-form-btns{display:flex;gap:8px;margin-top:10px;}
+.clan-form-btns button{flex:1;background:#0a1a14;border:1px solid #2a6a4a;color:#6ad08a;border-radius:6px;padding:10px;font-size:13px;cursor:pointer;font-family:Georgia,serif;}
+.clan-form-btns button.cancel{background:#0a0a14;border-color:#2a2a40;color:#5a6a7a;}
+.clan-siege-bar{background:#0c0f1a;border:1px solid #2a3a5a;border-radius:6px;padding:9px 11px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#6a8a9a;}
+.clan-siege-bar b{color:#c8a020;}
 #class-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #class-wrap.show{display:block;}
 #gear-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
@@ -109,26 +169,26 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .gd-itemname{font-size:10px;color:#cdb88a;font-weight:600;line-height:1.2;}
 .gd-pow{font-size:9px;color:#7a9a6a;}
 .gd-empty{font-size:9px;color:#33394a;font-style:italic;}
-.gear-list-row{display:flex;align-items:center;gap:8px;padding:6px 9px;background:#0f0f1c;border:1px solid #202033;border-radius:6px;margin-bottom:4px;cursor:pointer;}
+.gear-list-row{display:flex;align-items:center;gap:10px;padding:7px 10px;background:#0f0f1c;border:1px solid #202033;border-radius:7px;margin-bottom:5px;cursor:pointer;}
 .gear-list-row:hover{border-color:#5a5070;background:#141424;}
-.gl-ico{font-size:18px;}
-.gl-name{flex:1;font-size:12px;color:#cdc8b8;}
-.gl-slot{font-size:9px;color:#4a5a6a;letter-spacing:1px;text-transform:uppercase;}
-.gl-pow{font-size:11px;color:#9a8a4a;font-weight:700;min-width:28px;text-align:right;}
+.gl-ico{font-size:20px;}
+.gl-name{flex:1;font-size:13px;color:#cdc8b8;}
+.gl-slot{font-size:10px;color:#4a5a6a;letter-spacing:1px;text-transform:uppercase;}
+.gl-pow{font-size:12px;color:#9a8a4a;font-weight:700;min-width:32px;text-align:right;}
 .cls-card{background:#0c0c18;border:1px solid #252538;border-radius:6px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
 .cls-card:hover{border-color:#3a3a6a;}
 .cls-card.cls-active{border-color:#c8a020;background:#0f0f20;}
 .cls-head{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
 .cls-ico{font-size:18px;}
-.cls-name{font-size:12px;font-weight:bold;letter-spacing:.5px;}
+.cls-name{font-size:14px;font-weight:bold;letter-spacing:.5px;}
 .cls-badge{font-size:9px;background:#c8a020;color:#080808;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;}
 .cls-lvl{font-size:10px;color:#4a6a5a;margin-top:1px;}
 .cls-bar{height:3px;background:#1a1a2e;border-radius:2px;margin-bottom:6px;}
 .cls-fill{height:100%;border-radius:2px;transition:width .3s;}
-.cls-desc{font-size:10px;color:#5a6a7a;margin-bottom:3px;}
-.cls-pvp{font-size:9px;color:#3a4a5a;letter-spacing:.3px;}
-.clan-section{margin-bottom:14px;}
-.clan-section h4{font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.cls-desc{font-size:11px;color:#5a6a7a;margin-bottom:3px;}
+.cls-pvp{font-size:10px;color:#3a4a5a;letter-spacing:.3px;}
+.clan-section{margin-bottom:16px;}
+.clan-section h4{font-size:11px;color:#4a5a6a;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
 #clan-create{background:#0f0f1c;border:1px solid #2a2a40;border-radius:8px;padding:14px;}
 #clan-create p{font-size:12px;color:#5a6a5a;margin-bottom:10px;line-height:1.5;}
 .clan-input-row{display:flex;gap:8px;margin-bottom:8px;}
@@ -140,12 +200,12 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #clan-create-btn{background:#1a1500;border:1px solid #c8a020;color:#c8a020;border-radius:5px;padding:7px 20px;font-size:12px;cursor:pointer;font-family:Georgia,serif;letter-spacing:2px;}
 .clan-card{background:#0f0f1c;border:1px solid #2a2a40;border-radius:7px;padding:10px 12px;margin-bottom:7px;}
 .clan-card .cc-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
-.cc-banner{font-size:20px;}.cc-name{font-size:13px;font-weight:700;color:#cdc8b8;}.cc-tag{font-size:10px;color:#4a5a6a;}
-.cc-body{font-size:11px;color:#4a5a6a;line-height:1.5;}
-.cc-territory{font-size:11px;color:#5a7a5a;margin-top:3px;}
+.cc-banner{font-size:22px;}.cc-name{font-size:14px;font-weight:700;color:#cdc8b8;}.cc-tag{font-size:11px;color:#4a5a6a;}
+.cc-body{font-size:12px;color:#4a5a6a;line-height:1.5;}
+.cc-territory{font-size:12px;color:#5a7a5a;margin-top:3px;}
 .territory-row{display:flex;align-items:center;gap:8px;padding:6px 9px;background:#0a0a14;border:1px solid #1e1e30;border-radius:6px;margin-bottom:4px;}
 .tr-icon{font-size:16px;width:20px;text-align:center;}.tr-body{flex:1;}
-.tr-name{font-size:12px;font-weight:600;color:#cdc8b8;}.tr-holder{font-size:10px;color:#4a5a6a;margin-top:1px;}.tr-prod{font-size:10px;color:#5a7a5a;}
+.tr-name{font-size:13px;font-weight:600;color:#cdc8b8;}.tr-holder{font-size:11px;color:#4a5a6a;margin-top:2px;}.tr-prod{font-size:11px;color:#5a7a5a;}
 .tr-action{font-size:11px;padding:3px 9px;border-radius:4px;border:1px solid;cursor:pointer;}
 .tr-claim{color:#5a9a5a;border-color:#3a7a3a;background:#0a120a;}
 .tr-raid{color:#9a5a3a;border-color:#7a3a2a;background:#12080a;}
@@ -157,9 +217,9 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .tr-upgrade:hover:not(:disabled){background:#221a08;border-color:#c8a020;}
 .tr-upgrade:disabled{opacity:.45;cursor:not-allowed;color:#6a6a4a;}
 .tr-upgrade span{font-size:9px;color:#7a7a5a;}
-.hold-line{font-size:11px;color:#8a9a8a;padding:3px 4px;border-bottom:1px solid #16161e;}
+.hold-line{font-size:12px;color:#8a9a8a;padding:4px 4px;border-bottom:1px solid #16161e;}
 .hold-buff{color:#6a9a5a;font-size:10px;}
-.zone-head{font-size:10px;font-weight:700;letter-spacing:.5px;padding:6px 8px;border-radius:5px;margin:8px 0 5px;}
+.zone-head{font-size:11px;font-weight:700;letter-spacing:.5px;padding:7px 10px;border-radius:5px;margin:8px 0 5px;}
 .zone-head.zone-safe{color:#7aaad0;background:#0a1018;border:1px solid #2a3a4a;}
 .zone-head.zone-danger{color:#d08050;background:#160c08;border:1px solid #5a2f1a;}
 .siege-banner{background:#0c0f1a;border:1px solid #2a3a5a;border-radius:8px;padding:9px 11px;margin-bottom:10px;}
@@ -175,22 +235,22 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .tr-garrison:hover{color:#9abade;}
 #market-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #market-wrap.show{display:block;}
-.mk-head{font-size:12px;font-weight:700;color:#c8a020;margin-bottom:8px;line-height:1.5;}
-.mk-row{display:flex;align-items:center;gap:9px;padding:6px 8px;background:#0f0f1c;border:1px solid #202033;border-radius:6px;margin-bottom:4px;}
-.mk-ico{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
+.mk-head{font-size:13px;font-weight:700;color:#c8a020;margin-bottom:10px;line-height:1.5;}
+.mk-row{display:flex;align-items:center;gap:10px;padding:7px 10px;background:#0f0f1c;border:1px solid #202033;border-radius:7px;margin-bottom:5px;}
+.mk-ico{font-size:20px;width:26px;text-align:center;flex-shrink:0;}
 .mk-info{flex:1;min-width:0;}
-.mk-name{font-size:12px;color:#cdc8b8;}
-.mk-price{font-size:10px;color:#5a6a7a;margin-top:1px;}
+.mk-name{font-size:13px;color:#cdc8b8;}
+.mk-price{font-size:11px;color:#5a6a7a;margin-top:2px;}
 .mk-price b{color:#c8a020;}
 .mk-up{color:#5aa050;}.mk-dn{color:#b05040;}.mk-flat{color:#4a4a5a;}
 .mk-btns{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:150px;}
-.mk-buy,.mk-sell{font-size:10px;border-radius:4px;padding:3px 7px;cursor:pointer;border:1px solid;}
+.mk-buy,.mk-sell{font-size:11px;border-radius:4px;padding:4px 9px;cursor:pointer;border:1px solid;}
 .mk-buy{background:#0a120a;border-color:#3a6a3a;color:#7aba6a;}
 .mk-buy:hover{background:#0f1a0f;}
 .mk-sell{background:#14110a;border-color:#6a5a2a;color:#c8a020;}
 .mk-sell:hover:not(:disabled){background:#1f1908;}
 .mk-sell:disabled{opacity:.35;cursor:not-allowed;}
-.war-report{background:#0a0812;border:1px solid #3a2a3a;border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:11px;line-height:1.5;}
+.war-report{background:#0a0812;border:1px solid #3a2a3a;border-radius:6px;padding:9px 11px;margin-bottom:6px;font-size:12px;line-height:1.5;}
 .war-report .wr-head{color:#9a6a3a;font-weight:700;margin-bottom:3px;}
 .war-report .wr-win{color:#6a9a5a;}.war-report .wr-loss{color:#9a4a3a;}
 .wr-phases{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;}
@@ -199,11 +259,11 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .wr-phase.lost{color:#a04040;background:#140a0a;border:1px solid #6a2a2a;}
 #prog-wrap{padding:8px 12px;background:#0f0f1c;border-top:1px solid #252538;flex-shrink:0;}
 #prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
-#prog-name{font-size:12px;color:#8a9aaa;}
+#prog-name{font-size:13px;color:#8a9aaa;}
 #prog-stop{font-size:10px;color:#7a3a4a;cursor:pointer;padding:2px 7px;border:1px solid #4a2535;border-radius:3px;}
 #prog-bg{height:10px;background:#1a1a2a;border-radius:5px;overflow:hidden;}
 #prog-fill{height:100%;background:#c8a020;border-radius:5px;width:0%;transition:width .08s linear;}
-#prog-rate{font-size:10px;color:#3a4a3a;margin-top:4px;}
+#prog-rate{font-size:11px;color:#3a4a3a;margin-top:4px;}
 #right{width:210px;background:#0f0f1c;border-left:1px solid #252538;display:flex;flex-direction:column;flex-shrink:0;}
 #inv-hdr{padding:7px 9px;border-bottom:1px solid #252538;display:flex;justify-content:space-between;align-items:center;}
 #inv-hdr h4{font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;}
@@ -226,11 +286,11 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .islot.tier-epic{border-color:#6a40b0!important;box-shadow:0 0 6px rgba(140,80,220,.4);}
 .islot.tier-legendary{border-color:#b03020!important;animation:pulse-leg 1.5s infinite;}
 @keyframes pulse-leg{0%,100%{box-shadow:0 0 8px rgba(200,64,32,.5);}50%{box-shadow:0 0 16px rgba(200,64,32,.9);}}
-.tip-box{display:none;position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:#141428;border:1px solid #3a3a60;border-radius:5px;padding:5px 9px;white-space:nowrap;z-index:50;font-size:11px;color:#cdc8b8;pointer-events:none;}
+.tip-box{display:none;position:absolute;bottom:calc(100% + 5px);right:0;background:#141428;border:1px solid #3a3a60;border-radius:5px;padding:5px 9px;white-space:normal;width:160px;z-index:50;font-size:11px;line-height:1.4;color:#cdc8b8;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.6);}
 .islot:hover .tip-box{display:block;}
 #log-wrap{border-top:1px solid #252538;height:160px;overflow-y:auto;padding:5px 8px;}
 #log-hdr{font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;position:sticky;top:0;background:#0f0f1c;padding:2px 0;}
-.log-line{font-size:11px;line-height:1.55;color:#4a5a4a;}
+.log-line{font-size:12px;line-height:1.6;color:#4a5a4a;}
 .log-line.good{color:#6a8a5a;}.log-line.nice{color:#a09050;}.log-line.rare{color:#c8a020;font-weight:600;}
 .log-line.epic{color:#9060d0;font-weight:700;}.log-line.legendary{color:#d05030;font-weight:700;}
 .log-line.info{color:#5a7a9a;}.log-line.lvlup{color:#50b0a0;font-weight:700;}.log-line.war{color:#9a5a3a;}
@@ -265,8 +325,8 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .task-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .task-icon{font-size:26px;}
 .task-info{flex:1;}
-.task-name{font-size:13px;font-weight:700;color:#cdc8b8;}
-.task-prog{font-size:11px;color:#5a4a5a;margin-top:2px;}
+.task-name{font-size:14px;font-weight:700;color:#cdc8b8;}
+.task-prog{font-size:12px;color:#5a4a5a;margin-top:3px;}
 .task-bar{height:5px;background:#1a1020;border-radius:3px;margin-top:4px;overflow:hidden;}
 .task-fill{height:100%;background:#8a3060;border-radius:3px;}
 .slayer-btn{width:100%;padding:8px;border-radius:5px;cursor:pointer;font-size:12px;letter-spacing:1px;margin-top:4px;}
@@ -280,12 +340,12 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #modal-overlay.show{display:flex;}
 #modal-box{background:#0f0f1c;border:1px solid #3a3a60;border-radius:10px;padding:22px;width:480px;max-width:90vw;max-height:85vh;overflow-y:auto;}
 #modal-box h3{font-family:Georgia,serif;font-size:16px;color:#c8a020;margin-bottom:6px;}
-#modal-box .mdesc{font-size:12px;color:#5a6a5a;margin-bottom:16px;line-height:1.5;}
-.modal-opt{display:flex;align-items:flex-start;gap:10px;padding:10px;background:#141424;border:1px solid #2a2a40;border-radius:7px;cursor:pointer;margin-bottom:7px;}
+#modal-box .mdesc{font-size:13px;color:#5a6a5a;margin-bottom:16px;line-height:1.55;}
+.modal-opt{display:flex;align-items:flex-start;gap:12px;padding:11px;background:#141424;border:1px solid #2a2a40;border-radius:8px;cursor:pointer;margin-bottom:7px;}
 .modal-opt:hover{border-color:#c8a020;background:#18181e;}
-.modal-opt .mopt-ico{font-size:26px;flex-shrink:0;}
-.modal-opt .mopt-name{font-size:13px;font-weight:600;color:#cdc8b8;}
-.modal-opt .mopt-desc{font-size:11px;color:#4a5a4a;margin-top:2px;line-height:1.4;}
+.modal-opt .mopt-ico{font-size:28px;flex-shrink:0;}
+.modal-opt .mopt-name{font-size:14px;font-weight:600;color:#cdc8b8;}
+.modal-opt .mopt-desc{font-size:12px;color:#4a5a4a;margin-top:3px;line-height:1.4;}
 .phase-report{background:#0a0814;border:1px solid #2a2040;border-radius:7px;padding:10px 12px;margin:8px 0;}
 .phase-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1a1a28;font-size:12px;}
 .phase-row:last-child{border-bottom:none;}
@@ -304,6 +364,146 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 .to-name{font-size:12px;font-weight:600;color:#cdc8b8;}
 .to-desc{font-size:10px;color:#4a5a4a;margin-top:2px;line-height:1.35;}
 .to-lock{font-size:10px;color:#5a3a3a;font-style:italic;margin-top:2px;}
+
+/* ── SKILLS COMPACT GRID ─────────────────────────────── */
+.sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:2px 0;}
+.sk-cell{background:#0c0c18;border:1px solid #1e1e30;border-radius:7px;padding:7px 3px 5px;text-align:center;cursor:pointer;position:relative;border-left:3px solid #2a2a3a;transition:background .1s;}
+.sk-cell:hover{background:#141424;}
+.sk-cell.sk-active{background:#0f0f20;border-top-color:#c8a020;border-right-color:#c8a020;border-bottom-color:#c8a020;border-left-color:#c8a020!important;}
+.sk-ico{font-size:20px;display:block;line-height:1;}
+.sk-lvl{font-size:17px;font-weight:700;color:#ddd8c8;line-height:1.1;display:block;margin-top:2px;}
+.sk-nm{font-size:9px;color:#3a4a5a;text-transform:uppercase;letter-spacing:.5px;display:block;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px;}
+.sk-bar{height:2px;border-radius:1px;margin:4px 4px 0;}
+.sk-totlvl{text-align:center;font-size:11px;color:#4a5a4a;padding:7px 4px 2px;border-top:1px solid #1e1e30;margin-top:4px;line-height:1.4;}
+.sk-totlvl b{color:#c8a020;font-size:13px;}
+
+/* ── LOCATION HUD STRIP ──────────────────────────────── */
+#loc-strip{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#0a0c14;border-bottom:2px solid #1a1a2a;flex-shrink:0;}
+#ls-loc{font-family:Georgia,serif;font-size:14px;color:#c8a020;letter-spacing:.5px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ls-btn{border-radius:7px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:Georgia,serif;font-weight:700;flex-shrink:0;white-space:nowrap;border:2px solid;letter-spacing:.3px;transition:background .1s;}
+#ls-travel{background:#0d1a0d;border-color:#3a7a3a;color:#6ad08a;}
+#ls-travel:hover{background:#142214;border-color:#5aaa5a;}
+#ls-world{background:#0a0a1a;border-color:#3a5a8a;color:#6a9ad0;}
+#ls-world:hover{background:#0c0c22;border-color:#5a7aaa;}
+
+/* ── RESOURCE STRIP ──────────────────────────────────── */
+#res-strip{display:flex;align-items:center;gap:5px;padding:4px 10px;background:#07070e;border-bottom:1px solid #141424;flex-shrink:0;overflow-x:auto;scrollbar-width:none;min-height:26px;}
+#res-strip::-webkit-scrollbar{display:none;}
+.rs-pill{display:inline-flex;align-items:center;gap:3px;background:#0c0c18;border:1px solid #1e1e30;border-radius:10px;padding:2px 8px;font-size:11px;color:#6a7a6a;white-space:nowrap;flex-shrink:0;}
+.rs-pill b{color:#c8a020;}
+
+/* ── CANVAS COLLAPSE ─────────────────────────────────── */
+#canvas-wrap{transition:height .2s ease;}
+#canvas-wrap.collapsed{height:0!important;overflow:hidden;}
+#canvas-toggle{position:absolute;bottom:5px;right:10px;background:rgba(0,0,0,.55);border:1px solid #2a3a2a;color:#4a7a4a;border-radius:4px;padding:2px 9px;font-size:11px;cursor:pointer;z-index:2;letter-spacing:.5px;}
+#canvas-toggle:hover{color:#6ad08a;}
+
+/* ── RICHER PROGRESS BAR ─────────────────────────────── */
+#prog-wrap{padding:8px 12px 10px;background:#0f0f1c;border-top:1px solid #252538;flex-shrink:0;}
+#prog-action-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:8px;}
+#prog-action-name{font-size:13px;color:#a09870;font-weight:600;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#prog-xp-badge{font-size:11px;color:#6ad08a;background:#0c1a10;border:1px solid #2a5a3a;border-radius:4px;padding:2px 7px;flex-shrink:0;white-space:nowrap;}
+#prog-action-bar-wrap{height:8px;background:#1a1a2a;border-radius:4px;overflow:hidden;margin-bottom:5px;}
+#prog-fill{height:100%;background:#c8a020;border-radius:4px;width:0%;transition:width .08s linear;}
+#prog-skill-row{display:flex;justify-content:space-between;font-size:11px;color:#4a5a4a;margin-bottom:3px;}
+#prog-skill-bar-wrap{height:3px;background:#1a2a1a;border-radius:2px;overflow:hidden;margin-bottom:4px;}
+#prog-skill-fill{height:100%;border-radius:2px;width:0%;transition:width .5s ease;}
+#prog-detail{font-size:11px;color:#3a4a3a;}
+#prog-stop{font-size:11px;color:#7a3a4a;cursor:pointer;padding:2px 8px;border:1px solid #4a2535;border-radius:4px;background:transparent;display:none;}
+
+/* ── ACTION CARD XP BADGE ────────────────────────────── */
+.xp-badge{display:inline-block;font-size:10px;background:#0c1a10;border:1px solid #2a5a3a;color:#6ad08a;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle;font-weight:400;}
+
+/* ── LOG FILTERS ─────────────────────────────────────── */
+#log-hdr{padding:5px 8px 4px;position:sticky;top:0;background:#0f0f1c;border-bottom:1px solid #1e1e30;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+#log-hdr-lbl{font-size:10px;color:#3a3a5a;letter-spacing:1.5px;text-transform:uppercase;flex:1;}
+.lf-tab{font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid #1e1e30;color:#3a4a5a;cursor:pointer;background:#0a0a14;}
+.lf-tab.sel{border-color:#c8a020;color:#c8a020;background:#14120a;}
+#inv-hdr h4{font-size:10px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;}
+/* ===== v0.19 readability + contrast pass ===== */
+body{font-size:15px;color:#dcd8ca;}
+.tip-box{display:none!important;}
+#skills-panel{width:196px;}
+#skills-panel h4{font-size:12px;color:#8b96aa;}
+.s-name{font-size:13px;color:#aeb8c8;}
+.s-xptext{font-size:11px;color:#8b96aa;}
+.tab-lbl{font-size:12px;color:#9aa6ba;}
+#action-wrap h4{font-size:13px;color:#aeb8c8;}
+.ac-name{font-size:15px;color:#ece8da;}
+.ac-meta{font-size:13px;color:#97a0b2;}
+.ac-drops{font-size:13px;color:#86bd86;}
+.ac-req{font-size:12px;color:#dd8a8a;}
+.bld-name{color:#ece8da;}
+.bld-desc{font-size:12px;color:#97a0b2;}
+.bld-bonus{font-size:12px;color:#86c486;}
+.clan-section h4{color:#8b96aa;}
+.cc-body,.cc-tag,.tr-holder,.cpr-owner,.gl-slot,.gd-slotname,.cls-pvp{color:#9098aa;}
+.cls-desc{font-size:12px;color:#97a0b2;}
+.cls-lvl{color:#86c4a4;}
+.tr-name{font-size:14px;}
+.tr-buff{font-size:12px;color:#86bd86;}
+.tr-garrison{font-size:12px;color:#86a6cc;}
+.clan-poi-row .cpr-name{font-size:14px;color:#c2b29c;}
+.clan-member-row .cm-skills,.sb-member-skills,.clan-online-hdr .c-meta{color:#7aa87a;}
+.mk-name{font-size:14px;color:#dcd8ca;}
+.mk-price{font-size:12px;color:#97a0b2;}
+.gd-itemname{font-size:11px;}
+.gd-pow{font-size:10px;color:#8fb88f;}
+.gd-empty{font-size:10px;color:#5a6276;}
+.gs-power span{font-size:10px;color:#9098aa;}
+.gs-breakdown{font-size:12px;color:#97a0b2;}
+#inv-hdr h4{font-size:11px;color:#8b96aa;}
+#inv-slots{font-size:11px;color:#86a486;}
+#right{width:236px;}
+.log-line{font-size:12px;color:#7d8a7d;}
+#prog-name{color:#aeb8c8;}
+#prog-rate{color:#86a486;}
+/* ===== v0.20 big-card action grid ===== */
+#action-wrap{padding:14px;}
+#action-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;align-content:start;}
+.act-card{flex-direction:column;align-items:stretch;text-align:center;padding:18px 16px;gap:6px;min-height:172px;justify-content:flex-start;border-width:2px;}
+.act-card .ac-ico{font-size:52px;width:100%;text-align:center;margin-bottom:4px;line-height:1;}
+.act-card .ac-body{width:100%;text-align:center;}
+.act-card .ac-name{font-size:17px;justify-content:center;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.act-card .ac-meta{font-size:13px;margin-top:4px;}
+.act-card .ac-drops{font-size:12px;margin-top:4px;}
+.act-card .ac-req{font-size:12px;margin-top:5px;}
+.act-card:hover:not(.locked){transform:translateY(-2px);}
+.act-card.running{box-shadow:0 0 0 2px #c8a020 inset;}
+.xp-badge{display:inline-block;background:#16210e;border:1px solid #3a5a2a;color:#9ad06a;font-size:11px;padding:1px 7px;border-radius:10px;}
+/* ===== v0.21 global brighten + card grids ===== */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;align-content:start;}
+#hdr-loc{color:#86b086;}#loc-sub{color:#9aa6b8;}
+.clan-section h4,#inv-hdr h4,#skills-panel h4,#action-wrap h4{color:#9aa3b8;}
+.sb-l,.clan-form-wrap .sb-l,#sb-box #sb-msg{color:#a6b0c2;}
+.cc-body,.cc-tag,.tr-holder,.cpr-owner,.gl-slot,.gd-slotname,.cls-pvp,.clan-siege-bar,.gs-breakdown{color:#9aa3b6;}
+.cc-territory,.tr-prod,.tr-buff,.cls-lvl,.clan-member-row .cm-skills,.clan-online-hdr .c-meta,.c-code-lbl,.sb-member-skills{color:#84c684;}
+.clan-create p,.clan-noclan p,.cls-desc{color:#aab4c4;}
+.clan-poi-row .cpr-name{color:#cdbf9c;}
+.war-report .wr-head{color:#c89050;}
+.gs-power span{color:#9aa3b6;}.gd-itemname{color:#e2ca9a;}.gd-pow{color:#9ad09a;}.gd-empty{color:#6a7488;}.gl-name{color:#dcd8ca;}
+.mk-name{color:#dcd8ca;}.mk-price{color:#9aa3b6;}
+#prog-name{color:#bcc6d4;}#prog-rate{color:#86b086;}#inv-slots{color:#86b086;}.log-line{color:#93a093;}
+.cm-name,.tr-name,.cc-name,.bld-name,.mk-name,.gl-name,.cpr-name{font-size:15px;}
+.bld-card,.mk-row,.gear-list-row{padding:12px 14px;}
+.clan-poi-row{padding:11px 13px;}.clan-member-row{padding:10px 12px;}
+#market-panel{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;align-content:start;}
+.mk-head{grid-column:1/-1;}
+.gear-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;align-content:start;}
+/* classes + clan: grid the long lists so they're concise */
+#class-panel{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;align-content:start;}
+.clan-member-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;}
+.clan-poi-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:8px;border-top:none;padding-top:0;}
+.clan-section h4,.clan-poi-list .clan-siege-bar{grid-column:1/-1;}
+.act-toggle{grid-column:1/-1;display:flex;gap:8px;margin-bottom:6px;}
+.act-toggle button{background:#0f1420;border:1px solid #2a3344;color:#9aa3b8;border-radius:8px;padding:7px 16px;font-size:13px;cursor:pointer;}
+.act-toggle button:hover{background:#141b2a;}
+.act-toggle button.on{background:#16210e;border-color:#3a5a2a;color:#9ad06a;}
+.act-empty{grid-column:1/-1;padding:24px;text-align:center;color:#9aa3b8;font-size:14px;}
+.act-card.locked{opacity:.72;}
+.act-card.locked .ac-name{color:#aab4c4;}
+.ac-req{color:#e0a45a;font-weight:500;}
+.ac-where{font-size:12px;color:#8ab0dc;margin-top:5px;}
 </style>
 </head>
 <body>
@@ -314,6 +514,7 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
   <span id="hdr-ironman">⚔ IRONMAN</span>
   <span id="hdr-class"></span>
   <span id="hdr-gold">🪙 0</span>
+  <span id="hdr-totlvl" style="color:#c8a020;font-size:12px;"></span>
   <span id="hdr-loc"></span>
   <span id="hdr-offline"></span>
   <button class="hdr-btn" onclick="saveGame()">Save</button>
@@ -334,22 +535,37 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
     <button id="sb-cancel" onclick="sbCloseOverlay()">Play offline</button>
   </div>
 </div></div>
+<div id="sb-clan-overlay"><div id="sb-clan-box">
+  <h3 id="sbc-title">⚔️ Clan</h3>
+  <div id="sbc-body"></div>
+  <div id="sb-clan-err"></div>
+  <div class="sb-row2" style="margin-top:10px;">
+    <button id="sbc-action" class="sb-clan-btn" onclick="sbcSubmit()" style="flex:1">OK</button>
+    <button class="sb-clan-btn" onclick="sbcClose()" style="background:#0a0a14;border-color:#2a2a40;color:#5a6a7a;">Close</button>
+  </div>
+</div></div>
 <div id="main">
-  <div id="skills-panel"><h4>Skills</h4><div id="skill-list"></div></div>
+  <div id="skills-panel"><h4>Skills</h4><div id="skill-list" class="sk-grid"></div><div class="sk-totlvl" id="sk-totlvl">Total <b id="sk-totlvl-val">—</b></div></div>
   <div id="center">
     <div id="canvas-wrap">
       <canvas id="game-canvas"></canvas>
       <div id="loc-label"></div><div id="loc-sub"></div>
-      <button id="travel-btn" onclick="openTravelModal()">Travel ▸</button>
+      <button id="canvas-toggle" onclick="toggleCanvas()">▾ hide</button>
     </div>
+    <div id="loc-strip">
+      <span id="ls-loc">Your Estate</span>
+      <button id="ls-travel" class="ls-btn" onclick="openTravelModal()">🗺 Travel</button>
+      <button id="ls-world" class="ls-btn" onclick="sbOnlineClick()">🌍 World</button>
+    </div>
+    <div id="res-strip"></div>
     <div id="tab-bar">
-      <div class="tab-btn active" id="tab-actions" onclick="showTab('actions')">ACTIONS</div>
-      <div class="tab-btn" id="tab-map" onclick="showTab('map')">WORLD MAP</div>
-      <div class="tab-btn" id="tab-estate" onclick="showTab('estate')">ESTATE</div>
-      <div class="tab-btn" id="tab-clan" onclick="showTab('clan')">CLAN</div>
-      <div class="tab-btn" id="tab-classes" onclick="showTab('classes')">CLASSES</div>
-      <div class="tab-btn" id="tab-gear" onclick="showTab('gear')">GEAR</div>
-      <div class="tab-btn" id="tab-market" onclick="showTab('market')">MARKET</div>
+      <div class="tab-btn active" id="tab-actions" onclick="showTab('actions')"><span class="tab-ico">🎯</span><span class="tab-lbl">Actions</span></div>
+      <div class="tab-btn" id="tab-map" onclick="showTab('map')"><span class="tab-ico">🗺️</span><span class="tab-lbl">Map</span></div>
+      <div class="tab-btn" id="tab-estate" onclick="showTab('estate')"><span class="tab-ico">🏛️</span><span class="tab-lbl">Estate</span></div>
+      <div class="tab-btn" id="tab-clan" onclick="showTab('clan')"><span class="tab-ico">⚔️</span><span class="tab-lbl">Clan</span></div>
+      <div class="tab-btn" id="tab-classes" onclick="showTab('classes')"><span class="tab-ico">🎓</span><span class="tab-lbl">Classes</span></div>
+      <div class="tab-btn" id="tab-gear" onclick="showTab('gear')"><span class="tab-ico">🛡️</span><span class="tab-lbl">Gear</span></div>
+      <div class="tab-btn" id="tab-market" onclick="showTab('market')"><span class="tab-ico">🏪</span><span class="tab-lbl">Market</span></div>
     </div>
     <div id="action-wrap" class="show">
       <h4 id="action-title">Select a skill</h4>
@@ -362,19 +578,34 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
     <div id="gear-wrap"><div id="gear-panel"></div></div>
     <div id="market-wrap"><div id="market-panel"></div></div>
     <div id="prog-wrap">
-      <div id="prog-top">
-        <span id="prog-name" style="color:#3a4a5a;">— idle —</span>
-        <span id="prog-stop" onclick="stopAction()" style="display:none;">Stop</span>
+      <div id="prog-action-row">
+        <span id="prog-action-name" style="color:#3a4a5a;">— idle —</span>
+        <span id="prog-xp-badge" style="display:none;"></span>
+        <button id="prog-stop" onclick="stopAction()">■ Stop</button>
       </div>
-      <div id="prog-bg"><div id="prog-fill"></div></div>
-      <div id="prog-rate"></div>
+      <div id="prog-action-bar-wrap"><div id="prog-fill"></div></div>
+      <div id="prog-skill-row" style="display:none;">
+        <span id="prog-skill-name"></span>
+        <span id="prog-skill-pct"></span>
+      </div>
+      <div id="prog-skill-bar-wrap" style="display:none;"><div id="prog-skill-fill"></div></div>
+      <div id="prog-detail"></div>
     </div>
   </div>
   <div id="right">
     <div id="inv-hdr"><h4>Inventory</h4><span id="inv-slots">0/28</span></div>
     <div id="equip-bar"></div>
     <div id="inv-grid"></div>
-    <div id="log-wrap"><div id="log-hdr">Log</div><div id="log-lines"></div></div>
+    <div id="log-wrap">
+      <div id="log-hdr">
+        <span id="log-hdr-lbl">Log</span>
+        <span class="lf-tab sel" onclick="setLogFilter('')">All</span>
+        <span class="lf-tab" onclick="setLogFilter('drop')">Drops</span>
+        <span class="lf-tab" onclick="setLogFilter('lvlup')">Levels</span>
+        <span class="lf-tab" onclick="setLogFilter('clan war')">Clan</span>
+      </div>
+      <div id="log-lines"></div>
+    </div>
   </div>
 </div>
 <div id="start-screen">
@@ -535,12 +766,12 @@ const ITEMS={
   cooked_salmon:{n:'Cooked Salmon',e:'🐠',val:120,tier:'common'},
   cooked_lobster:{n:'Cooked Lobster',e:'🦞',val:200,tier:'uncommon'},
   cooked_shark:{n:'Cooked Shark',e:'🦈',val:500,tier:'rare'},
-  burnt_food:{n:'Burnt Food',e:'🔥',val:0,tier:'common'},
+  burnt_food:{n:'Burnt Scraps',e:'🔥',val:3,tier:'common',usable:true},
   potato:{n:'Potato',e:'🥔',val:8,tier:'common'},
-  herb_guam:{n:'Guam Herb',e:'🌿',val:40,tier:'common'},
-  herb_tarromin:{n:'Tarromin Herb',e:'🌿',val:80,tier:'uncommon'},
-  herb_harralander:{n:'Harralander',e:'🌿',val:160,tier:'uncommon'},
-  herb_avantoe:{n:'Avantoe Herb',e:'🌿',val:40,tier:'uncommon'},
+  herb_guam:{n:'Marshleaf',e:'🌿',val:40,tier:'common'},
+  herb_tarromin:{n:'Bitterroot',e:'🌿',val:80,tier:'uncommon'},
+  herb_harralander:{n:'Sunclover',e:'🌿',val:160,tier:'uncommon'},
+  herb_avantoe:{n:'Mistbloom',e:'🌿',val:40,tier:'uncommon'},
   xp_potion:{n:'XP Potion',e:'🧪',val:200,tier:'uncommon',usable:true},
   combat_potion:{n:'Combat Potion',e:'⚗️',val:350,tier:'uncommon',usable:true},
   drop_potion:{n:'Drop Potion',e:'🫧',val:400,tier:'uncommon',usable:true},
@@ -689,23 +920,23 @@ const ACTIONS={
   cook_lobster:{loc:'estate',skill:'cooking',n:'Cook Lobster',e:'🦞',req:40,xp:120,ms:2500,drops:[{id:'cooked_lobster',qty:1,ch:.9},{id:'burnt_food',qty:1,ch:.1}],needs:[{id:'raw_lobster',qty:1}]},
   cook_shark:{loc:'estate',skill:'cooking',n:'Cook Shark',e:'🦈',req:80,xp:210,ms:3500,drops:[{id:'cooked_shark',qty:1,ch:.95},{id:'burnt_food',qty:1,ch:.05}],needs:[{id:'raw_shark',qty:1}]},
   farm_potato:{loc:'estate',skill:'farming',n:'Grow Potatoes',e:'🥔',req:1,xp:25,ms:3000,drops:[{id:'potato',qty:3,ch:1}]},
-  farm_guam:{loc:'estate',skill:'farming',n:'Grow Guam',e:'🌿',req:9,xp:50,ms:5000,drops:[{id:'herb_guam',qty:2,ch:1}]},
-  farm_tarromin:{loc:'estate',skill:'farming',n:'Grow Tarromin',e:'🌿',req:19,xp:80,ms:7000,drops:[{id:'herb_tarromin',qty:2,ch:1}]},
-  farm_harralander:{loc:'estate',skill:'farming',n:'Grow Harralander',e:'🌿',req:26,xp:110,ms:9000,drops:[{id:'herb_harralander',qty:1,ch:1}]},
+  farm_guam:{loc:'estate',skill:'farming',n:'Grow Marshleaf',e:'🌿',req:9,xp:50,ms:5000,drops:[{id:'herb_guam',qty:2,ch:1}]},
+  farm_tarromin:{loc:'estate',skill:'farming',n:'Grow Bitterroot',e:'🌿',req:19,xp:80,ms:7000,drops:[{id:'herb_tarromin',qty:2,ch:1}]},
+  farm_harralander:{loc:'estate',skill:'farming',n:'Grow Sunclover',e:'🌿',req:26,xp:110,ms:9000,drops:[{id:'herb_harralander',qty:1,ch:1}]},
   herb_xp:{loc:'estate',skill:'herblore',n:'Brew XP Potion',e:'🧪',req:3,xp:25,ms:2000,drops:[{id:'xp_potion',qty:1,ch:1}],needs:[{id:'herb_guam',qty:2}]},
   herb_combat:{loc:'estate',skill:'herblore',n:'Brew Combat Potion',e:'⚗️',req:12,xp:50,ms:3000,drops:[{id:'combat_potion',qty:1,ch:1}],needs:[{id:'herb_tarromin',qty:2}]},
   herb_drop:{loc:'estate',skill:'herblore',n:'Brew Drop Potion',e:'🫧',req:22,xp:75,ms:4000,drops:[{id:'drop_potion',qty:1,ch:1}],needs:[{id:'herb_harralander',qty:2}]},
   herb_speed:{loc:'estate',skill:'herblore',n:'Brew Speed Potion',e:'💨',req:35,xp:95,ms:4500,drops:[{id:'speed_potion',qty:1,ch:1}],needs:[{id:'herb_avantoe',qty:2}]},
   herb_defense:{loc:'estate',skill:'herblore',n:'Brew Defense Potion',e:'🛡️',req:40,xp:100,ms:5000,drops:[{id:'defense_potion',qty:1,ch:1}],needs:[{id:'herb_avantoe',qty:1},{id:'herb_harralander',qty:1}]},
   herb_teleport:{loc:'estate',skill:'herblore',n:'Brew Teleport Potion',e:'🌀',req:55,xp:140,ms:6000,drops:[{id:'teleport_potion',qty:1,ch:1}],needs:[{id:'herb_avantoe',qty:2},{id:'herb_harralander',qty:1}]},
-  farm_avantoe:{loc:'estate',skill:'farming',n:'Grow Avantoe',e:'🌿',req:40,xp:150,ms:12000,drops:[{id:'herb_avantoe',qty:2,ch:1}]},
+  farm_avantoe:{loc:'estate',skill:'farming',n:'Grow Mistbloom',e:'🌿',req:40,xp:150,ms:12000,drops:[{id:'herb_avantoe',qty:2,ch:1}]},
   fletch_shafts:{loc:'estate',skill:'fletching',n:'Cut Arrow Shafts',e:'🪵',req:1,xp:5,ms:800,drops:[{id:'arrow_shafts',qty:15,ch:1}],needs:[{id:'normal_log',qty:1}]},
   fletch_bronze:{loc:'estate',skill:'fletching',n:'Fletch Bronze Arrows',e:'➶',req:5,xp:15,ms:1500,drops:[{id:'bronze_arrows',qty:10,ch:1}],needs:[{id:'arrow_shafts',qty:10}]},
   fletch_iron:{loc:'estate',skill:'fletching',n:'Fletch Iron Arrows',e:'➶',req:15,xp:37,ms:2000,drops:[{id:'iron_arrows',qty:10,ch:1}],needs:[{id:'arrow_shafts',qty:10},{id:'iron_bar',qty:1}]},
   fletch_mith:{loc:'estate',skill:'fletching',n:'Fletch Mithril Arrows',e:'➶',req:45,xp:75,ms:3000,drops:[{id:'mithril_arrows',qty:10,ch:1}],needs:[{id:'arrow_shafts',qty:10},{id:'mithril_ore',qty:1}]},
   fletch_shortbow:{loc:'estate',skill:'fletching',n:'Whittle Shortbow',e:'🏹',req:20,xp:50,ms:3000,drops:[{id:'shortbow',qty:1,ch:1}],needs:[{id:'oak_log',qty:2}]},
   fletch_longbow:{loc:'estate',skill:'fletching',n:'Whittle Longbow',e:'🏹',req:40,xp:80,ms:5000,drops:[{id:'longbow',qty:1,ch:1}],needs:[{id:'yew_log',qty:2}]},
-  smith_bronze_sword:{loc:'estate',skill:'smithing',n:'Smith Bronze Sword',e:'🗡️',req:4,xp:25,ms:2000,drops:[{id:'bronze_sword',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
+  smith_bronze_sword:{loc:'estate',skill:'smithing',n:'Smith Bronze Sword',e:'🗡️',req:1,xp:25,ms:2000,drops:[{id:'bronze_sword',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
   smith_bronze_shield:{loc:'estate',skill:'smithing',n:'Smith Bronze Shield',e:'🛡️',req:7,xp:30,ms:2000,drops:[{id:'bronze_shield',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:2}]},
   smith_iron_sword:{loc:'iron_hollow',skill:'smithing',n:'Smith Iron Sword',e:'🗡️',req:20,xp:50,ms:3000,drops:[{id:'iron_sword',qty:1,ch:1}],needs:[{id:'iron_bar',qty:2}]},
   smith_iron_shield:{loc:'iron_hollow',skill:'smithing',n:'Smith Iron Shield',e:'🛡️',req:25,xp:60,ms:3500,drops:[{id:'iron_shield',qty:1,ch:1}],needs:[{id:'iron_bar',qty:3}]},
@@ -717,8 +948,8 @@ const ACTIONS={
   smith_bronze_helmet:{loc:'estate',skill:'smithing',n:'Smith Bronze Helmet',e:'🪖',req:5,xp:22,ms:1800,drops:[{id:'bronze_helmet',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
   smith_bronze_body:{loc:'estate',skill:'smithing',n:'Smith Bronze Platebody',e:'🦺',req:10,xp:50,ms:2600,drops:[{id:'bronze_body',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:3}]},
   smith_bronze_legs:{loc:'estate',skill:'smithing',n:'Smith Bronze Greaves',e:'👖',req:8,xp:38,ms:2200,drops:[{id:'bronze_legs',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:2}]},
-  smith_bronze_boots:{loc:'estate',skill:'smithing',n:'Smith Bronze Boots',e:'🥾',req:5,xp:20,ms:1600,drops:[{id:'bronze_boots',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
-  smith_bronze_gloves:{loc:'estate',skill:'smithing',n:'Smith Bronze Gauntlets',e:'🧤',req:5,xp:20,ms:1600,drops:[{id:'bronze_gloves',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
+  smith_bronze_boots:{loc:'estate',skill:'smithing',n:'Smith Bronze Boots',e:'🥾',req:2,xp:20,ms:1600,drops:[{id:'bronze_boots',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
+  smith_bronze_gloves:{loc:'estate',skill:'smithing',n:'Smith Bronze Gauntlets',e:'🧤',req:3,xp:20,ms:1600,drops:[{id:'bronze_gloves',qty:1,ch:1}],needs:[{id:'bronze_bar',qty:1}]},
   // ── iron armor (iron hollow) ──
   smith_iron_helmet:{loc:'iron_hollow',skill:'smithing',n:'Smith Iron Helmet',e:'🪖',req:22,xp:45,ms:2600,drops:[{id:'iron_helmet',qty:1,ch:1}],needs:[{id:'iron_bar',qty:1}]},
   smith_iron_body:{loc:'iron_hollow',skill:'smithing',n:'Smith Iron Platebody',e:'🦺',req:28,xp:95,ms:3600,drops:[{id:'iron_body',qty:1,ch:1}],needs:[{id:'iron_bar',qty:3}]},
@@ -812,7 +1043,7 @@ const ACTIONS={
   coast_pearl:{loc:'the_coast',skill:'fishing',n:'Pearl Net',e:'🔮',req:70,xp:190,ms:9000,drops:[{id:'sea_pearl',qty:1,ch:.3},{id:'raw_shark',qty:1,ch:.8}]},
 };
 
-const GLOBAL_RARES=[{id:'scroll_basic',ch:.030},{id:'scroll_perm',ch:.003},{id:'scroll_dungeon',ch:.0015},{id:'vault_key',ch:.0002}];
+const GLOBAL_RARES=[{id:'scroll_basic',ch:.006},{id:'scroll_perm',ch:.0010},{id:'scroll_dungeon',ch:.0005},{id:'vault_key',ch:.0002}];
 const GATHER_SKILLS=new Set(['woodcutting','mining','fishing','farming']);
 
 // Bonus gem drops while mining — richer the deeper / rarer the location.
@@ -1002,7 +1233,7 @@ function rollDrops(key,task){
     (GEM_DROPS[ac.loc]||[]).forEach(d=>{if(Math.random()<d.ch*dropMult){addItem(d.id,1);gained.push({id:d.id,qty:1});}});
   }
   GLOBAL_RARES.forEach(r=>{if(Math.random()<r.ch*dropMult){addItem(r.id,1);gained.push({id:r.id,qty:1});}});
-  if(ac&&GATHER_SKILLS.has(ac.skill)&&Math.random()<0.005*dropMult){addItem('scroll_bounty',1);gained.push({id:'scroll_bounty',qty:1});}
+  if(ac&&GATHER_SKILLS.has(ac.skill)&&Math.random()<0.0015*dropMult){addItem('scroll_bounty',1);gained.push({id:'scroll_bounty',qty:1});}
   return gained;
 }
 
@@ -1027,15 +1258,6 @@ function startSlayer(){
   if(actionInterval)clearInterval(actionInterval);
   actionInterval=setInterval(tickAction,80);
   renderActions();updateProgUI();
-}
-function stopAction(){
-  G.activeAction=null;G.queuedAction=null;
-  if(actionInterval){clearInterval(actionInterval);actionInterval=null;}
-  const fill=document.getElementById('prog-fill');if(fill)fill.style.width='0%';
-  const name=document.getElementById('prog-name');if(name){name.textContent='— idle —';name.style.color='#3a4a5a';}
-  const stop=document.getElementById('prog-stop');if(stop)stop.style.display='none';
-  const rate=document.getElementById('prog-rate');if(rate)rate.textContent='';
-  renderActions();
 }
 function getActionMs(){
   if(G.activeAction==='__slayer__'){
@@ -1109,7 +1331,7 @@ function completeAction(){
   G.queuedAction=null;
   G.activeAction=null;
   startAction(next);
-  renderSkills();renderInventory();updateGold();
+  renderSkills();renderInventory();updateGold();renderResStrip();
 }
 function completeSlayer(){
   const taskDef=SLAYER_TASKS.find(t=>t.id===G.slayerTask?.id);if(!taskDef)return;
@@ -1154,17 +1376,50 @@ function logDrops(gained){
 }
 function updateProgUI(){
   if(!G.activeAction){stopAction();return;}
-  let name,xpPer,ms;
+  let name,xpPer,ms,skillId;
   if(G.activeAction==='__slayer__'){
     const t=SLAYER_TASKS.find(x=>x.id===G.slayerTask?.id);
-    name=`Slay ${t?.n||'monster'}`;xpPer=t?.xpPer||0;ms=t?.ms||4000;
+    name=`Slay ${t?.n||'monster'}`;xpPer=t?.xpPer||0;ms=t?.ms||4000;skillId='slayer';
   }else{
     const ac=ACTIONS[G.activeAction];
-    name=ac.n;xpPer=ac.xp;ms=ac.ms;
+    name=ac.n;xpPer=ac.xp;ms=ac.ms;skillId=ac.skill;
   }
-  const pn=document.getElementById('prog-name');if(pn){pn.textContent=name;pn.style.color='#a09870';}
-  const ps=document.getElementById('prog-stop');if(ps)ps.style.display='block';
-  const pr=document.getElementById('prog-rate');if(pr)pr.textContent=`${Math.round(xpPer/(ms/3600000)).toLocaleString()} XP/hr`;
+  const sk=SKILLS[skillId];
+  const xp=G.xp[skillId]||0;
+  const lvl=xpToLevel(xp);
+  const into=xpIntoLevel(xp,lvl);
+  const needed=xpForNext(lvl);
+  const pct=lvl>=99?100:Math.round(into/needed*100);
+  const actionsToLevel=lvl>=99?0:Math.ceil((needed-into)/xpPer);
+  const xphr=Math.round(xpPer/(ms/3600000));
+  const col=SKILL_CAT_COL[skillId]||sk?.col||'#6a9a5a';
+
+  const pan=$p('prog-action-name');if(pan){pan.textContent=name;pan.style.color='#a09870';}
+  const pxb=$p('prog-xp-badge');if(pxb){pxb.textContent=`+${xpPer} XP`;pxb.style.display='inline';}
+  const ps=$p('prog-stop');if(ps)ps.style.display='inline-block';
+
+  const psr=$p('prog-skill-row');if(psr)psr.style.display='flex';
+  const psn=$p('prog-skill-name');if(psn)psn.textContent=`${sk?.e||''} ${sk?.n||skillId} Lv ${lvl}${lvl>=99?' (MAX)':''}`;
+  const psp=$p('prog-skill-pct');if(psp)psp.textContent=`${pct}%`;
+  const psbw=$p('prog-skill-bar-wrap');if(psbw)psbw.style.display='block';
+  const psf=$p('prog-skill-fill');if(psf){psf.style.width=pct+'%';psf.style.background=col;}
+
+  const pd=$p('prog-detail');
+  if(pd)pd.textContent=lvl>=99?`${xphr.toLocaleString()} XP/hr · MAX level`:`${xphr.toLocaleString()} XP/hr · level up in ~${actionsToLevel} actions`;
+}
+
+function stopAction(){
+  G.activeAction=null;G.queuedAction=null;
+  if(actionInterval){clearInterval(actionInterval);actionInterval=null;}
+  const fill=$p('prog-fill');if(fill)fill.style.width='0%';
+  const pan=$p('prog-action-name');if(pan){pan.textContent='— idle —';pan.style.color='#3a4a5a';}
+  const pxb=$p('prog-xp-badge');if(pxb)pxb.style.display='none';
+  const ps=$p('prog-stop');if(ps)ps.style.display='none';
+  const psr=$p('prog-skill-row');if(psr)psr.style.display='none';
+  const psbw=$p('prog-skill-bar-wrap');if(psbw)psbw.style.display='none';
+  const psf=$p('prog-skill-fill');if(psf)psf.style.width='0%';
+  const pd=$p('prog-detail');if(pd)pd.textContent='';
+  renderActions();
 }
 
 /* OFFLINE */
@@ -1296,6 +1551,15 @@ function upgradePoi(tid){
   awardClanXp(50);
   updateGold();renderInventory();renderClan();drawMapCanvas();saveGame();
 }
+function abandonPoi(tid){
+  if(G.territories[tid]!=='player')return;
+  const t=TERRITORIES.find(x=>x.id===tid);
+  if(!confirm(`Abandon ${t.n}? You lose its buff and tithe. Any garrison you stationed is returned to your bag.`))return;
+  if(typeof returnGarrison==='function')returnGarrison(tid);
+  G.territories[tid]=null;
+  addLog(`You abandoned ${t.n} — it's unclaimed again.`,'info');
+  renderClan();drawMapCanvas();updateGold();renderInventory();saveGame();
+}
 function renderHoldings(){
   const owned=playerTerritories();
   if(!owned.length)return `<div style="font-size:11px;color:#4a5a6a;padding:2px;">You hold no POIs yet. Capture territory below to earn empire-wide bonuses.</div>`;
@@ -1323,7 +1587,7 @@ function poiRow(t){
     right=`<span class="tr-action tr-raid" onclick="confirmRaid('${t.id}')">DECLARE</span>`;
   }
   const pips=isPlayer?`<div class="bld-level" style="margin-top:4px;">${Array.from({length:POI_UPGRADES.length},(_,i)=>`<div class="bld-pip ${i<lvl?'filled':''}"></div>`).join('')}</div>`:'';
-  const garLine=isPlayer?`<div class="tr-garrison" onclick="openGarrison('${t.id}')">⚔ Garrison ${garrisonOf(t.id).length}/${garrisonCap()}${garrisonPower(t.id)?` · +${garrisonPower(t.id)} def`:''} ▸</div>`:'';
+  const garLine=isPlayer?`<div class="tr-garrison" onclick="openGarrison('${t.id}')">⚔ Garrison ${garrisonOf(t.id).length}/${garrisonCap()}${garrisonPower(t.id)?` · +${garrisonPower(t.id)} def`:''} ▸</div><div class="tr-garrison" style="color:#9a5a5a;" onclick="abandonPoi('${t.id}')">✕ Abandon this POI</div>`:'';
   return `<div class="territory-row"><span class="tr-icon">${t.e}</span><div class="tr-body"><div class="tr-name">${t.n}${skillName?` <span style="color:#5a7a9a;font-size:9px;">${skillName}</span>`:''}${isPlayer?` <span style="color:#c8a020;font-size:9px;">T${lvl}</span>`:''}</div><div class="tr-holder" style="color:${holderColor};">${holderName}${isPlayer?` · 🛡 ${poiDefense(t.id)} def`:''}</div>${buffLine}${pips}${garLine}</div>${right}</div>`;
 }
 function renderTerritoryRows(){
@@ -1492,9 +1756,65 @@ function raidTerritory(tid){
   setTimeout(()=>{renderClan();drawMapCanvas();},100);
 }
 function addLog(msg,cls=''){G.logs.unshift({msg,cls});if(G.logs.length>80)G.logs.pop();renderLog();}
-function renderLog(){const el=document.getElementById('log-lines');if(!el)return;el.innerHTML=G.logs.slice(0,40).map(l=>`<div class="log-line ${l.cls}">${l.msg}</div>`).join('');}
+let _logFilter='';
+function setLogFilter(f){
+  _logFilter=f;
+  document.querySelectorAll('.lf-tab').forEach(t=>{t.classList.toggle('sel',t.getAttribute('onclick')===`setLogFilter('${f}')`||(f===''&&t.getAttribute('onclick')==="setLogFilter('')"));});
+  renderLog();
+}
+function renderLog(){
+  const el=document.getElementById('log-lines');if(!el)return;
+  const lines=_logFilter?G.logs.filter(l=>l.cls&&l.cls.includes(_logFilter)):G.logs;
+  el.innerHTML=lines.slice(0,40).map(l=>`<div class="log-line ${l.cls}">${l.msg}</div>`).join('');
+}
+function renderResStrip(){
+  const el=$p('res-strip');if(!el)return;
+  const show=[
+    {e:'🪵',k:'wood',n:'Wood'},{e:'🐟',k:'fish',n:'Fish'},{e:'⛏️',k:'ore',n:'Ore'},
+    {e:'🌾',k:'grain',n:'Grain'},{e:'🍖',k:'meat',n:'Meat'},{e:'🌿',k:'herbs',n:'Herbs'},
+    {e:'💎',k:'gems',k2:'gem',n:'Gems'},{e:'🧵',k:'cloth',n:'Cloth'},{e:'🪨',k:'stone',n:'Stone'},
+  ];
+  const inv=G.inventory||{};
+  const pills=show.map(r=>{
+    const amt=(inv[r.k]||0)+(r.k2?inv[r.k2]||0:0);
+    if(amt<=0)return '';
+    return `<span class="rs-pill">${r.e} <b>${amt>=1000?Math.floor(amt/1000)+'k':amt}</b></span>`;
+  }).filter(Boolean).join('');
+  el.innerHTML=pills||'<span class="rs-pill" style="color:#2a3a2a">— gathering —</span>';
+}
+function renderLocStrip(){
+  const el=$p('ls-loc');if(!el)return;
+  const loc=LOCATIONS[G.currentLocation];
+  el.textContent=loc?loc.name||G.currentLocation:'Your Estate';
+}
+function toggleCanvas(){
+  const wrap=$p('canvas-wrap');const btn=$p('canvas-toggle');if(!wrap)return;
+  const collapsed=wrap.classList.toggle('collapsed');
+  if(btn)btn.textContent=collapsed?'▴ show':'▾ hide';
+}
 function $p(id){return document.getElementById(id);}
 function updateGold(){const e=$p('hdr-gold');if(e)e.textContent=`🪙 ${G.gold.toLocaleString()}`;}
+function renderClasses(){
+  const el=$p('class-panel');if(!el)return;
+  el.innerHTML=Object.entries(CLASSES).map(([id,cls])=>{
+    const xp=G.classXp[id]||0,lvl=xpToLevel(xp),into=xpIntoLevel(xp,lvl),needed=xpForNext(lvl),pct=lvl>=99?100:Math.round(into/needed*100);
+    const isActive=G.activeClass===id;
+    const bonusPct=Math.round(classScale(lvl)*20);
+    return `<div class="cls-card ${isActive?'cls-active':''}" onclick="setActiveClass('${id}')">
+      <div class="cls-head"><span class="cls-ico" style="color:${cls.col}">${cls.e}</span><div class="cls-info"><div class="cls-name" style="color:${cls.col}">${cls.n}${isActive?' <span class="cls-badge">ACTIVE</span>':''}</div><div class="cls-lvl">Lv ${lvl}${bonusPct>0?' &middot; +'+bonusPct+'% XP to its skills':''}</div></div></div>
+      <div class="cls-bar"><div class="cls-fill" style="width:${pct}%;background:${cls.col}"></div></div>
+      <div class="cls-desc">${cls.desc}<br><span style="color:#5a8a5a;">${cls.passive}</span></div>
+      <div class="cls-pvp">Siege: Scout ×${cls.pvpBonus.scout} &middot; Attack ×${cls.pvpBonus.attack} &middot; Sustain ×${cls.pvpBonus.sustain}</div>
+    </div>`;
+  }).join('')+`<p style="font-size:12px;color:#a6b0c2;padding:4px;line-height:1.5;grid-column:1/-1;">Tap a class to make it active (tap again to turn off). You level all four by training their skills — switch anytime.</p>`;
+}
+function setActiveClass(id){
+  G.activeClass=(G.activeClass===id?null:id);
+  const hdr=$p('hdr-class');
+  if(hdr){if(G.activeClass){hdr.textContent=CLASSES[G.activeClass].e+' '+CLASSES[G.activeClass].n;hdr.style.display='inline-block';}else{hdr.style.display='none';}}
+  addLog(G.activeClass?`Active class: ${CLASSES[G.activeClass].e} ${CLASSES[G.activeClass].n}`:'Class deactivated.','info');
+  renderClasses();saveGame();
+}
 function showTab(tab){
   $p('action-wrap').classList.toggle('show',tab==='actions');
   $p('map-wrap').classList.toggle('show',tab==='map');
@@ -1519,33 +1839,49 @@ function flashSkill(skillId,lvl){
     setTimeout(()=>el.classList.remove('skill-max','skill-milestone'),2000);
   },50);
 }
+const SKILL_CAT_COL={
+  woodcutting:'#3a8a3a',fishing:'#3a8a3a',mining:'#3a8a3a',farming:'#3a8a3a',
+  combat:'#9a3030',slayer:'#9a3030',
+  crafting:'#a07020',smithing:'#a07020',fletching:'#a07020',jewelcrafting:'#a07020',
+  cooking:'#2a8a7a',herblore:'#7050a0',
+};
 function renderSkills(){
   const el=$p('skill-list');if(!el)return;
   el.innerHTML=Object.entries(SKILLS).map(([id,sk])=>{
     const xp=G.xp[id]||0,lvl=xpToLevel(xp),into=xpIntoLevel(xp,lvl),needed=xpForNext(lvl),pct=lvl>=99?100:Math.round(into/needed*100);
-    const cape=lvl>=99?' 🏆':'';
-    return `<div class="skill-row ${G.activeSkill===id?'sel':''}" data-skill="${id}" onclick="selectSkill('${id}')"><span class="s-icon">${sk.e}</span><div class="s-info"><div class="s-name">${sk.n}${cape}</div><div class="s-lvl">${lvl}</div><div class="s-bar"><div class="s-fill" style="width:${pct}%;background:${sk.col}"></div></div><div class="s-xptext">${lvl<99?into.toLocaleString()+'/'+needed.toLocaleString()+' xp':'MAX'}</div></div></div>`;
+    const col=SKILL_CAT_COL[id]||sk.col;
+    const active=G.activeSkill===id;
+    return `<div class="sk-cell ${active?'sk-active':''}" data-skill="${id}" onclick="selectSkill('${id}')" title="${sk.n} — Level ${lvl}" style="border-left-color:${active?'#c8a020':col}"><span class="sk-ico">${sk.e}${lvl>=99?' 🏆':''}</span><span class="sk-lvl">${lvl}</span><span class="sk-nm">${sk.n}</span><div class="sk-bar" style="background:${col};width:${pct}%;margin:4px auto 0;max-width:calc(100% - 8px);"></div></div>`;
   }).join('');
+  // Total level
+  const total=Object.keys(SKILLS).reduce((s,id)=>s+xpToLevel(G.xp[id]||0),0);
+  const tv=$p('sk-totlvl-val');if(tv)tv.textContent=total;
+  const hdrTot=$p('hdr-totlvl');if(hdrTot)hdrTot.textContent=`· Lv ${total}`;
 }
-function selectSkill(id){G.activeSkill=id;renderSkills();renderActions();drawCanvas();}
+function selectSkill(id){G.activeSkill=id;renderSkills();renderActions();drawCanvas();showTab('actions');}
 function renderActions(){
   const el=$p('action-list');if(!el)return;
   $p('action-title').textContent=`${SKILLS[G.activeSkill]?.n||''} — ${LOCATIONS[G.currentLocation]?.n||''}`;
   if(G.activeSkill==='slayer'){renderSlayer();return;}
-  const acts=Object.entries(ACTIONS).filter(([,a])=>a.skill===G.activeSkill&&a.loc===G.currentLocation);
+  const showAll=!!G.showAllActions;
+  let acts=Object.entries(ACTIONS).filter(([,a])=>a.skill===G.activeSkill&&(showAll||a.loc===G.currentLocation));
   const playerLvl=xpToLevel(G.xp[G.activeSkill]||0);
-  if(!acts.length){el.innerHTML=`<div style="padding:20px;text-align:center;color:#3a4a5a;font-size:12px;">No ${SKILLS[G.activeSkill]?.n} actions here.<br>Travel to find more.</div>`;return;}
-  el.innerHTML=acts.map(([key,ac])=>{
-    const locked=playerLvl<ac.req,running=G.activeAction===key;
+  const rank=([,a])=>{const here=a.loc===G.currentLocation,ok=playerLvl>=a.req;return (here&&ok?0:here?1:2)*1000+a.req;};
+  acts=acts.sort((x,y)=>rank(x)-rank(y));
+  const toggle=`<div class="act-toggle"><button class="${!showAll?'on':''}" onclick="setActionView(false)">📍 Here</button><button class="${showAll?'on':''}" onclick="setActionView(true)">🌐 Show all</button></div>`;
+  if(!acts.length){el.innerHTML=toggle+`<div class="act-empty">No ${SKILLS[G.activeSkill]?.n} actions ${showAll?'exist yet':'at this location'}.<br>Travel to find more.</div>`;return;}
+  el.innerHTML=toggle+acts.map(([key,ac])=>{
+    const here=ac.loc===G.currentLocation,lvlOk=playerLvl>=ac.req,locked=!here||!lvlOk,running=G.activeAction===key,queued=G.queuedAction===key;
     const needsMats=ac.needs&&!hasItems(ac.needs);
     const mainDrop=ac.drops&&ac.drops[0]?ITEMS[ac.drops[0].id]:null;
     const dropText=mainDrop?`→ ${mainDrop.e} ${mainDrop.n}`:'';
     const needsText=ac.needs?ac.needs.map(n=>`${n.qty}x ${ITEMS[n.id]?.n||n.id}`).join(' + '):'';
     const xps=(ac.xp/(ac.ms/1000)).toFixed(1);
-    const queued=G.queuedAction===key;
-    return `<div class="act-card ${locked?'locked':''} ${running?'running':''} ${queued?'queued':''}" onclick="${locked?'':'clickAction(\''+key+'\')'}"><span class="ac-ico">${ac.e}</span><div class="ac-body"><div class="ac-name">${ac.n}${running?' <span style="color:#c8a020;font-size:10px;">▶ ACTIVE</span>':''}${queued?' <span style="color:#6a8a4a;font-size:10px;">⏭ QUEUED</span>':''}</div><div class="ac-meta">⚡ ${ac.xp} xp · ⏱ ${(ac.ms/1000).toFixed(1)}s · ${xps} xp/s</div>${dropText?`<div class="ac-drops">${dropText}${needsMats?' <span style="color:#7a3a3a">· Need: '+needsText+'</span>':needsText?' <span style="color:#3a4a3a">· '+needsText+'</span>':''}</div>`:''} ${locked?`<div class="ac-req">Requires ${SKILLS[G.activeSkill].n} level ${ac.req}</div>`:''}</div></div>`;
+    const reqLine=(!here?`<div class="ac-where">📍 At ${LOCATIONS[ac.loc]?.n||ac.loc}</div>`:'')+(!lvlOk?`<div class="ac-req">🔒 Requires ${SKILLS[G.activeSkill].n} level ${ac.req}</div>`:'');
+    return `<div class="act-card ${locked?'locked':''} ${running?'running':''} ${queued?'queued':''}" onclick="${locked?'':'clickAction(\''+key+'\')'}"><span class="ac-ico">${ac.e}</span><div class="ac-body"><div class="ac-name">${ac.n}<span class="xp-badge">+${ac.xp} XP</span>${running?' <span style="color:#c8a020;font-size:11px;">▶</span>':''}${queued?' <span style="color:#8abf6a;font-size:11px;">⏭</span>':''}</div><div class="ac-meta">⏱ ${(ac.ms/1000).toFixed(1)}s · ${xps} xp/s</div>${dropText?`<div class="ac-drops">${dropText}${needsMats?' <span style="color:#d08a8a">· Need: '+needsText+'</span>':needsText?' <span style="color:#9aa3b6">· '+needsText+'</span>':''}</div>`:''}${reqLine}</div></div>`;
   }).join('');
 }
+function setActionView(all){G.showAllActions=all;renderActions();}
 function renderSlayer(){
   const el=$p('action-list');if(!el)return;
   if(!G.slayerTask){
@@ -1590,7 +1926,8 @@ function renderInventory(){
     const isEquipped=it.equip&&G.equipment&&G.equipment[it.equip.slot]===id;
     const clickFn=it.equip?`equipChoice('${id}')`:it.usable?`useItem('${id}')`:it.val>0?`openSellModal('${id}')`:null;
     const tipSuffix=it.equip?(isEquipped?' · Equipped':' · Click to equip'):it.usable?' · Click to use':it.val>0?' · Click to sell':'';
-    slots.push(`<div class="islot has-item ${tc}" ${clickFn?`onclick="${clickFn}" style="cursor:pointer;"`:''} ><span>${it.e}</span><span class="qty">${qty>1?qty:''}</span><div class="tip-box">${it.n} ×${qty}${it.val>0?' · '+it.val.toLocaleString()+'g ea':''}${tipSuffix}</div></div>`);
+    const titleTxt=`${it.n} ×${qty}${it.val>0?' · '+it.val.toLocaleString()+'g ea':''}${tipSuffix}`;
+    slots.push(`<div class="islot has-item ${tc}" title="${titleTxt}" ${clickFn?`onclick="${clickFn}" style="cursor:pointer;"`:''} ><span>${it.e}</span><span class="qty">${qty>1?qty:''}</span><div class="tip-box">${titleTxt}</div></div>`);
   });
   for(let i=items.length;i<INV_SIZE;i++)slots.push(`<div class="islot"></div>`);
   el.innerHTML=slots.join('');
@@ -1731,10 +2068,18 @@ function renderGear(){
     <h4 style="font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin:6px 2px 6px;">Equip from Inventory</h4>
     <div class="gear-list">${list}</div>`;
 }
+let _clanTabMode=''; // ''|'create'|'join'
 function renderClan(){
   const el=$p('clan-content');if(!el)return;
+  // ── ONLINE MODE ─────────────────────────────────────────────────────────────
+  if(SB.token){
+    if(SB.clanId) renderClanOnline();
+    else renderClanNoClan();
+    return;
+  }
+  // ── OFFLINE MODE (local solo sim) ───────────────────────────────────────────
   if(!G.clan){
-    el.innerHTML=`<div class="clan-section"><h4>Found a Clan</h4><div id="clan-create"><p>Unite adventurers under your banner. Claim territory. Build an empire.</p><div class="clan-input-row"><input id="clan-name-input" type="text" maxlength="20" placeholder="Clan name…" autocomplete="off"></div><div style="font-size:10px;color:#3a4a5a;margin-bottom:6px;letter-spacing:1px;">CHOOSE YOUR BANNER</div><div class="banner-opts" id="banner-opts">${['⚔️','🛡️','🌙','🔥','🏹','🐉','☠️','🌿','🌟','⚡','🗡️','🦅'].map((b,i)=>`<div class="banner-opt ${i===0?'sel':''}" onclick="selectBanner(this,'${b}')">${b}</div>`).join('')}</div><button id="clan-create-btn" onclick="createClan()">FOUND CLAN</button></div></div><div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
+    el.innerHTML=`<div class="clan-section"><p style="font-size:12px;color:#5a6a5a;text-align:center;padding:10px 0;">Go online (🌐 button top-right) to join the live shared world with real clans.<br><br>Or found a local clan to play solo vs the AI:</p><div id="clan-create"><div class="clan-input-row"><input id="clan-name-input" type="text" maxlength="20" placeholder="Clan name…" autocomplete="off"></div><div style="font-size:10px;color:#3a4a5a;margin-bottom:6px;letter-spacing:1px;">CHOOSE YOUR BANNER</div><div class="banner-opts" id="banner-opts">${['⚔️','🛡️','🌙','🔥','🏹','🐉','☠️','🌿','🌟','⚡','🗡️','🦅'].map((b,i)=>`<div class="banner-opt ${i===0?'sel':''}" onclick="selectBanner(this,'${b}')">${b}</div>`).join('')}</div><button id="clan-create-btn" onclick="createClan()">FOUND CLAN</button></div></div><div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
     return;
   }
   const myTerrs=playerTerritories();
@@ -1750,7 +2095,132 @@ function renderClan(){
   const seCountdown=seMs<=0?'Ending now…':`${seDays}d ${seHrs}h`;
   const pactNames=(G.diplomacy?.pacts||[]).map(p=>`${RIVAL_CLANS[p[0]]?.n} & ${RIVAL_CLANS[p[1]]?.n}`).join('; ')||'None';
   const lbHtml=(G.leaderboard&&G.leaderboard.length)?G.leaderboard.map(snap=>`<div style="margin-bottom:8px;"><div style="font-size:10px;color:#6a7a5a;letter-spacing:1px;margin-bottom:3px;">SEASON ${snap.season} FINAL</div>${snap.entries.map((e,i)=>`<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 4px;${e.id==='player'?'background:#1a2a1a;border-radius:3px;':''}"><span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${e.banner} ${e.name}</span><span style="color:#6a8a6a;">${e.pois} POIs · Lv${e.level}</span></div>`).join('')}</div>`).join(''):'<div style="font-size:11px;color:#3a4a3a;font-style:italic;">No completed seasons yet.</div>';
-  el.innerHTML=`<div class="clan-section"><h4>Your Clan</h4><div class="clan-card" style="border-color:#3a3a60;"><div class="cc-head"><span class="cc-banner">${G.clan.banner}</span><span class="cc-name">${G.clan.name}</span></div><div class="cc-body">Combat: ${xpToLevel(G.xp.combat||0)} · Class: ${acls?acls.e+' '+acls.n:'—'} · Territories: ${myTerrs.length}</div><div class="cc-territory">${myTerrs.length?'Holds: '+myTerrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory — claim some.'}</div>${clanLvlHtml}</div></div>${renderSiegeBanner()}<div class="clan-section"><h4>Your Holdings</h4>${renderHoldings()}</div><div class="clan-section"><h4>Territory Control</h4><p style="font-size:10px;color:#4a5a6a;margin:-2px 2px 7px;line-height:1.5;">Hold POIs for empire-wide buffs. Fortify them with gold + materials to strengthen the buff and raise defense. Outer-ring POIs give bigger rewards but are riskier (full-loot sieges coming).</p>${renderTerritoryRows()}</div><div class="clan-section"><h4>Conquest Season ${seasonNum}</h4><div style="font-size:11px;color:#8a9a7a;margin-bottom:5px;">Season ends in <b>${seCountdown}</b> — territories reset, standings are locked into the leaderboard. Your skills, gear and gold carry over.</div><div style="font-size:11px;color:#6a7a5a;margin-bottom:4px;">Active pacts against leader: <span style="color:#c07050;">${pactNames}</span></div></div><div class="clan-section"><h4>Season Leaderboard</h4>${lbHtml}</div>${G.warReports.length?`<div class="clan-section"><h4>War Reports</h4>${G.warReports.slice(0,8).map(r=>{const tname=TERRITORIES.find(t=>t.id===r.territory)?.n||r.territory;const phaseHtml=r.phases?`<div class="wr-phases">${['Scout','Attack','Sustain'].map((p,i)=>`<span class="wr-phase ${r.phases[i]?'won':'lost'}">${p}: ${r.phases[i]?'✓':'✗'}</span>`).join('')}</div>`:'';return `<div class="war-report"><div class="wr-head">Turn ${r.turn} · ${tname}</div><div class="${r.won?'wr-win':'wr-loss'}">${r.won?'✓ Victory':'✗ Defeat'} — ${r.desc}</div>${phaseHtml}</div>`;}).join('')}</div>`:''}<div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
+  el.innerHTML=`<div class="clan-section"><h4>Your Clan</h4><div class="clan-card" style="border-color:#3a3a60;"><div class="cc-head"><span class="cc-banner">${G.clan.banner}</span><span class="cc-name">${G.clan.name}</span></div><div class="cc-body">Combat: ${xpToLevel(G.xp.combat||0)} · Class: ${acls?acls.e+' '+acls.n:'—'} · Territories: ${myTerrs.length}</div><div class="cc-territory">${myTerrs.length?'Holds: '+myTerrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory — claim some.'}</div>${clanLvlHtml}</div></div>${renderSiegeBanner()}<div class="clan-section"><h4>Your Holdings</h4>${renderHoldings()}</div><div class="clan-section"><h4>Territory Control</h4><p style="font-size:10px;color:#4a5a6a;margin:-2px 2px 7px;line-height:1.5;">Hold POIs for empire-wide buffs. Fortify them with gold + materials to strengthen the buff and raise defense.</p>${renderTerritoryRows()}</div><div class="clan-section"><h4>Conquest Season ${seasonNum}</h4><div style="font-size:11px;color:#8a9a7a;margin-bottom:5px;">Season ends in <b>${seCountdown}</b> — territories reset, standings locked. Skills, gear and gold carry over.</div><div style="font-size:11px;color:#6a7a5a;margin-bottom:4px;">Active pacts against leader: <span style="color:#c07050;">${pactNames}</span></div></div><div class="clan-section"><h4>Season Leaderboard</h4>${lbHtml}</div>${G.warReports.length?`<div class="clan-section"><h4>War Reports</h4>${G.warReports.slice(0,8).map(r=>{const tname=TERRITORIES.find(t=>t.id===r.territory)?.n||r.territory;const phaseHtml=r.phases?`<div class="wr-phases">${['Scout','Attack','Sustain'].map((p,i)=>`<span class="wr-phase ${r.phases[i]?'won':'lost'}">${p}: ${r.phases[i]?'✓':'✗'}</span>`).join('')}</div>`:'';return `<div class="war-report"><div class="wr-head">Turn ${r.turn} · ${tname}</div><div class="${r.won?'wr-win':'wr-loss'}">${r.won?'✓ Victory':'✗ Defeat'} — ${r.desc}</div>${phaseHtml}</div>`;}).join('')}</div>`:''}<div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
+}
+
+/* ── ONLINE CLAN TAB VIEWS ─────────────────────────────────────────── */
+function renderClanOnline(){
+  const el=$p('clan-content');if(!el)return;
+  const w=SB.world||{territories:{},sieges:{},clans:{},players:[]};
+  const clan=(w.clans||{})[SB.clanId];
+  const next=w.nextSiege?Math.max(0,Math.round((w.nextSiege-Date.now())/60000)):'?';
+  const memberCount=clan?clan.members.length:1;
+  const totalPower=(w.players||[]).filter(p=>clan&&clan.members.includes(p.id)).reduce((s,p)=>s+(p.power||0),0);
+
+  // Member list
+  const memberRows=(w.players||[]).filter(p=>clan&&clan.members.includes(p.id)).map(p=>{
+    const dot=p.online?'<span style="color:#6ad08a">●</span>':'<span style="color:#2a3a2a">●</span>';
+    const crown=clan&&clan.ownerId===p.id?' 👑':'';
+    const topSkills=Object.entries(p.skills||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([sk,lv])=>`${SKILL_NAMES_SHORT[sk]||sk} ${lv}`).join(' · ');
+    return `<div class="clan-member-row"><span class="cm-dot">${dot}</span><div><div class="cm-name">${p.name}<span class="cm-crown">${crown}</span></div>${topSkills?`<div class="cm-skills">${topSkills}</div>`:''}</div></div>`;
+  }).join('')||'<div style="font-size:11px;color:#3a4a3a;padding:6px">No member data yet — they need to log in.</div>';
+
+  // POI list (shared world)
+  const poiRows=Object.keys(SB_POI_NAMES).map(poi=>{
+    const o=w.territories&&w.territories[poi];
+    const mine=o&&o.type!=='ai'&&(o.id===SB.clanId||o.id===SB.playerId);
+    const ownerTxt=o?(mine?'✦ Your clan':`${o.type==='ai'?'🤖 '+o.name:'🧑 '+o.name}`):'Unclaimed';
+    const decl=((w.sieges&&w.sieges[poi])||[]).length;
+    const btn=mine?`<span style="color:#4a7a4a;font-size:10px">Held</span>`
+      :`<button class="clan-poi-btn" onclick="clanTabDeclare('${poi}')">⚔ Siege</button>`;
+    const info=SB_POI_INFO[poi]||{e:'🏛️',tag:'Territory',bonus:'',col:'#3a3a5a'};
+    return `<div class="clan-poi-row ${mine?'held':''}">
+      <div style="font-size:22px;line-height:1;flex-shrink:0">${info.e}</div>
+      <div class="cpr-info">
+        <div class="cpr-name">${SB_POI_NAMES[poi]}</div>
+        <div class="cpr-owner">${ownerTxt}${decl?' · '+decl+' siege(s) active':''}</div>
+      </div>
+      <div style="flex:1;min-width:0;padding:0 8px">
+        <span style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;background:${info.col}22;border:1px solid ${info.col};color:${info.col};white-space:nowrap">${info.tag}</span>
+        <div style="font-size:10px;color:#3a4a3a;margin-top:3px">${info.bonus}</div>
+      </div>
+      ${btn}
+    </div>`;
+  }).join('');
+
+  const codeHtml=SB.isOwner?`<div class="c-code-lbl">Invite code — share with friends:</div><div class="c-code">${clan?clan.inviteCode:'???'}</div>`:'';
+  el.innerHTML=`
+    <div class="clan-online-hdr">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <h3>⚔️ ${SB.clanName} [${SB.clanTag}]</h3>
+          <div class="c-meta">${memberCount} member${memberCount!==1?'s':''} · Combined power: ${totalPower}</div>
+        </div>
+        <button onclick="sbcPanel()" style="background:#0a1a14;border:1px solid #2a5a3a;color:#6ad08a;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;flex-shrink:0;">Manage ▸</button>
+      </div>
+      ${codeHtml}
+    </div>
+    <div class="clan-section"><h4 style="font-size:11px;color:#84c684;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Members</h4>
+      <div class="clan-member-list">${memberRows}</div>
+    </div>
+    <div class="clan-section clan-poi-list">
+      <div class="clan-siege-bar"><span>⏱ Next siege window: <b>~${next} min</b></span><button onclick="sbWorldModal()" style="background:transparent;border:1px solid #2a4a6a;color:#6aa0d0;border-radius:4px;padding:2px 8px;font-size:10px;cursor:pointer;">🌍 Full Map</button></div>
+      <h4 style="font-size:11px;color:#9aa3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Territory Control</h4>
+      ${poiRows}
+    </div>`;
+}
+function renderClanNoClan(){
+  const el=$p('clan-content');if(!el)return;
+  if(_clanTabMode==='create'){
+    el.innerHTML=`<div class="clan-noclan"><p>Create your clan — share the invite code with friends.</p></div>
+      <div class="clan-form-wrap">
+        <label class="sb-l">Clan name (2–24 chars)</label>
+        <input id="ctab-name" maxlength="24" placeholder="Iron Brotherhood" autocomplete="off">
+        <label class="sb-l" style="margin-top:8px">Tag (2–5 letters, shown in [brackets])</label>
+        <input id="ctab-tag" maxlength="5" placeholder="IB" autocomplete="off" style="width:120px;text-transform:uppercase">
+        <div class="clan-form-err" id="ctab-err"></div>
+        <div class="clan-form-btns">
+          <button onclick="clanTabSubmitCreate()">⚔ Create Clan</button>
+          <button class="cancel" onclick="_clanTabMode='';renderClan()">Cancel</button>
+        </div>
+      </div>`;
+    return;
+  }
+  if(_clanTabMode==='join'){
+    el.innerHTML=`<div class="clan-noclan"><p>Enter the invite code from your clan leader.</p></div>
+      <div class="clan-form-wrap">
+        <label class="sb-l">Invite code (6 characters)</label>
+        <input id="ctab-code" maxlength="10" placeholder="ABC123" autocomplete="off" style="text-transform:uppercase;letter-spacing:3px">
+        <div class="clan-form-err" id="ctab-err"></div>
+        <div class="clan-form-btns">
+          <button onclick="clanTabSubmitJoin()">🤝 Join Clan</button>
+          <button class="cancel" onclick="_clanTabMode='';renderClan()">Cancel</button>
+        </div>
+      </div>`;
+    return;
+  }
+  el.innerHTML=`<div class="clan-noclan">
+    <p>You're online but not in a clan yet.</p>
+    <p style="font-size:12px;">Create a clan to fight the shared world with friends — or join one with an invite code.</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;">
+      <button onclick="_clanTabMode='create';renderClan()" style="background:#0a1a14;border:1px solid #2a6a4a;color:#6ad08a;border-radius:6px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:Georgia,serif;">⚔ Create Clan</button>
+      <button onclick="_clanTabMode='join';renderClan()" style="background:#0a0a1a;border:1px solid #3a4a6a;color:#6a90d0;border-radius:6px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:Georgia,serif;">🤝 Join Clan</button>
+    </div>
+  </div>`;
+}
+function clanTabDeclare(poi){
+  sbApi('/api/siege/declare',{poiId:poi}).then(r=>{SB.world=r.world;addLog(`⚔ ${SB_POI_NAMES[poi]} siege declared.`,'info');renderClan();}).catch(err=>addLog((err&&err.error)||'Declare failed.','info'));
+}
+function clanTabSubmitCreate(){
+  const name=($p('ctab-name').value||'').trim();
+  const tag=($p('ctab-tag').value||'').trim().toUpperCase();
+  if(!name||!tag){$p('ctab-err').textContent='Enter a name and tag.';return;}
+  $p('ctab-err').textContent='Creating…';
+  sbApi('/api/clan/create',{name,tag}).then(r=>{
+    sbSetClan(r);_clanTabMode='';sbUpdateBtn();
+    addLog(`⚔ Clan "${name}" [${tag}] created! Invite code: ${r.inviteCode}`,'epic');
+    renderClan();
+  }).catch(e=>{$p('ctab-err').textContent=(e&&e.error)||'Create failed.';});
+}
+function clanTabSubmitJoin(){
+  const code=($p('ctab-code').value||'').trim().toUpperCase();
+  if(!code){$p('ctab-err').textContent='Enter an invite code.';return;}
+  $p('ctab-err').textContent='Joining…';
+  sbApi('/api/clan/join',{inviteCode:code}).then(r=>{
+    sbSetClan(r);_clanTabMode='';sbUpdateBtn();
+    addLog(`⚔ Joined clan "${r.clanName}" [${r.clanTag}]!`,'epic');
+    renderClan();
+  }).catch(e=>{$p('ctab-err').textContent=(e&&e.error)||'Invalid invite code.';});
 }
 let selectedBanner='⚔️';
 function selectBanner(el,b){selectedBanner=b;document.querySelectorAll('.banner-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
@@ -1815,11 +2285,11 @@ function renderMarket(){
   el.innerHTML=`<div class="mk-head">🏛️ The Free City Market <span style="font-weight:400;color:#5a6a7a;">— prices drift; sell into demand, buy the dips. Owning Goldfields boosts your sales. (Real player trading arrives with the server.)</span></div>${rows}`;
 }
 /* GUILD BANK — shared stash; POI fortification can draw from it ("GM builds defenses") */
-function bankTypes(){return Object.keys(G.guildBank).filter(k=>G.guildBank[k]>0).length;}
+function bankTypes(){if(!G.guildBank)G.guildBank={};return Object.keys(G.guildBank).filter(k=>G.guildBank[k]>0).length;}
 function ownedQty(id){return (G.inv[id]||0)+(G.guildBank[id]||0);}
 function hasCombined(needs){return needs.every(n=>ownedQty(n.id)>=n.qty);}
 function spendCombined(needs){needs.forEach(n=>{let q=n.qty;const fi=Math.min(q,G.inv[n.id]||0);if(fi)removeItem(n.id,fi);q-=fi;if(q>0){G.guildBank[n.id]=(G.guildBank[n.id]||0)-q;if(G.guildBank[n.id]<=0)delete G.guildBank[n.id];}});}
-function bankDeposit(id,qty){const n=Math.min(qty,G.inv[id]||0);if(n<=0)return;removeItem(id,n);G.guildBank[id]=(G.guildBank[id]||0)+n;addLog(`Deposited ${n}× ${ITEMS[id]?.n||id} to the guild bank.`,'');renderInventory();openBank();saveGame();}
+function bankDeposit(id,qty){if(!G.guildBank)G.guildBank={};const n=Math.min(qty,G.inv[id]||0);if(n<=0)return;removeItem(id,n);G.guildBank[id]=(G.guildBank[id]||0)+n;addLog(`Deposited ${n}× ${ITEMS[id]?.n||id} to the guild bank.`,'');renderInventory();openBank();saveGame();}
 function bankWithdraw(id,qty){const n=Math.min(qty,G.guildBank[id]||0);if(n<=0)return;if(!(G.inv[id]>0)&&invCount()>=INV_SIZE){addLog('Inventory full.','info');return;}G.guildBank[id]-=n;if(G.guildBank[id]<=0)delete G.guildBank[id];addItem(id,n);renderInventory();openBank();saveGame();}
 function openBank(){
   const inBank=Object.entries(G.guildBank).filter(([id,q])=>q>0).map(([id,q])=>({e:ITEMS[id]?.e||'?',name:`Withdraw ${ITEMS[id]?.n||id} (${q})`,desc:'Move to your bag',onclick:`bankWithdraw('${id}',${q})`}));
@@ -1834,7 +2304,7 @@ function renderBankSection(){
 function renderEstate(){
   const el=$p('estate-content');if(!el)return;
   const bl=G.buildings||{};
-  el.innerHTML=`${renderBankSection()}<div style="padding:0 0 10px;"><h4 style="font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Guild Hall — Estate Buildings</h4><p style="font-size:11px;color:#4a5a6a;margin-bottom:12px;line-height:1.55;">Upgrade to boost XP gains and territory defense.</p>${Object.entries(BUILDINGS).map(([id,b])=>{const lvl=bl[id]||0,maxLvl=b.costs.length,nextCost=lvl<maxLvl?b.costs[lvl]:null,canAfford=nextCost&&G.gold>=nextCost;const pips=Array.from({length:maxLvl},(_,i)=>`<div class="bld-pip ${i<lvl?'filled':''}"></div>`).join('');return `<div class="bld-card"><span class="bld-icon">${b.e}</span><div class="bld-body"><div class="bld-name">${b.n} ${lvl>0?`<span style="color:#c8a020;font-size:10px;">Lv ${lvl}</span>`:'<span style="color:#3a4a5a;font-size:10px;">Not built</span>'}</div><div class="bld-desc">${b.desc}</div><div class="bld-bonus">${b.bonus}</div><div class="bld-level">${pips}</div></div>${nextCost?`<button class="bld-upgrade" ${canAfford?'':'disabled'} onclick="upgradeBuilding('${id}')">${lvl===0?'Build':'Upgrade'}<br><span style="font-size:10px;">${nextCost.toLocaleString()}g</span></button>`:`<span style="font-size:10px;color:#c8a020;padding:4px 8px;">MAX</span>`}</div>`;}).join('')}</div>`;
+  el.innerHTML=`${renderBankSection()}<div style="padding:0 0 10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;align-content:start;"><h4 style="font-size:12px;color:#9aa3b8;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;grid-column:1/-1;">Guild Hall — Estate Buildings</h4><p style="font-size:12px;color:#a6b0c2;margin-bottom:2px;line-height:1.55;grid-column:1/-1;">Upgrade to boost XP gains and territory defense.</p>${Object.entries(BUILDINGS).map(([id,b])=>{const lvl=bl[id]||0,maxLvl=b.costs.length,nextCost=lvl<maxLvl?b.costs[lvl]:null,canAfford=nextCost&&G.gold>=nextCost;const pips=Array.from({length:maxLvl},(_,i)=>`<div class="bld-pip ${i<lvl?'filled':''}"></div>`).join('');return `<div class="bld-card"><span class="bld-icon">${b.e}</span><div class="bld-body"><div class="bld-name">${b.n} ${lvl>0?`<span style="color:#c8a020;font-size:10px;">Lv ${lvl}</span>`:'<span style="color:#3a4a5a;font-size:10px;">Not built</span>'}</div><div class="bld-desc">${b.desc}</div><div class="bld-bonus">${b.bonus}</div><div class="bld-level">${pips}</div></div>${nextCost?`<button class="bld-upgrade" ${canAfford?'':'disabled'} onclick="upgradeBuilding('${id}')">${lvl===0?'Build':'Upgrade'}<br><span style="font-size:10px;">${nextCost.toLocaleString()}g</span></button>`:`<span style="font-size:10px;color:#c8a020;padding:4px 8px;">MAX</span>`}</div>`;}).join('')}</div>`;
 }
 function upgradeBuilding(id){
   const b=BUILDINGS[id];if(!b)return;
@@ -1860,6 +2330,7 @@ function useItem(id){
   else if(id==='scroll_perm')openPermModal();
   else if(id==='scroll_dungeon')openDungeonModal();
   else if(id==='scroll_bounty'){if(!removeItem('scroll_bounty',1))return;addEffect('boon',1.75,10*60*1000);addLog('✨ Bounty Scroll unfurled — +75% XP & drops for 10 minutes!','epic');}
+  else if(id==='burnt_food'){if(!removeItem('burnt_food',1))return;G.xp.farming=(G.xp.farming||0)+20;addLog('Composted Burnt Scraps — +20 Farming XP.','good');renderSkills();}
   else if(id==='vault_key')openVaultModal();
   else if(id==='xp_potion'){if(!removeItem('xp_potion',1))return;addEffect('xp',1.5,5*60*1000);addLog('XP Potion — +50% XP for 5 minutes!','epic');}
   else if(id==='combat_potion'){if(!removeItem('combat_potion',1))return;addEffect('combat',1.25,5*60*1000);addLog('Combat Potion — +25% combat for 5 minutes!','epic');}
@@ -1943,6 +2414,7 @@ function drawCanvas(){
   else if(region==='grove'||region==='wilds')drawForest(W,H,region);
   else drawEstate(W,H);
   const loc=LOCATIONS[G.currentLocation];$p('loc-label').textContent=loc?.n||'Your Estate';$p('loc-sub').textContent=loc?.desc||'';
+  renderLocStrip();
 }
 function drawEstate(W,H){
   sky(W,H,'#1a1a30','#2a2a1a');px(0,H*.5,W,H*.5,'#2a3a1a');px(0,H*.5,W,8,'#3a4a2a');
@@ -2047,4 +2519,259 @@ function endSeason(){
   if(!G.leaderboard)G.leaderboard=[];
   if(!G.seasonNum)G.seasonNum=1;
   // Snapshot standings
-  const entries=[{id:'player',name:G.clan?.name||'You',banner:G.clan?.banner
+  const entries=[{id:'player',name:G.clan?.name||'You',banner:G.clan?.banner||'⚔️',pois:playerTerritories().length,level:G.clan?.level||1}];
+  Object.entries(RIVAL_CLANS).forEach(([id,cl])=>entries.push({id,name:cl.n,banner:cl.e,pois:clanTerritories(id).length,level:1}));
+  entries.sort((a,b)=>b.pois-a.pois);
+  G.leaderboard.unshift({season:G.seasonNum,entries,playerRank:entries.findIndex(e=>e.id==='player')+1});
+  if(G.leaderboard.length>5)G.leaderboard.pop();
+  // Reset territories to initHolders (keeps skills/gear/gold/buildings)
+  G.territories={};
+  TERRITORIES.forEach(t=>{if(t.initHolder)G.territories[t.id]=t.initHolder;});
+  G.garrisons={};G.poiLevels={};G.diplomacy={pacts:[],lastDiplomacyTurn:0};
+  G.seasonNum++;
+  G.seasonEnd=Date.now()+SEASON_DURATION_MS;
+  addLog(`🏆 Season ${G.seasonNum-1} ended! Your rank: #${G.leaderboard[0].playerRank}. Season ${G.seasonNum} begins — territory has been reset.`,'epic');
+  renderClan();drawMapCanvas();saveGame();
+}
+// Named timer functions referenced in setInterval (previously undefined — fixed here)
+function gameTick(){tickEffects();}
+function autoGatherTick(){territoryTick();checkSeasonEnd();}
+function warTick(){marketDrift();}
+/* ===== ONLINE / SHARED WORLD (Phase B — additive; solo play works with no server) ===== */
+const SB={token:null,playerId:null,name:null,world:null,clanId:null,clanName:null,clanTag:null,isOwner:false,_loops:false};
+function sbApi(path,body){
+  const opts={method:body?'POST':'GET',headers:{'Content-Type':'application/json'}};
+  if(SB.token)opts.headers['Authorization']='Bearer '+SB.token;
+  if(body)opts.body=JSON.stringify(body);
+  return fetch(path,opts).then(r=>r.json().then(j=>r.ok?j:Promise.reject(j)));
+}
+function sbSetClan(res){
+  // Only update clan fields when explicitly present in the response
+  if('clanId' in res)SB.clanId=res.clanId||null;
+  if('clanName' in res)SB.clanName=res.clanName||null;
+  if('clanTag' in res)SB.clanTag=res.clanTag||null;
+  if('isOwner' in res)SB.isOwner=!!res.isOwner;
+  if(res.world)SB.world=res.world;
+}
+function sbOnlineClick(){
+  if(SB.token){sbWorldModal();return;}
+  $p('sb-name').value=G.name||localStorage.getItem('sb_name')||'';
+  $p('sb-code').value=localStorage.getItem('sb_code')||'';
+  $p('sb-err').textContent='';
+  $p('sb-overlay').classList.add('show');
+}
+function sbCloseOverlay(){$p('sb-overlay').classList.remove('show');}
+function sbLogin(){
+  const name=($p('sb-name').value||'').trim(),code=($p('sb-code').value||'').trim();
+  if(!name||!code){$p('sb-err').textContent='Enter a name and invite code.';return;}
+  $p('sb-err').textContent='Connecting…';
+  sbApi('/api/login',{name,code}).then(res=>{
+    SB.token=res.token;SB.playerId=res.playerId;SB.name=res.name;
+    sbSetClan(res);
+    try{localStorage.setItem('sb_token',res.token);localStorage.setItem('sb_name',name);localStorage.setItem('sb_code',code);}catch(e){}
+    sbCloseOverlay();
+    if(res.save){localStorage.setItem('scrollbound_v3',res.save);location.reload();return;}
+    sbSync();sbStartLoops();sbUpdateBtn();
+    addLog(`🌐 Online as ${name} — welcome to the shared world!`,'epic');
+  }).catch(err=>{$p('sb-err').textContent=(err&&err.error)||'Could not reach the server (is it deployed?).';});
+}
+function sbSkillsSummary(){
+  const out={};
+  try{Object.keys(G.skills||{}).forEach(sk=>{out[sk]=xpToLevel((G.xp&&G.xp[sk])||0);});}catch(e){}
+  return out;
+}
+function sbSync(){
+  if(!SB.token)return;
+  const skills=sbSkillsSummary();
+  sbApi('/api/save',{save:localStorage.getItem('scrollbound_v3'),power:(typeof combatPower==='function'?combatPower():1),guild:(G.clan&&G.clan.name)||SB.name,skills}).catch(()=>{});
+}
+function sbPoll(){
+  if(!SB.token)return;
+  sbApi('/api/state').then(r=>{
+    if(r.world)SB.world=r.world;
+    if(r.you)SB.playerId=r.you;
+    sbSetClan(r);sbUpdateBtn();
+    // Re-render Clan tab live if it's currently open
+    const cw=document.getElementById('clan-wrap');if(cw&&cw.classList.contains('show'))renderClan();
+  }).catch(()=>{});
+}
+function sbStartLoops(){
+  if(SB._loops)return;SB._loops=true;
+  setInterval(sbSync,15000);setInterval(sbPoll,10000);sbPoll();
+}
+function sbUpdateBtn(){
+  const b=$p('hdr-online');if(!b)return;
+  if(!SB.token){b.textContent='🌐 Go Online';return;}
+  const online=SB.world&&SB.world.players?SB.world.players.filter(p=>p.online).length:1;
+  b.textContent=`🌍 World (${online} online)`;b.style.color='#6ad08a';b.style.borderColor='#2a6a4a';
+}
+function sbDeclare(poi){
+  sbApi('/api/siege/declare',{poiId:poi}).then(r=>{SB.world=r.world;addLog('⚔ Siege declared on the shared world — resolves at the next server window.','info');sbWorldModal();}).catch(err=>addLog((err&&err.error)||'Declare failed.','info'));
+}
+const SB_POI_NAMES={oakreach:'Oakreach Stands',tinford:'Tinford Pits',mistlake:'Mistlake Shallows',greenrow:'Greenrow Fields',emberforge:'Emberforge',blackpine:'Blackpine Deepwood',gravemount:'Gravemount Lode',drownreach:'Drownreach Coast',thornwild:'Thornwild Expanse',cinderpeak:'Cinderpeak Foundry',shadefen:'Shadefen Hollow',glimmerdeep:'Glimmerdeep'};
+const SB_POI_INFO={
+  oakreach:  {e:'🌳',tag:'Gathering',bonus:'+XP to all gathering',col:'#2a5a2a'},
+  tinford:   {e:'⛏️',tag:'Mining',  bonus:'+XP & drops to mining',col:'#5a4a2a'},
+  mistlake:  {e:'🐟',tag:'Fishing', bonus:'+XP & drops to fishing',col:'#2a4a5a'},
+  greenrow:  {e:'🌾',tag:'Farming', bonus:'+XP to farming & cooking',col:'#3a5a2a'},
+  emberforge:{e:'🔥',tag:'Smithing',bonus:'+speed to smithing',col:'#6a3a2a'},
+  blackpine: {e:'🪵',tag:'Woodcutting',bonus:'+XP & drops to woodcutting',col:'#2a4a2a'},
+  gravemount:{e:'💎',tag:'Crafting',bonus:'+XP to mining & crafting',col:'#4a3a6a'},
+  drownreach:{e:'🌊',tag:'Coast',   bonus:'+drops to fishing & slayer',col:'#2a4a5a'},
+  thornwild: {e:'🐾',tag:'Slayer',  bonus:'+XP to slayer & combat',col:'#6a2a2a'},
+  cinderpeak:{e:'⚒️',tag:'Industry',bonus:'+XP to smithing & fletching',col:'#5a4a2a'},
+  shadefen:  {e:'🌿',tag:'Herblore',bonus:'+XP to herblore & farming',col:'#3a4a6a'},
+  glimmerdeep:{e:'✨',tag:'Magic',  bonus:'+XP to all skills',col:'#5a3a6a'},
+};
+const SKILL_NAMES_SHORT={woodcutting:'Wc',mining:'Min',fishing:'Fish',combat:'Cmbt',crafting:'Craft',cooking:'Cook',farming:'Farm',herblore:'Herb',slayer:'Slay',fletching:'Fltch',smithing:'Smith',jewelcrafting:'Jwl'};
+function sbWorldModal(){
+  if(!SB.token){sbOnlineClick();return;}
+  const w=SB.world||{territories:{},players:[],sieges:{},clans:{}};
+  const next=w.nextSiege?Math.max(0,Math.round((w.nextSiege-Date.now())/60000)):'?';
+
+  // Clan badge (create/join lives in the Clan tab)
+  let clanHtml='';
+  if(SB.clanId){
+    const clan=(w.clans||{})[SB.clanId];
+    const memberCount=clan?clan.members.length:1;
+    clanHtml=`<div class="sb-world-clan"><b>⚔ ${SB.clanName||'Your Clan'}</b> <span style="color:#4a8a5a">[${SB.clanTag||'?'}]</span> · ${memberCount} member${memberCount!==1?'s':''} <button onclick="closeModal();showTab('clan')" class="sb-clan-btn" style="font-size:10px;padding:2px 8px;margin-left:6px">Clan tab ▸</button></div>`;
+  }else{
+    clanHtml=`<div class="sb-world-clan"><span style="opacity:.6">No clan — </span><button onclick="closeModal();showTab('clan')" class="sb-clan-btn" style="font-size:11px;padding:2px 9px">Create or join in Clan tab ▸</button></div>`;
+  }
+
+  // Online players
+  const onlinePlayers=(w.players||[]).filter(p=>p.online);
+  let onlineHtml='';
+  if(onlinePlayers.length){
+    const rows=onlinePlayers.map(p=>{
+      const tag=p.clanTag?`<span style="color:#4a8a5a;font-size:10px">[${p.clanTag}]</span> `:'';
+      const topSkills=Object.entries(p.skills||{}).sort((a,b)=>b[1]-a[1]).slice(0,3)
+        .map(([sk,lv])=>`${SKILL_NAMES_SHORT[sk]||sk} ${lv}`).join(' · ');
+      const dot=p.id===SB.playerId?'<span style="color:#6ad08a">●</span> ':'<span style="color:#4a6a4a">●</span> ';
+      return `<div>${dot}${tag}<b>${p.name}</b>${topSkills?` <span style="color:#5a7a5a;font-size:10px">· ${topSkills}</span>`:''}</div>`;
+    }).join('');
+    onlineHtml=`<div class="sb-world-online"><b>Online (${onlinePlayers.length})</b><br>${rows}</div>`;
+  }
+
+  // POI map opts
+  const myId=SB.clanId||SB.playerId;
+  $p('modal-title').textContent=`🌍 Shared World — Season ${w.season||1}`;
+  $p('modal-desc').innerHTML=clanHtml+onlineHtml+`<div style="font-size:11px;opacity:.6;margin-bottom:4px">Next siege window in ~${next} min. Tap any POI to declare a siege.</div>`;
+  const opts=Object.keys(SB_POI_NAMES).map(poi=>{
+    const o=w.territories&&w.territories[poi];
+    const mine=o&&o.type!=='ai'&&(o.id===SB.playerId||o.id===SB.clanId);
+    const ownerTxt=o?(mine?'Held by you':`${o.type==='ai'?'🤖':'🧑'} ${o.name}`):'Unclaimed';
+    const decl=((w.sieges&&w.sieges[poi])||[]).length;
+    return {e:mine?'🟢':o?(o.type==='ai'?'🤖':'⚔️'):'⬜',name:`${SB_POI_NAMES[poi]} — ${ownerTxt}`,desc:mine?'Held by your clan':`${decl?decl+' attacker(s) queued · ':''}Tap to declare a siege`,onclick:mine?'closeModal()':`sbDeclare('${poi}')`};
+  });
+  $p('modal-opts').innerHTML=opts.map(o=>`<div class="modal-opt" onclick="${o.onclick}"><span class="mopt-ico">${o.e}</span><div><div class="mopt-name">${o.name}</div><div class="mopt-desc">${o.desc}</div></div></div>`).join('');
+  $p('modal-overlay').classList.add('show');
+}
+
+/* ===== CLAN MANAGEMENT OVERLAY ===== */
+let _sbcMode=''; // 'create'|'join'|'panel'
+function sbcClose(){$p('sb-clan-overlay').classList.remove('show');$p('sb-clan-err').textContent='';}
+function sbcOpen(mode,title,bodyHtml,actionLabel){
+  _sbcMode=mode;
+  $p('sbc-title').textContent=title;
+  $p('sbc-body').innerHTML=bodyHtml;
+  $p('sb-clan-err').textContent='';
+  $p('sbc-action').textContent=actionLabel||'OK';
+  $p('sbc-action').style.display=actionLabel===''?'none':'block';
+  $p('sb-clan-overlay').classList.add('show');
+  closeModal();
+}
+function sbcCreate(){
+  sbcOpen('create','⚔️ Create a Clan',
+    `<p style="font-size:12px;color:#5a7a5a;margin-bottom:10px">Choose a name and a short tag for your clan. Share the invite code with friends after creating.</p>`
+    +`<label class="sb-l">Clan name (2–24 chars)</label><input id="sbc-name" maxlength="24" placeholder="Iron Brotherhood" autocomplete="off">`
+    +`<label class="sb-l">Tag (2–5 letters, shown in [brackets])</label><input id="sbc-tag" maxlength="5" placeholder="IB" autocomplete="off" style="width:120px;text-transform:uppercase">`,
+    'Create Clan');
+}
+function sbcJoin(){
+  sbcOpen('join','🤝 Join a Clan',
+    `<p style="font-size:12px;color:#5a7a5a;margin-bottom:10px">Enter the 6-character invite code from your clan leader.</p>`
+    +`<label class="sb-l">Invite code</label><input id="sbc-code" maxlength="10" placeholder="ABC123" autocomplete="off" style="text-transform:uppercase;letter-spacing:3px">`,
+    'Join Clan');
+}
+function sbcPanel(){
+  if(!SB.clanId){sbcCreate();return;}
+  // Fetch latest clan info then render
+  sbApi('/api/clan/info').then(r=>{
+    const clan=r.clan;
+    const memberRows=r.members.map(m=>{
+      const dot=m.online?'<span style="color:#6ad08a">●</span>':'<span style="color:#3a3a4a">●</span>';
+      const crown=m.isOwner?' 👑':'';
+      const topSkills=Object.entries(m.skills||{}).sort((a,b)=>b[1]-a[1]).slice(0,4)
+        .map(([sk,lv])=>`${SKILL_NAMES_SHORT[sk]||sk} ${lv}`).join(' · ');
+      const kickBtn=(SB.isOwner&&!m.isOwner)?`<button onclick="sbcKick('${m.id}','${m.name}')" class="sb-clan-btn danger" style="font-size:10px;padding:2px 6px">Kick</button>`:'';
+      return `<div class="sb-member-row"><div>${dot} <b>${m.name}${crown}</b>${kickBtn?'  '+kickBtn:''}</div></div>`
+        +(topSkills?`<div class="sb-member-skills">&nbsp;&nbsp;&nbsp;${topSkills}</div>`:'');
+    }).join('');
+    const leaveLabel=SB.isOwner?'Disband Clan':'Leave Clan';
+    const body=`<div style="margin-bottom:8px"><b style="color:#6ad08a">${clan.name}</b> [${clan.tag}]`
+      +(SB.isOwner?`<br><span class="sb-l" style="display:inline;margin:0">Invite code: </span><span class="sb-invite-code">${clan.inviteCode}</span>  <span style="font-size:10px;color:#5a6a5a">(share with friends)</span>`:'')
+      +`</div><div style="margin-bottom:6px;font-size:11px;color:#4a6a4a">Members (${r.members.length})</div>`
+      +memberRows
+      +`<div style="margin-top:12px"><button onclick="sbcLeave()" class="sb-clan-btn danger" style="font-size:11px">${leaveLabel}</button></div>`;
+    sbcOpen('panel',`⚔️ ${clan.name}`,body,'');
+  }).catch(()=>{$p('sb-clan-err').textContent='Could not load clan info.';});
+}
+function sbcKick(targetId,targetName){
+  if(!confirm(`Kick ${targetName} from the clan?`))return;
+  sbApi('/api/clan/kick',{targetId}).then(r=>{sbSetClan(r);sbcPanel();addLog(`Kicked ${targetName} from the clan.`,'info');}).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Kick failed.';});
+}
+function sbcLeave(){
+  const msg=SB.isOwner?'Disband the clan? All members will be removed and your POIs released. This cannot be undone.':'Leave the clan?';
+  if(!confirm(msg))return;
+  sbApi('/api/clan/leave').then(r=>{sbSetClan(r);sbcClose();sbUpdateBtn();addLog(SB.isOwner?'Clan disbanded.':'You left the clan.','info');}).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Failed.';});
+}
+function sbcSubmit(){
+  $p('sb-clan-err').textContent='';
+  if(_sbcMode==='create'){
+    const name=($p('sbc-name').value||'').trim();
+    const tag=($p('sbc-tag').value||'').trim().toUpperCase();
+    if(!name||!tag){$p('sb-clan-err').textContent='Enter a name and tag.';return;}
+    $p('sbc-action').textContent='Creating…';
+    sbApi('/api/clan/create',{name,tag}).then(r=>{
+      sbSetClan(r);sbcClose();sbUpdateBtn();
+      addLog(`⚔ Clan "${name}" [${tag}] created! Invite code: ${r.inviteCode}`,'epic');
+    }).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Create failed.';$p('sbc-action').textContent='Create Clan';});
+  }else if(_sbcMode==='join'){
+    const code=($p('sbc-code').value||'').trim().toUpperCase();
+    if(!code){$p('sb-clan-err').textContent='Enter an invite code.';return;}
+    $p('sbc-action').textContent='Joining…';
+    sbApi('/api/clan/join',{inviteCode:code}).then(r=>{
+      sbSetClan(r);sbcClose();sbUpdateBtn();
+      addLog(`⚔ Joined clan "${r.clanName}" [${r.clanTag}]!`,'epic');
+    }).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Join failed.';$p('sbc-action').textContent='Join Clan';});
+  }
+}
+function sbInit(){
+  const t=localStorage.getItem('sb_token');
+  if(t){SB.token=t;SB.name=localStorage.getItem('sb_name');sbStartLoops();sbUpdateBtn();}
+}
+function boot(){
+  const raw=localStorage.getItem('scrollbound_v3');
+  if(raw){try{loadGame(JSON.parse(raw));}catch(e){console.warn('Save load failed',e);}}
+  const hdr=$p('hdr-class');
+  if(G.name){
+    $p('start-screen').style.display='none';
+    $p('hdr-player').textContent=G.name;
+    if(G.ironman)$p('hdr-ironman').style.display='inline-block';
+    if(G.activeClass&&hdr){hdr.textContent=CLASSES[G.activeClass].e+' '+CLASSES[G.activeClass].n;hdr.style.display='inline-block';}
+    renderSkills();renderActions();renderInventory();renderEquipment();drawCanvas();drawMapCanvas();updateGold();renderResStrip();renderLocStrip();
+    if(G.offlineSeconds>5)addLog(`Welcome back! Away for ${Math.round(G.offlineSeconds/60)}m.`,'info');
+  } else {
+    $p('start-screen').style.display='flex';
+  }
+  setInterval(gameTick,80);
+  setInterval(()=>{autoGatherTick();saveGame();},2000);
+  setInterval(warTick,30000);
+  sbInit();
+  let _rz;window.addEventListener('resize',()=>{clearTimeout(_rz);_rz=setTimeout(()=>{try{resizeCanvas();}catch(e){}try{drawMapCanvas();}catch(e){}},150);});
+}
+boot();
+</script>
+</body>
+</html>
