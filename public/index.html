@@ -26,6 +26,28 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #sb-err{color:#d05050;font-size:11px;min-height:14px;margin:6px 0;}
 .sb-row2{display:flex;gap:8px;margin-top:6px;}
 #sb-login{flex:1;background:#0a1a2a;border:1px solid #3a6a9a;color:#8ac0f0;border-radius:6px;padding:9px;font-size:13px;cursor:pointer;font-family:Georgia,serif;letter-spacing:1px;}
+/* clan overlay — same structure as sb-overlay */
+#sb-clan-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:310;display:none;align-items:center;justify-content:center;}
+#sb-clan-overlay.show{display:flex;}
+#sb-clan-box{background:#0f0f1c;border:1px solid #2a6a4a;border-radius:10px;padding:22px;width:420px;max-width:94vw;max-height:90vh;overflow-y:auto;}
+#sb-clan-box h3{font-family:Georgia,serif;font-size:17px;color:#6ad08a;margin-bottom:8px;}
+#sb-clan-box .sb-l{display:block;font-size:10px;letter-spacing:1px;color:#5a6a7a;text-transform:uppercase;margin:8px 0 3px;}
+#sb-clan-box input{width:100%;background:#0a0a14;border:1px solid #2a2a40;color:#cdc8b8;border-radius:5px;padding:8px 10px;font-size:14px;outline:none;box-sizing:border-box;}
+#sb-clan-box input:focus{border-color:#3a8a5a;}
+#sb-clan-err{color:#d05050;font-size:11px;min-height:14px;margin:6px 0;}
+.sb-clan-btn{background:#0a1a14;border:1px solid #2a6a4a;color:#6ad08a;border-radius:6px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:Georgia,serif;letter-spacing:.5px;}
+.sb-clan-btn:hover{background:#102a1c;}
+.sb-clan-btn.danger{border-color:#6a2a2a;color:#d08080;background:#1a0a0a;}
+.sb-clan-btn.danger:hover{background:#2a0f0f;}
+.sb-member-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a2a;font-size:12px;}
+.sb-member-row:last-child{border-bottom:none;}
+.sb-member-skills{font-size:10px;color:#5a7a5a;margin-top:2px;}
+.sb-invite-code{font-family:monospace;font-size:15px;color:#c8a020;background:#100e00;border:1px solid #3a3000;border-radius:4px;padding:4px 10px;letter-spacing:2px;display:inline-block;margin:4px 0;}
+/* world modal clan section */
+.sb-world-clan{background:#0c1a10;border:1px solid #2a4a2a;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;}
+.sb-world-clan b{color:#6ad08a;}
+.sb-world-online{background:#0c0f1a;border:1px solid #1a2a3a;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:11px;line-height:1.8;}
+.sb-world-online b{color:#6aa0d0;}
 #sb-login:hover{background:#0f2438;}
 #sb-cancel{background:#161620;border:1px solid #2a2a40;color:#6a7a8a;border-radius:6px;padding:9px 12px;font-size:12px;cursor:pointer;}
 .hdr-btn:hover{background:#22223a;}
@@ -332,6 +354,15 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
   <div class="sb-row2">
     <button id="sb-login" onclick="sbLogin()">Enter World</button>
     <button id="sb-cancel" onclick="sbCloseOverlay()">Play offline</button>
+  </div>
+</div></div>
+<div id="sb-clan-overlay"><div id="sb-clan-box">
+  <h3 id="sbc-title">⚔️ Clan</h3>
+  <div id="sbc-body"></div>
+  <div id="sb-clan-err"></div>
+  <div class="sb-row2" style="margin-top:10px;">
+    <button id="sbc-action" class="sb-clan-btn" onclick="sbcSubmit()" style="flex:1">OK</button>
+    <button class="sb-clan-btn" onclick="sbcClose()" style="background:#0a0a14;border-color:#2a2a40;color:#5a6a7a;">Close</button>
   </div>
 </div></div>
 <div id="main">
@@ -2097,12 +2128,20 @@ function gameTick(){tickEffects();}
 function autoGatherTick(){territoryTick();checkSeasonEnd();}
 function warTick(){marketDrift();}
 /* ===== ONLINE / SHARED WORLD (Phase B — additive; solo play works with no server) ===== */
-const SB={token:null,playerId:null,name:null,world:null,_loops:false};
+const SB={token:null,playerId:null,name:null,world:null,clanId:null,clanName:null,clanTag:null,isOwner:false,_loops:false};
 function sbApi(path,body){
   const opts={method:body?'POST':'GET',headers:{'Content-Type':'application/json'}};
   if(SB.token)opts.headers['Authorization']='Bearer '+SB.token;
   if(body)opts.body=JSON.stringify(body);
   return fetch(path,opts).then(r=>r.json().then(j=>r.ok?j:Promise.reject(j)));
+}
+function sbSetClan(res){
+  // Only update clan fields when explicitly present in the response
+  if('clanId' in res)SB.clanId=res.clanId||null;
+  if('clanName' in res)SB.clanName=res.clanName||null;
+  if('clanTag' in res)SB.clanTag=res.clanTag||null;
+  if('isOwner' in res)SB.isOwner=!!res.isOwner;
+  if(res.world)SB.world=res.world;
 }
 function sbOnlineClick(){
   if(SB.token){sbWorldModal();return;}
@@ -2117,7 +2156,8 @@ function sbLogin(){
   if(!name||!code){$p('sb-err').textContent='Enter a name and invite code.';return;}
   $p('sb-err').textContent='Connecting…';
   sbApi('/api/login',{name,code}).then(res=>{
-    SB.token=res.token;SB.playerId=res.playerId;SB.name=res.name;SB.world=res.world;
+    SB.token=res.token;SB.playerId=res.playerId;SB.name=res.name;
+    sbSetClan(res);
     try{localStorage.setItem('sb_token',res.token);localStorage.setItem('sb_name',name);localStorage.setItem('sb_code',code);}catch(e){}
     sbCloseOverlay();
     if(res.save){localStorage.setItem('scrollbound_v3',res.save);location.reload();return;}
@@ -2125,13 +2165,19 @@ function sbLogin(){
     addLog(`🌐 Online as ${name} — welcome to the shared world!`,'epic');
   }).catch(err=>{$p('sb-err').textContent=(err&&err.error)||'Could not reach the server (is it deployed?).';});
 }
+function sbSkillsSummary(){
+  const out={};
+  try{Object.keys(G.skills||{}).forEach(sk=>{out[sk]=xpToLevel((G.skills[sk]&&G.skills[sk].xp)||0);});}catch(e){}
+  return out;
+}
 function sbSync(){
   if(!SB.token)return;
-  sbApi('/api/save',{save:localStorage.getItem('scrollbound_v3'),power:(typeof combatPower==='function'?combatPower():1),guild:(G.clan&&G.clan.name)||SB.name}).catch(()=>{});
+  const skills=sbSkillsSummary();
+  sbApi('/api/save',{save:localStorage.getItem('scrollbound_v3'),power:(typeof combatPower==='function'?combatPower():1),guild:(G.clan&&G.clan.name)||SB.name,skills}).catch(()=>{});
 }
 function sbPoll(){
   if(!SB.token)return;
-  sbApi('/api/state').then(r=>{SB.world=r.world;if(r.you)SB.playerId=r.you;sbUpdateBtn();}).catch(()=>{});
+  sbApi('/api/state').then(r=>{if(r.world)SB.world=r.world;if(r.you)SB.playerId=r.you;sbSetClan(r);sbUpdateBtn();}).catch(()=>{});
 }
 function sbStartLoops(){
   if(SB._loops)return;SB._loops=true;
@@ -2147,19 +2193,134 @@ function sbDeclare(poi){
   sbApi('/api/siege/declare',{poiId:poi}).then(r=>{SB.world=r.world;addLog('⚔ Siege declared on the shared world — resolves at the next server window.','info');sbWorldModal();}).catch(err=>addLog((err&&err.error)||'Declare failed.','info'));
 }
 const SB_POI_NAMES={oakreach:'Oakreach Stands',tinford:'Tinford Pits',mistlake:'Mistlake Shallows',greenrow:'Greenrow Fields',emberforge:'Emberforge',blackpine:'Blackpine Deepwood',gravemount:'Gravemount Lode',drownreach:'Drownreach Coast',thornwild:'Thornwild Expanse',cinderpeak:'Cinderpeak Foundry',shadefen:'Shadefen Hollow',glimmerdeep:'Glimmerdeep'};
+const SKILL_NAMES_SHORT={woodcutting:'Wc',mining:'Min',fishing:'Fish',combat:'Cmbt',crafting:'Craft',cooking:'Cook',farming:'Farm',herblore:'Herb',slayer:'Slay',fletching:'Fltch',smithing:'Smith',jewelcrafting:'Jwl'};
 function sbWorldModal(){
   if(!SB.token){sbOnlineClick();return;}
-  const w=SB.world||{territories:{},players:[],sieges:{}};
+  const w=SB.world||{territories:{},players:[],sieges:{},clans:{}};
   const next=w.nextSiege?Math.max(0,Math.round((w.nextSiege-Date.now())/60000)):'?';
-  const online=(w.players||[]).filter(p=>p.online).map(p=>p.name).join(', ')||'just you';
+
+  // Clan panel
+  let clanHtml='';
+  if(SB.clanId){
+    const clan=(w.clans||{})[SB.clanId];
+    const code=clan?clan.inviteCode:'???';
+    const memberCount=clan?clan.members.length:1;
+    clanHtml=`<div class="sb-world-clan"><b>⚔ ${SB.clanName||'Your Clan'}</b> [${SB.clanTag||'?'}] · ${memberCount} member${memberCount!==1?'s':''}`
+      +(SB.isOwner?` · Invite: <span class="sb-invite-code" style="font-size:12px;padding:2px 6px">${code}</span>`:'')
+      +` <button onclick="sbcPanel()" class="sb-clan-btn" style="font-size:10px;padding:2px 7px;margin-left:6px">Manage</button></div>`;
+  }else{
+    clanHtml=`<div class="sb-world-clan" style="display:flex;align-items:center;gap:8px;"><span style="opacity:.6">No clan.</span>`
+      +`<button onclick="sbcCreate()" class="sb-clan-btn" style="font-size:11px;padding:3px 10px">⚔ Create</button>`
+      +`<button onclick="sbcJoin()" class="sb-clan-btn" style="font-size:11px;padding:3px 10px">🤝 Join</button></div>`;
+  }
+
+  // Online players
+  const onlinePlayers=(w.players||[]).filter(p=>p.online);
+  let onlineHtml='';
+  if(onlinePlayers.length){
+    const rows=onlinePlayers.map(p=>{
+      const tag=p.clanTag?`<span style="color:#4a8a5a;font-size:10px">[${p.clanTag}]</span> `:'';
+      const topSkills=Object.entries(p.skills||{}).sort((a,b)=>b[1]-a[1]).slice(0,3)
+        .map(([sk,lv])=>`${SKILL_NAMES_SHORT[sk]||sk} ${lv}`).join(' · ');
+      const dot=p.id===SB.playerId?'<span style="color:#6ad08a">●</span> ':'<span style="color:#4a6a4a">●</span> ';
+      return `<div>${dot}${tag}<b>${p.name}</b>${topSkills?` <span style="color:#5a7a5a;font-size:10px">· ${topSkills}</span>`:''}</div>`;
+    }).join('');
+    onlineHtml=`<div class="sb-world-online"><b>Online (${onlinePlayers.length})</b><br>${rows}</div>`;
+  }
+
+  // POI map opts
+  const myId=SB.clanId||SB.playerId;
+  $p('modal-title').textContent=`🌍 Shared World — Season ${w.season||1}`;
+  $p('modal-desc').innerHTML=clanHtml+onlineHtml+`<div style="font-size:11px;opacity:.6;margin-bottom:4px">Next siege window in ~${next} min. Tap any POI to declare a siege.</div>`;
   const opts=Object.keys(SB_POI_NAMES).map(poi=>{
     const o=w.territories&&w.territories[poi];
-    const mine=o&&o.type==='player'&&o.id===SB.playerId;
-    const ownerTxt=o?(mine?'You hold it':`${o.type==='ai'?'🤖':'🧑'} ${o.name}`):'Unclaimed';
+    const mine=o&&o.type!=='ai'&&(o.id===SB.playerId||o.id===SB.clanId);
+    const ownerTxt=o?(mine?'Held by you':`${o.type==='ai'?'🤖':'🧑'} ${o.name}`):'Unclaimed';
     const decl=((w.sieges&&w.sieges[poi])||[]).length;
-    return {e:mine?'🟢':o?(o.type==='ai'?'🤖':'⚔️'):'⬜',name:`${SB_POI_NAMES[poi]} — ${ownerTxt}`,desc:mine?'Held by your guild':`${decl?decl+' attacker(s) queued · ':''}Tap to declare a siege`,onclick:mine?'closeModal()':`sbDeclare('${poi}')`};
+    return {e:mine?'🟢':o?(o.type==='ai'?'🤖':'⚔️'):'⬜',name:`${SB_POI_NAMES[poi]} — ${ownerTxt}`,desc:mine?'Held by your clan':`${decl?decl+' attacker(s) queued · ':''}Tap to declare a siege`,onclick:mine?'closeModal()':`sbDeclare('${poi}')`};
   });
-  showModal(`🌍 Shared World — season ${w.season||1}`,`Online: ${online}. Next siege window in ~${next} min. Declare a siege on any POI you don't hold; the server resolves all guilds (players + AI) together.`,opts);
+  $p('modal-opts').innerHTML=opts.map(o=>`<div class="modal-opt" onclick="${o.onclick}"><span class="mopt-ico">${o.e}</span><div><div class="mopt-name">${o.name}</div><div class="mopt-desc">${o.desc}</div></div></div>`).join('');
+  $p('modal-overlay').classList.add('show');
+}
+
+/* ===== CLAN MANAGEMENT OVERLAY ===== */
+let _sbcMode=''; // 'create'|'join'|'panel'
+function sbcClose(){$p('sb-clan-overlay').classList.remove('show');$p('sb-clan-err').textContent='';}
+function sbcOpen(mode,title,bodyHtml,actionLabel){
+  _sbcMode=mode;
+  $p('sbc-title').textContent=title;
+  $p('sbc-body').innerHTML=bodyHtml;
+  $p('sb-clan-err').textContent='';
+  $p('sbc-action').textContent=actionLabel||'OK';
+  $p('sbc-action').style.display=actionLabel===''?'none':'block';
+  $p('sb-clan-overlay').classList.add('show');
+  closeModal();
+}
+function sbcCreate(){
+  sbcOpen('create','⚔️ Create a Clan',
+    `<p style="font-size:12px;color:#5a7a5a;margin-bottom:10px">Choose a name and a short tag for your clan. Share the invite code with friends after creating.</p>`
+    +`<label class="sb-l">Clan name (2–24 chars)</label><input id="sbc-name" maxlength="24" placeholder="Iron Brotherhood" autocomplete="off">`
+    +`<label class="sb-l">Tag (2–5 letters, shown in [brackets])</label><input id="sbc-tag" maxlength="5" placeholder="IB" autocomplete="off" style="width:120px;text-transform:uppercase">`,
+    'Create Clan');
+}
+function sbcJoin(){
+  sbcOpen('join','🤝 Join a Clan',
+    `<p style="font-size:12px;color:#5a7a5a;margin-bottom:10px">Enter the 6-character invite code from your clan leader.</p>`
+    +`<label class="sb-l">Invite code</label><input id="sbc-code" maxlength="10" placeholder="ABC123" autocomplete="off" style="text-transform:uppercase;letter-spacing:3px">`,
+    'Join Clan');
+}
+function sbcPanel(){
+  if(!SB.clanId){sbcCreate();return;}
+  // Fetch latest clan info then render
+  sbApi('/api/clan/info').then(r=>{
+    const clan=r.clan;
+    const memberRows=r.members.map(m=>{
+      const dot=m.online?'<span style="color:#6ad08a">●</span>':'<span style="color:#3a3a4a">●</span>';
+      const crown=m.isOwner?' 👑':'';
+      const topSkills=Object.entries(m.skills||{}).sort((a,b)=>b[1]-a[1]).slice(0,4)
+        .map(([sk,lv])=>`${SKILL_NAMES_SHORT[sk]||sk} ${lv}`).join(' · ');
+      const kickBtn=(SB.isOwner&&!m.isOwner)?`<button onclick="sbcKick('${m.id}','${m.name}')" class="sb-clan-btn danger" style="font-size:10px;padding:2px 6px">Kick</button>`:'';
+      return `<div class="sb-member-row"><div>${dot} <b>${m.name}${crown}</b>${kickBtn?'  '+kickBtn:''}</div></div>`
+        +(topSkills?`<div class="sb-member-skills">&nbsp;&nbsp;&nbsp;${topSkills}</div>`:'');
+    }).join('');
+    const leaveLabel=SB.isOwner?'Disband Clan':'Leave Clan';
+    const body=`<div style="margin-bottom:8px"><b style="color:#6ad08a">${clan.name}</b> [${clan.tag}]`
+      +(SB.isOwner?`<br><span class="sb-l" style="display:inline;margin:0">Invite code: </span><span class="sb-invite-code">${clan.inviteCode}</span>  <span style="font-size:10px;color:#5a6a5a">(share with friends)</span>`:'')
+      +`</div><div style="margin-bottom:6px;font-size:11px;color:#4a6a4a">Members (${r.members.length})</div>`
+      +memberRows
+      +`<div style="margin-top:12px"><button onclick="sbcLeave()" class="sb-clan-btn danger" style="font-size:11px">${leaveLabel}</button></div>`;
+    sbcOpen('panel',`⚔️ ${clan.name}`,body,'');
+  }).catch(()=>{$p('sb-clan-err').textContent='Could not load clan info.';});
+}
+function sbcKick(targetId,targetName){
+  if(!confirm(`Kick ${targetName} from the clan?`))return;
+  sbApi('/api/clan/kick',{targetId}).then(r=>{sbSetClan(r);sbcPanel();addLog(`Kicked ${targetName} from the clan.`,'info');}).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Kick failed.';});
+}
+function sbcLeave(){
+  const msg=SB.isOwner?'Disband the clan? All members will be removed and your POIs released. This cannot be undone.':'Leave the clan?';
+  if(!confirm(msg))return;
+  sbApi('/api/clan/leave').then(r=>{sbSetClan(r);sbcClose();sbUpdateBtn();addLog(SB.isOwner?'Clan disbanded.':'You left the clan.','info');}).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Failed.';});
+}
+function sbcSubmit(){
+  $p('sb-clan-err').textContent='';
+  if(_sbcMode==='create'){
+    const name=($p('sbc-name').value||'').trim();
+    const tag=($p('sbc-tag').value||'').trim().toUpperCase();
+    if(!name||!tag){$p('sb-clan-err').textContent='Enter a name and tag.';return;}
+    $p('sbc-action').textContent='Creating…';
+    sbApi('/api/clan/create',{name,tag}).then(r=>{
+      sbSetClan(r);sbcClose();sbUpdateBtn();
+      addLog(`⚔ Clan "${name}" [${tag}] created! Invite code: ${r.inviteCode}`,'epic');
+    }).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Create failed.';$p('sbc-action').textContent='Create Clan';});
+  }else if(_sbcMode==='join'){
+    const code=($p('sbc-code').value||'').trim().toUpperCase();
+    if(!code){$p('sb-clan-err').textContent='Enter an invite code.';return;}
+    $p('sbc-action').textContent='Joining…';
+    sbApi('/api/clan/join',{inviteCode:code}).then(r=>{
+      sbSetClan(r);sbcClose();sbUpdateBtn();
+      addLog(`⚔ Joined clan "${r.clanName}" [${r.clanTag}]!`,'epic');
+    }).catch(e=>{$p('sb-clan-err').textContent=(e&&e.error)||'Join failed.';$p('sbc-action').textContent='Join Clan';});
+  }
 }
 function sbInit(){
   const t=localStorage.getItem('sb_token');
