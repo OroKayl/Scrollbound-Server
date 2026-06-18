@@ -77,10 +77,15 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #loc-sub{position:absolute;top:27px;left:12px;font-size:10px;color:#5a6a5a;}
 #travel-btn{position:absolute;top:8px;right:10px;background:#0f1a0f;border:1px solid #3a5a3a;color:#6a9a6a;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;}
 #travel-btn:hover{background:#162216;border-color:#5a8a5a;}
-#tab-bar{display:flex;border-bottom:1px solid #252538;flex-shrink:0;background:#0c0c18;}
-.tab-btn{flex:1;padding:7px 0;text-align:center;font-size:11px;color:#4a5a6a;cursor:pointer;letter-spacing:1px;border-bottom:2px solid transparent;}
-.tab-btn:hover{color:#8a9aaa;}
-.tab-btn.active{color:#c8a020;border-bottom-color:#c8a020;}
+#tab-bar{display:flex;border-bottom:2px solid #1a1a2a;flex-shrink:0;background:#090912;overflow-x:auto;scrollbar-width:none;}
+#tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{flex:1;min-width:54px;padding:9px 4px 7px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;border-bottom:3px solid transparent;transition:background .12s,border-color .12s;position:relative;}
+.tab-btn:hover{background:#0f0f20;}
+.tab-btn.active{background:#0d0d1e;border-bottom-color:#c8a020;}
+.tab-ico{font-size:18px;line-height:1;}
+.tab-lbl{font-size:8.5px;letter-spacing:.8px;color:#3a4a5a;text-transform:uppercase;font-family:'Segoe UI',sans-serif;}
+.tab-btn.active .tab-lbl{color:#c8a020;}
+.tab-btn:hover .tab-lbl{color:#6a7a8a;}
 #action-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #action-wrap.show{display:block;}
 #action-wrap h4{font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
@@ -114,6 +119,38 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
 #map-canvas{display:block;width:100%;height:100%;}
 #clan-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #clan-wrap.show{display:block;}
+/* clan tab online view */
+.clan-online-hdr{background:#0c1a10;border:1px solid #2a4a2a;border-radius:8px;padding:10px 12px;margin-bottom:10px;}
+.clan-online-hdr h3{font-family:Georgia,serif;font-size:16px;color:#6ad08a;margin:0 0 3px;}
+.clan-online-hdr .c-meta{font-size:11px;color:#4a6a4a;}
+.clan-online-hdr .c-code{font-family:monospace;font-size:14px;color:#c8a020;background:#0e0c00;border:1px solid #3a3000;border-radius:4px;padding:2px 8px;letter-spacing:2px;}
+.clan-online-hdr .c-code-lbl{font-size:10px;color:#4a5a4a;margin-top:4px;}
+.clan-member-list{margin-bottom:10px;}
+.clan-member-row{display:flex;align-items:flex-start;padding:6px 8px;border-radius:6px;margin-bottom:3px;background:#0a0a14;border:1px solid #1a1a28;}
+.clan-member-row .cm-dot{font-size:10px;margin-right:6px;padding-top:2px;flex-shrink:0;}
+.clan-member-row .cm-name{font-size:13px;color:#cdc8b8;font-weight:600;}
+.clan-member-row .cm-crown{font-size:11px;margin-left:3px;}
+.clan-member-row .cm-skills{font-size:10px;color:#4a7a4a;margin-top:2px;}
+.clan-poi-list{border-top:1px solid #1a1a2a;padding-top:8px;}
+.clan-poi-row{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:6px;margin-bottom:4px;background:#0a0a14;border:1px solid #1a1a28;}
+.clan-poi-row.held{border-color:#2a4a2a;background:#090f09;}
+.clan-poi-row .cpr-name{font-size:12px;color:#9a8a7a;}
+.clan-poi-row.held .cpr-name{color:#6ad08a;}
+.clan-poi-row .cpr-owner{font-size:10px;color:#3a4a3a;}
+.clan-poi-btn{background:#0a1a14;border:1px solid #2a5a3a;color:#6ad08a;border-radius:5px;padding:3px 10px;font-size:11px;cursor:pointer;flex-shrink:0;}
+.clan-poi-btn:hover{background:#102a1c;}
+.clan-noclan{text-align:center;padding:20px 10px;}
+.clan-noclan p{color:#5a6a5a;font-size:13px;margin-bottom:10px;}
+.clan-form-wrap{background:#0c0c18;border:1px solid #2a2a40;border-radius:8px;padding:14px;margin:10px 0;}
+.clan-form-wrap .sb-l{display:block;font-size:10px;letter-spacing:1px;color:#5a6a7a;text-transform:uppercase;margin:8px 0 3px;}
+.clan-form-wrap input{width:100%;background:#0a0a14;border:1px solid #2a2a40;color:#cdc8b8;border-radius:5px;padding:8px 10px;font-size:13px;outline:none;box-sizing:border-box;}
+.clan-form-wrap input:focus{border-color:#3a8a5a;}
+.clan-form-err{color:#d05050;font-size:11px;min-height:14px;margin:5px 0;}
+.clan-form-btns{display:flex;gap:8px;margin-top:8px;}
+.clan-form-btns button{flex:1;background:#0a1a14;border:1px solid #2a6a4a;color:#6ad08a;border-radius:6px;padding:8px;font-size:12px;cursor:pointer;font-family:Georgia,serif;}
+.clan-form-btns button.cancel{background:#0a0a14;border-color:#2a2a40;color:#5a6a7a;}
+.clan-siege-bar{background:#0c0f1a;border:1px solid #2a3a5a;border-radius:6px;padding:8px 10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#6a8a9a;}
+.clan-siege-bar b{color:#c8a020;}
 #class-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
 #class-wrap.show{display:block;}
 #gear-wrap{flex:1;overflow-y:auto;padding:10px;display:none;}
@@ -374,13 +411,13 @@ body{background:#0d0d18;color:#cdc8b8;font-family:'Segoe UI',sans-serif;height:1
       <button id="travel-btn" onclick="openTravelModal()">Travel ▸</button>
     </div>
     <div id="tab-bar">
-      <div class="tab-btn active" id="tab-actions" onclick="showTab('actions')">ACTIONS</div>
-      <div class="tab-btn" id="tab-map" onclick="showTab('map')">WORLD MAP</div>
-      <div class="tab-btn" id="tab-estate" onclick="showTab('estate')">ESTATE</div>
-      <div class="tab-btn" id="tab-clan" onclick="showTab('clan')">CLAN</div>
-      <div class="tab-btn" id="tab-classes" onclick="showTab('classes')">CLASSES</div>
-      <div class="tab-btn" id="tab-gear" onclick="showTab('gear')">GEAR</div>
-      <div class="tab-btn" id="tab-market" onclick="showTab('market')">MARKET</div>
+      <div class="tab-btn active" id="tab-actions" onclick="showTab('actions')"><span class="tab-ico">🎯</span><span class="tab-lbl">Actions</span></div>
+      <div class="tab-btn" id="tab-map" onclick="showTab('map')"><span class="tab-ico">🗺️</span><span class="tab-lbl">Map</span></div>
+      <div class="tab-btn" id="tab-estate" onclick="showTab('estate')"><span class="tab-ico">🏛️</span><span class="tab-lbl">Estate</span></div>
+      <div class="tab-btn" id="tab-clan" onclick="showTab('clan')"><span class="tab-ico">⚔️</span><span class="tab-lbl">Clan</span></div>
+      <div class="tab-btn" id="tab-classes" onclick="showTab('classes')"><span class="tab-ico">🎓</span><span class="tab-lbl">Classes</span></div>
+      <div class="tab-btn" id="tab-gear" onclick="showTab('gear')"><span class="tab-ico">🛡️</span><span class="tab-lbl">Gear</span></div>
+      <div class="tab-btn" id="tab-market" onclick="showTab('market')"><span class="tab-ico">🏪</span><span class="tab-lbl">Market</span></div>
     </div>
     <div id="action-wrap" class="show">
       <h4 id="action-title">Select a skill</h4>
@@ -1792,10 +1829,18 @@ function renderGear(){
     <h4 style="font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin:6px 2px 6px;">Equip from Inventory</h4>
     <div class="gear-list">${list}</div>`;
 }
+let _clanTabMode=''; // ''|'create'|'join'
 function renderClan(){
   const el=$p('clan-content');if(!el)return;
+  // ── ONLINE MODE ─────────────────────────────────────────────────────────────
+  if(SB.token){
+    if(SB.clanId) renderClanOnline();
+    else renderClanNoClan();
+    return;
+  }
+  // ── OFFLINE MODE (local solo sim) ───────────────────────────────────────────
   if(!G.clan){
-    el.innerHTML=`<div class="clan-section"><h4>Found a Clan</h4><div id="clan-create"><p>Unite adventurers under your banner. Claim territory. Build an empire.</p><div class="clan-input-row"><input id="clan-name-input" type="text" maxlength="20" placeholder="Clan name…" autocomplete="off"></div><div style="font-size:10px;color:#3a4a5a;margin-bottom:6px;letter-spacing:1px;">CHOOSE YOUR BANNER</div><div class="banner-opts" id="banner-opts">${['⚔️','🛡️','🌙','🔥','🏹','🐉','☠️','🌿','🌟','⚡','🗡️','🦅'].map((b,i)=>`<div class="banner-opt ${i===0?'sel':''}" onclick="selectBanner(this,'${b}')">${b}</div>`).join('')}</div><button id="clan-create-btn" onclick="createClan()">FOUND CLAN</button></div></div><div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
+    el.innerHTML=`<div class="clan-section"><p style="font-size:12px;color:#5a6a5a;text-align:center;padding:10px 0;">Go online (🌐 button top-right) to join the live shared world with real clans.<br><br>Or found a local clan to play solo vs the AI:</p><div id="clan-create"><div class="clan-input-row"><input id="clan-name-input" type="text" maxlength="20" placeholder="Clan name…" autocomplete="off"></div><div style="font-size:10px;color:#3a4a5a;margin-bottom:6px;letter-spacing:1px;">CHOOSE YOUR BANNER</div><div class="banner-opts" id="banner-opts">${['⚔️','🛡️','🌙','🔥','🏹','🐉','☠️','🌿','🌟','⚡','🗡️','🦅'].map((b,i)=>`<div class="banner-opt ${i===0?'sel':''}" onclick="selectBanner(this,'${b}')">${b}</div>`).join('')}</div><button id="clan-create-btn" onclick="createClan()">FOUND CLAN</button></div></div><div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
     return;
   }
   const myTerrs=playerTerritories();
@@ -1811,7 +1856,122 @@ function renderClan(){
   const seCountdown=seMs<=0?'Ending now…':`${seDays}d ${seHrs}h`;
   const pactNames=(G.diplomacy?.pacts||[]).map(p=>`${RIVAL_CLANS[p[0]]?.n} & ${RIVAL_CLANS[p[1]]?.n}`).join('; ')||'None';
   const lbHtml=(G.leaderboard&&G.leaderboard.length)?G.leaderboard.map(snap=>`<div style="margin-bottom:8px;"><div style="font-size:10px;color:#6a7a5a;letter-spacing:1px;margin-bottom:3px;">SEASON ${snap.season} FINAL</div>${snap.entries.map((e,i)=>`<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 4px;${e.id==='player'?'background:#1a2a1a;border-radius:3px;':''}"><span>${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${e.banner} ${e.name}</span><span style="color:#6a8a6a;">${e.pois} POIs · Lv${e.level}</span></div>`).join('')}</div>`).join(''):'<div style="font-size:11px;color:#3a4a3a;font-style:italic;">No completed seasons yet.</div>';
-  el.innerHTML=`<div class="clan-section"><h4>Your Clan</h4><div class="clan-card" style="border-color:#3a3a60;"><div class="cc-head"><span class="cc-banner">${G.clan.banner}</span><span class="cc-name">${G.clan.name}</span></div><div class="cc-body">Combat: ${xpToLevel(G.xp.combat||0)} · Class: ${acls?acls.e+' '+acls.n:'—'} · Territories: ${myTerrs.length}</div><div class="cc-territory">${myTerrs.length?'Holds: '+myTerrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory — claim some.'}</div>${clanLvlHtml}</div></div>${renderSiegeBanner()}<div class="clan-section"><h4>Your Holdings</h4>${renderHoldings()}</div><div class="clan-section"><h4>Territory Control</h4><p style="font-size:10px;color:#4a5a6a;margin:-2px 2px 7px;line-height:1.5;">Hold POIs for empire-wide buffs. Fortify them with gold + materials to strengthen the buff and raise defense. Outer-ring POIs give bigger rewards but are riskier (full-loot sieges coming).</p>${renderTerritoryRows()}</div><div class="clan-section"><h4>Conquest Season ${seasonNum}</h4><div style="font-size:11px;color:#8a9a7a;margin-bottom:5px;">Season ends in <b>${seCountdown}</b> — territories reset, standings are locked into the leaderboard. Your skills, gear and gold carry over.</div><div style="font-size:11px;color:#6a7a5a;margin-bottom:4px;">Active pacts against leader: <span style="color:#c07050;">${pactNames}</span></div></div><div class="clan-section"><h4>Season Leaderboard</h4>${lbHtml}</div>${G.warReports.length?`<div class="clan-section"><h4>War Reports</h4>${G.warReports.slice(0,8).map(r=>{const tname=TERRITORIES.find(t=>t.id===r.territory)?.n||r.territory;const phaseHtml=r.phases?`<div class="wr-phases">${['Scout','Attack','Sustain'].map((p,i)=>`<span class="wr-phase ${r.phases[i]?'won':'lost'}">${p}: ${r.phases[i]?'✓':'✗'}</span>`).join('')}</div>`:'';return `<div class="war-report"><div class="wr-head">Turn ${r.turn} · ${tname}</div><div class="${r.won?'wr-win':'wr-loss'}">${r.won?'✓ Victory':'✗ Defeat'} — ${r.desc}</div>${phaseHtml}</div>`;}).join('')}</div>`:''}<div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
+  el.innerHTML=`<div class="clan-section"><h4>Your Clan</h4><div class="clan-card" style="border-color:#3a3a60;"><div class="cc-head"><span class="cc-banner">${G.clan.banner}</span><span class="cc-name">${G.clan.name}</span></div><div class="cc-body">Combat: ${xpToLevel(G.xp.combat||0)} · Class: ${acls?acls.e+' '+acls.n:'—'} · Territories: ${myTerrs.length}</div><div class="cc-territory">${myTerrs.length?'Holds: '+myTerrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory — claim some.'}</div>${clanLvlHtml}</div></div>${renderSiegeBanner()}<div class="clan-section"><h4>Your Holdings</h4>${renderHoldings()}</div><div class="clan-section"><h4>Territory Control</h4><p style="font-size:10px;color:#4a5a6a;margin:-2px 2px 7px;line-height:1.5;">Hold POIs for empire-wide buffs. Fortify them with gold + materials to strengthen the buff and raise defense.</p>${renderTerritoryRows()}</div><div class="clan-section"><h4>Conquest Season ${seasonNum}</h4><div style="font-size:11px;color:#8a9a7a;margin-bottom:5px;">Season ends in <b>${seCountdown}</b> — territories reset, standings locked. Skills, gear and gold carry over.</div><div style="font-size:11px;color:#6a7a5a;margin-bottom:4px;">Active pacts against leader: <span style="color:#c07050;">${pactNames}</span></div></div><div class="clan-section"><h4>Season Leaderboard</h4>${lbHtml}</div>${G.warReports.length?`<div class="clan-section"><h4>War Reports</h4>${G.warReports.slice(0,8).map(r=>{const tname=TERRITORIES.find(t=>t.id===r.territory)?.n||r.territory;const phaseHtml=r.phases?`<div class="wr-phases">${['Scout','Attack','Sustain'].map((p,i)=>`<span class="wr-phase ${r.phases[i]?'won':'lost'}">${p}: ${r.phases[i]?'✓':'✗'}</span>`).join('')}</div>`:'';return `<div class="war-report"><div class="wr-head">Turn ${r.turn} · ${tname}</div><div class="${r.won?'wr-win':'wr-loss'}">${r.won?'✓ Victory':'✗ Defeat'} — ${r.desc}</div>${phaseHtml}</div>`;}).join('')}</div>`:''}<div class="clan-section"><h4>Rival Clans</h4>${Object.entries(RIVAL_CLANS).map(([id,cl])=>{const terrs=clanTerritories(id);return `<div class="clan-card"><div class="cc-head"><span class="cc-banner">${cl.e}</span><span class="cc-name">${cl.n}</span><span class="cc-tag">[${cl.tag}]</span></div><div class="cc-body">${cl.desc}</div><div class="cc-territory">Holds: ${terrs.length?terrs.map(tid=>TERRITORIES.find(t=>t.id===tid)?.n).join(', '):'No territory'}</div></div>`;}).join('')}</div>`;
+}
+
+/* ── ONLINE CLAN TAB VIEWS ─────────────────────────────────────────── */
+function renderClanOnline(){
+  const el=$p('clan-content');if(!el)return;
+  const w=SB.world||{territories:{},sieges:{},clans:{},players:[]};
+  const clan=(w.clans||{})[SB.clanId];
+  const next=w.nextSiege?Math.max(0,Math.round((w.nextSiege-Date.now())/60000)):'?';
+  const memberCount=clan?clan.members.length:1;
+  const totalPower=(w.players||[]).filter(p=>clan&&clan.members.includes(p.id)).reduce((s,p)=>s+(p.power||0),0);
+
+  // Member list
+  const memberRows=(w.players||[]).filter(p=>clan&&clan.members.includes(p.id)).map(p=>{
+    const dot=p.online?'<span style="color:#6ad08a">●</span>':'<span style="color:#2a3a2a">●</span>';
+    const crown=clan&&clan.ownerId===p.id?' 👑':'';
+    const topSkills=Object.entries(p.skills||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([sk,lv])=>`${SKILL_NAMES_SHORT[sk]||sk} ${lv}`).join(' · ');
+    return `<div class="clan-member-row"><span class="cm-dot">${dot}</span><div><div class="cm-name">${p.name}<span class="cm-crown">${crown}</span></div>${topSkills?`<div class="cm-skills">${topSkills}</div>`:''}</div></div>`;
+  }).join('')||'<div style="font-size:11px;color:#3a4a3a;padding:6px">No member data yet — they need to log in.</div>';
+
+  // POI list (shared world)
+  const poiRows=Object.keys(SB_POI_NAMES).map(poi=>{
+    const o=w.territories&&w.territories[poi];
+    const mine=o&&o.type!=='ai'&&(o.id===SB.clanId||o.id===SB.playerId);
+    const ownerTxt=o?(mine?'✦ Your clan':`${o.type==='ai'?'🤖 '+o.name:'🧑 '+o.name}`):'Unclaimed';
+    const decl=((w.sieges&&w.sieges[poi])||[]).length;
+    const btn=mine?`<span style="color:#4a7a4a;font-size:10px">Held</span>`
+      :`<button class="clan-poi-btn" onclick="clanTabDeclare('${poi}')">⚔ Siege</button>`;
+    return `<div class="clan-poi-row ${mine?'held':''}">
+      <div><div class="cpr-name">${SB_POI_NAMES[poi]}</div><div class="cpr-owner">${ownerTxt}${decl?' · '+decl+' siege(s) queued':''}</div></div>
+      ${btn}</div>`;
+  }).join('');
+
+  const codeHtml=SB.isOwner?`<div class="c-code-lbl">Invite code — share with friends:</div><div class="c-code">${clan?clan.inviteCode:'???'}</div>`:'';
+  el.innerHTML=`
+    <div class="clan-online-hdr">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <h3>⚔️ ${SB.clanName} [${SB.clanTag}]</h3>
+          <div class="c-meta">${memberCount} member${memberCount!==1?'s':''} · Combined power: ${totalPower}</div>
+        </div>
+        <button onclick="sbcPanel()" style="background:#0a1a14;border:1px solid #2a5a3a;color:#6ad08a;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;flex-shrink:0;">Manage ▸</button>
+      </div>
+      ${codeHtml}
+    </div>
+    <div class="clan-section"><h4 style="font-size:9px;color:#3a5a3a;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Members</h4>
+      <div class="clan-member-list">${memberRows}</div>
+    </div>
+    <div class="clan-section clan-poi-list">
+      <div class="clan-siege-bar"><span>⏱ Next siege window: <b>~${next} min</b></span><button onclick="sbWorldModal()" style="background:transparent;border:1px solid #2a4a6a;color:#6aa0d0;border-radius:4px;padding:2px 8px;font-size:10px;cursor:pointer;">🌍 Full Map</button></div>
+      <h4 style="font-size:9px;color:#3a3a5a;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Territory Control</h4>
+      ${poiRows}
+    </div>`;
+}
+function renderClanNoClan(){
+  const el=$p('clan-content');if(!el)return;
+  if(_clanTabMode==='create'){
+    el.innerHTML=`<div class="clan-noclan"><p>Create your clan — share the invite code with friends.</p></div>
+      <div class="clan-form-wrap">
+        <label class="sb-l">Clan name (2–24 chars)</label>
+        <input id="ctab-name" maxlength="24" placeholder="Iron Brotherhood" autocomplete="off">
+        <label class="sb-l" style="margin-top:8px">Tag (2–5 letters, shown in [brackets])</label>
+        <input id="ctab-tag" maxlength="5" placeholder="IB" autocomplete="off" style="width:120px;text-transform:uppercase">
+        <div class="clan-form-err" id="ctab-err"></div>
+        <div class="clan-form-btns">
+          <button onclick="clanTabSubmitCreate()">⚔ Create Clan</button>
+          <button class="cancel" onclick="_clanTabMode='';renderClan()">Cancel</button>
+        </div>
+      </div>`;
+    return;
+  }
+  if(_clanTabMode==='join'){
+    el.innerHTML=`<div class="clan-noclan"><p>Enter the invite code from your clan leader.</p></div>
+      <div class="clan-form-wrap">
+        <label class="sb-l">Invite code (6 characters)</label>
+        <input id="ctab-code" maxlength="10" placeholder="ABC123" autocomplete="off" style="text-transform:uppercase;letter-spacing:3px">
+        <div class="clan-form-err" id="ctab-err"></div>
+        <div class="clan-form-btns">
+          <button onclick="clanTabSubmitJoin()">🤝 Join Clan</button>
+          <button class="cancel" onclick="_clanTabMode='';renderClan()">Cancel</button>
+        </div>
+      </div>`;
+    return;
+  }
+  el.innerHTML=`<div class="clan-noclan">
+    <p>You're online but not in a clan yet.</p>
+    <p style="font-size:12px;">Create a clan to fight the shared world with friends — or join one with an invite code.</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;">
+      <button onclick="_clanTabMode='create';renderClan()" style="background:#0a1a14;border:1px solid #2a6a4a;color:#6ad08a;border-radius:6px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:Georgia,serif;">⚔ Create Clan</button>
+      <button onclick="_clanTabMode='join';renderClan()" style="background:#0a0a1a;border:1px solid #3a4a6a;color:#6a90d0;border-radius:6px;padding:10px 18px;font-size:13px;cursor:pointer;font-family:Georgia,serif;">🤝 Join Clan</button>
+    </div>
+  </div>`;
+}
+function clanTabDeclare(poi){
+  sbApi('/api/siege/declare',{poiId:poi}).then(r=>{SB.world=r.world;addLog(`⚔ ${SB_POI_NAMES[poi]} siege declared.`,'info');renderClan();}).catch(err=>addLog((err&&err.error)||'Declare failed.','info'));
+}
+function clanTabSubmitCreate(){
+  const name=($p('ctab-name').value||'').trim();
+  const tag=($p('ctab-tag').value||'').trim().toUpperCase();
+  if(!name||!tag){$p('ctab-err').textContent='Enter a name and tag.';return;}
+  $p('ctab-err').textContent='Creating…';
+  sbApi('/api/clan/create',{name,tag}).then(r=>{
+    sbSetClan(r);_clanTabMode='';sbUpdateBtn();
+    addLog(`⚔ Clan "${name}" [${tag}] created! Invite code: ${r.inviteCode}`,'epic');
+    renderClan();
+  }).catch(e=>{$p('ctab-err').textContent=(e&&e.error)||'Create failed.';});
+}
+function clanTabSubmitJoin(){
+  const code=($p('ctab-code').value||'').trim().toUpperCase();
+  if(!code){$p('ctab-err').textContent='Enter an invite code.';return;}
+  $p('ctab-err').textContent='Joining…';
+  sbApi('/api/clan/join',{inviteCode:code}).then(r=>{
+    sbSetClan(r);_clanTabMode='';sbUpdateBtn();
+    addLog(`⚔ Joined clan "${r.clanName}" [${r.clanTag}]!`,'epic');
+    renderClan();
+  }).catch(e=>{$p('ctab-err').textContent=(e&&e.error)||'Invalid invite code.';});
 }
 let selectedBanner='⚔️';
 function selectBanner(el,b){selectedBanner=b;document.querySelectorAll('.banner-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
@@ -2167,7 +2327,7 @@ function sbLogin(){
 }
 function sbSkillsSummary(){
   const out={};
-  try{Object.keys(G.skills||{}).forEach(sk=>{out[sk]=xpToLevel((G.skills[sk]&&G.skills[sk].xp)||0);});}catch(e){}
+  try{Object.keys(G.skills||{}).forEach(sk=>{out[sk]=xpToLevel((G.xp&&G.xp[sk])||0);});}catch(e){}
   return out;
 }
 function sbSync(){
@@ -2177,7 +2337,13 @@ function sbSync(){
 }
 function sbPoll(){
   if(!SB.token)return;
-  sbApi('/api/state').then(r=>{if(r.world)SB.world=r.world;if(r.you)SB.playerId=r.you;sbSetClan(r);sbUpdateBtn();}).catch(()=>{});
+  sbApi('/api/state').then(r=>{
+    if(r.world)SB.world=r.world;
+    if(r.you)SB.playerId=r.you;
+    sbSetClan(r);sbUpdateBtn();
+    // Re-render Clan tab live if it's currently open
+    const cw=document.getElementById('clan-wrap');if(cw&&cw.classList.contains('show'))renderClan();
+  }).catch(()=>{});
 }
 function sbStartLoops(){
   if(SB._loops)return;SB._loops=true;
@@ -2199,19 +2365,14 @@ function sbWorldModal(){
   const w=SB.world||{territories:{},players:[],sieges:{},clans:{}};
   const next=w.nextSiege?Math.max(0,Math.round((w.nextSiege-Date.now())/60000)):'?';
 
-  // Clan panel
+  // Clan badge (create/join lives in the Clan tab)
   let clanHtml='';
   if(SB.clanId){
     const clan=(w.clans||{})[SB.clanId];
-    const code=clan?clan.inviteCode:'???';
     const memberCount=clan?clan.members.length:1;
-    clanHtml=`<div class="sb-world-clan"><b>⚔ ${SB.clanName||'Your Clan'}</b> [${SB.clanTag||'?'}] · ${memberCount} member${memberCount!==1?'s':''}`
-      +(SB.isOwner?` · Invite: <span class="sb-invite-code" style="font-size:12px;padding:2px 6px">${code}</span>`:'')
-      +` <button onclick="sbcPanel()" class="sb-clan-btn" style="font-size:10px;padding:2px 7px;margin-left:6px">Manage</button></div>`;
+    clanHtml=`<div class="sb-world-clan"><b>⚔ ${SB.clanName||'Your Clan'}</b> <span style="color:#4a8a5a">[${SB.clanTag||'?'}]</span> · ${memberCount} member${memberCount!==1?'s':''} <button onclick="closeModal();showTab('clan')" class="sb-clan-btn" style="font-size:10px;padding:2px 8px;margin-left:6px">Clan tab ▸</button></div>`;
   }else{
-    clanHtml=`<div class="sb-world-clan" style="display:flex;align-items:center;gap:8px;"><span style="opacity:.6">No clan.</span>`
-      +`<button onclick="sbcCreate()" class="sb-clan-btn" style="font-size:11px;padding:3px 10px">⚔ Create</button>`
-      +`<button onclick="sbcJoin()" class="sb-clan-btn" style="font-size:11px;padding:3px 10px">🤝 Join</button></div>`;
+    clanHtml=`<div class="sb-world-clan"><span style="opacity:.6">No clan — </span><button onclick="closeModal();showTab('clan')" class="sb-clan-btn" style="font-size:11px;padding:2px 9px">Create or join in Clan tab ▸</button></div>`;
   }
 
   // Online players
