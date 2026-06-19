@@ -504,6 +504,75 @@ body{font-size:15px;color:#dcd8ca;}
 .act-card.locked .ac-name{color:#aab4c4;}
 .ac-req{color:#e0a45a;font-weight:500;}
 .ac-where{font-size:12px;color:#8ab0dc;margin-top:5px;}
+/* ===== Tasks / Goals system (v0.23) ===== */
+#tk-launcher{position:fixed;right:16px;bottom:16px;z-index:140;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#1d1d34,#13131f);border:1px solid #36365222;border-color:#363652;color:#e3e7f2;padding:9px 14px;border-radius:24px;cursor:pointer;font-size:14px;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.5);user-select:none;}
+#tk-launcher:hover{border-color:#5a5070;}
+#tk-l-ico{font-size:17px;line-height:1;}
+#tk-l-badge{display:none;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:#c8a020;color:#1a1405;font-size:12px;font-weight:800;}
+#tk-l-min{margin-left:2px;color:#8a8aa0;font-weight:800;padding:0 4px;border-radius:5px;line-height:1;}
+#tk-l-min:hover{background:#2a2a44;color:#fff;}
+#tk-tab{position:fixed;right:0;bottom:96px;z-index:140;display:none;align-items:center;justify-content:center;width:36px;height:42px;background:#1d1d34;border:1px solid #363652;border-right:none;border-radius:11px 0 0 11px;cursor:pointer;font-size:19px;box-shadow:0 4px 14px rgba(0,0,0,.4);}
+#tk-tab.tk-has{box-shadow:0 0 0 2px #c8a020,0 4px 14px rgba(0,0,0,.45);}
+#tk-overlay{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:200;display:none;align-items:center;justify-content:center;}
+#tk-overlay.show{display:flex;}
+#tk-win{width:min(580px,94vw);max-height:88vh;display:flex;flex-direction:column;background:#0f0f1c;border:1px solid #2a2a44;border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.6);}
+#tk-win-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #20203a;font-size:17px;font-weight:700;color:#eef1f8;background:#13131f;}
+#tk-close{background:#22223a;border:none;color:#cfd3e0;font-size:14px;width:30px;height:30px;border-radius:8px;cursor:pointer;}
+#tk-close:hover{background:#36365a;}
+#tk-win-body{padding:10px 14px 18px;overflow-y:auto;}
+.tk-sec-h{font-size:14px;font-weight:700;color:#d8b43a;margin:16px 0 9px;letter-spacing:.3px;}
+.tk-sec-h:first-child{margin-top:4px;}
+.tk-sub{font-size:11px;color:#8087a0;font-weight:500;margin-left:5px;}
+.tk-card{display:flex;gap:11px;align-items:flex-start;background:#141426;border:1px solid #232340;border-radius:10px;padding:11px 12px;margin-bottom:8px;}
+.tk-card.tk-ready{border-color:#c8a020;box-shadow:0 0 0 1px rgba(200,160,32,.35) inset;}
+.tk-card.tk-done{opacity:.5;}
+.tk-card.tk-lock{opacity:.4;}
+.tk-ico{font-size:26px;line-height:1;flex-shrink:0;width:32px;text-align:center;}
+.tk-mid{flex:1;min-width:0;}
+.tk-t{font-size:14.5px;font-weight:700;color:#eef1f8;}
+.tk-d{font-size:12.5px;color:#aeb4c6;margin:2px 0 7px;}
+.tk-bar{height:7px;background:#0a0a16;border-radius:4px;overflow:hidden;}
+.tk-bar-f{height:100%;background:linear-gradient(90deg,#3a7a3a,#5cba5c);border-radius:4px;transition:width .3s;}
+.tk-bar-n{font-size:11px;color:#8b92a6;margin-top:3px;}
+.tk-rw{font-size:11.5px;color:#cda85e;margin-top:6px;}
+.tk-act{flex-shrink:0;display:flex;align-items:center;}
+.tk-act button{background:#c8a020;border:none;color:#1a1405;font-weight:800;font-size:13px;padding:8px 15px;border-radius:8px;cursor:pointer;}
+.tk-act button:hover{background:#e2ba34;}
+.tk-claimed{font-size:11px;color:#5f9a5f;font-weight:700;}
+#tk-maptip{position:fixed;z-index:210;display:none;max-width:230px;background:#0c0c18;border:1px solid #363652;border-radius:8px;padding:8px 11px;font-size:12px;color:#e3e7f2;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.55);line-height:1.45;}
+#tk-maptip b{color:#f0d68a;}
+/* ===== v0.24 — resizable log, top-bar Tasks, tabbed window ===== */
+/* Tasks button in the top location strip (no longer floats over the log) */
+#tk-launcher,#tk-tab{display:none!important;}
+#ls-tasks{background:#0a0a1a;border-color:#7a6420;color:#dcb73c;}
+#ls-tasks:hover{background:#141206;border-color:#c8a020;}
+#tk-l-badge{display:none;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:#c8a020;color:#1a1405;font-size:11px;font-weight:800;vertical-align:middle;}
+/* Resizable / collapsible chat log */
+#log-wrap{height:auto!important;overflow:visible!important;padding:0!important;display:flex;flex-direction:column;flex-shrink:0;}
+#log-hdr{margin-bottom:0!important;}
+#log-lines{overflow-y:auto;padding:5px 8px 7px;transition:height .12s ease;}
+#log-wrap.sz-0 #log-lines{display:none;}
+#log-wrap.sz-1 #log-lines{height:54px;}
+#log-wrap.sz-2 #log-lines{height:150px;}
+#log-wrap.sz-3 #log-lines{height:320px;}
+#log-size{display:inline-flex;gap:3px;margin-left:auto;}
+.ls-sz{cursor:pointer;color:#8a93ab;font-size:12px;padding:1px 6px;border-radius:4px;border:1px solid #232338;background:#0a0a14;line-height:1.35;}
+.ls-sz:hover{color:#fff;border-color:#3a3a5a;}
+/* Tabbed window */
+#tk-tabs{display:flex;gap:6px;padding:12px 14px 0;background:#0f0f1c;}
+.tk-tabb{flex:1;position:relative;background:#15152a;border:1px solid #242442;border-bottom:none;color:#9aa3b8;font-size:13.5px;font-weight:700;padding:10px 6px;border-radius:9px 9px 0 0;cursor:pointer;}
+.tk-tabb.on{background:#1c1c34;color:#f1d57e;border-color:#3a3a5e;}
+.tk-tabb:hover:not(.on){color:#dfe3ee;}
+.tk-tc{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;margin-left:5px;border-radius:8px;background:#c8a020;color:#1a1405;font-size:11px;font-weight:800;vertical-align:middle;}
+#tk-win-body{border-top:1px solid #2a2a48;}
+.tk-intro{font-size:12.5px;color:#9aa3b8;margin:12px 2px 13px;line-height:1.45;}
+/* Brighter, easier-to-read cards */
+.tk-card{background:#16162c;border-color:#262648;padding:12px 13px;}
+.tk-t{color:#f4f6fc;font-size:15px;}
+.tk-d{color:#c4cad9;font-size:13px;}
+.tk-bar-n{color:#9aa3b8;}
+.tk-rw{color:#e4c06c;font-size:12px;}
+.tk-claimed{color:#6fae6f;}
 </style>
 </head>
 <body>
@@ -556,6 +625,7 @@ body{font-size:15px;color:#dcd8ca;}
       <span id="ls-loc">Your Estate</span>
       <button id="ls-travel" class="ls-btn" onclick="openTravelModal()">🗺 Travel</button>
       <button id="ls-world" class="ls-btn" onclick="sbOnlineClick()">🌍 World</button>
+      <button id="ls-tasks" class="ls-btn" onclick="tkOpen()">📋 Tasks<span id="tk-l-badge"></span></button>
     </div>
     <div id="res-strip"></div>
     <div id="tab-bar">
@@ -603,6 +673,7 @@ body{font-size:15px;color:#dcd8ca;}
         <span class="lf-tab" onclick="setLogFilter('drop')">Drops</span>
         <span class="lf-tab" onclick="setLogFilter('lvlup')">Levels</span>
         <span class="lf-tab" onclick="setLogFilter('clan war')">Clan</span>
+        <span id="log-size"><span class="ls-sz" onclick="logSize(-1)" title="Smaller / hide">▾</span><span class="ls-sz" onclick="logSize(1)" title="Bigger">▴</span></span>
       </div>
       <div id="log-lines"></div>
     </div>
@@ -1326,6 +1397,7 @@ function completeAction(){
   }
   const gained=rollDrops(key,null);
   logDrops(gained);
+  try{tkOnAction(ac,gained);}catch(e){}
   // Auto-restart: if queued action differs, switch to it; else repeat current
   const next=G.queuedAction&&G.queuedAction!==key?G.queuedAction:key;
   G.queuedAction=null;
@@ -1605,6 +1677,7 @@ function claimTerritory(tid){
   if(G.territories[tid]){addLog('That POI is held — declare a siege instead.','info');return;}
   if(playerTerritories().length>=poiCap()){addLog(`Your guild can hold at most ${poiCap()} POIs. Siege one away from a rival first, or build a Barracks to raise the cap.`,'info');return;}
   G.territories[tid]='player';const t=TERRITORIES.find(x=>x.id===tid);
+  try{tkEvent('claim');}catch(e){}
   addLog(`Claimed unclaimed ${t.n} for ${G.clan.name}.`,'epic');renderClan();drawMapCanvas();saveGame();
 }
 function declareSiege(tid){
@@ -1740,7 +1813,7 @@ function raidTerritory(tid){
   const result=resolveBattle(combatLvl,rivalPower,guardBonus);
   const holderName=holder?RIVAL_CLANS[holder]?.n:null;
   let lostGear=[];
-  if(result.won){G.territories[tid]='player';addLog(`Victory! ${t.n} captured for ${G.clan.name}!`,'epic');awardClanXp(500);}
+  if(result.won){G.territories[tid]='player';try{tkEvent('claim');tkEvent('siege');}catch(e){}addLog(`Victory! ${t.n} captured for ${G.clan.name}!`,'epic');awardClanXp(500);}
   else{addLog(`Raid failed. ${t.n} holds.`,'war');if(isDangerous(tid))lostGear=loseGearOnDefeat();}
   G.warReports.unshift({turn:G.warTurn,attacker:'player',defender:holder,territory:tid,won:result.won,
     desc:result.won?`Your clan claimed ${t.n}${holderName?' from '+holderName:''}.`:`Your raid on ${t.n} was repelled${holderName?' by '+holderName:''}.`,
@@ -1793,7 +1866,7 @@ function toggleCanvas(){
   if(btn)btn.textContent=collapsed?'▴ show':'▾ hide';
 }
 function $p(id){return document.getElementById(id);}
-function updateGold(){const e=$p('hdr-gold');if(e)e.textContent=`🪙 ${G.gold.toLocaleString()}`;}
+function updateGold(){const e=$p('hdr-gold');if(e)e.textContent=`🪙 ${G.gold.toLocaleString()}`;try{tkOnGold();}catch(_){}}
 function renderClasses(){
   const el=$p('class-panel');if(!el)return;
   el.innerHTML=Object.entries(CLASSES).map(([id,cls])=>{
@@ -2322,6 +2395,7 @@ function travelTo(locId){
   if(!G.unlockedLocations.has(locId)){addLog('Not discovered yet.','info');return;}
   if(G.activeAction)stopAction();
   G.currentLocation=locId;const loc=LOCATIONS[locId];
+  try{tkTravel();}catch(e){}
   addLog(`You travel to ${loc.n}.`,'info');
   $p('hdr-loc').textContent=`▸ ${loc.n}`;renderActions();drawCanvas();drawMapCanvas();
 }
@@ -2329,7 +2403,7 @@ function useItem(id){
   if(id==='scroll_basic')openScrollModal();
   else if(id==='scroll_perm')openPermModal();
   else if(id==='scroll_dungeon')openDungeonModal();
-  else if(id==='scroll_bounty'){if(!removeItem('scroll_bounty',1))return;addEffect('boon',1.75,10*60*1000);addLog('✨ Bounty Scroll unfurled — +75% XP & drops for 10 minutes!','epic');}
+  else if(id==='scroll_bounty'){if(!removeItem('scroll_bounty',1))return;try{tkOnScroll();}catch(e){}addEffect('boon',1.75,10*60*1000);addLog('✨ Bounty Scroll unfurled — +75% XP & drops for 10 minutes!','epic');}
   else if(id==='burnt_food'){if(!removeItem('burnt_food',1))return;G.xp.farming=(G.xp.farming||0)+20;addLog('Composted Burnt Scraps — +20 Farming XP.','good');renderSkills();}
   else if(id==='vault_key')openVaultModal();
   else if(id==='xp_potion'){if(!removeItem('xp_potion',1))return;addEffect('xp',1.5,5*60*1000);addLog('XP Potion — +50% XP for 5 minutes!','epic');}
@@ -2385,6 +2459,7 @@ function openVaultModal(){showModal('🗝️ VAULT KEY','The key hums with power
 function unlockLocation(id,scrollType){
   const scrollId=scrollType==='basic'?'scroll_basic':scrollType==='dungeon'?'scroll_dungeon':'scroll_perm';
   if(!removeItem(scrollId,1))return;
+  try{tkOnScroll();}catch(e){}
   G.unlockedLocations.add(id);const loc=LOCATIONS[id];
   addLog(`${loc.n} revealed on your map!`,'epic');renderInventory();drawMapCanvas();saveGame();closeModal();
 }
@@ -2761,6 +2836,7 @@ function boot(){
     if(G.ironman)$p('hdr-ironman').style.display='inline-block';
     if(G.activeClass&&hdr){hdr.textContent=CLASSES[G.activeClass].e+' '+CLASSES[G.activeClass].n;hdr.style.display='inline-block';}
     renderSkills();renderActions();renderInventory();renderEquipment();drawCanvas();drawMapCanvas();updateGold();renderResStrip();renderLocStrip();
+    try{tkBoot();}catch(e){console.warn('tk boot',e);}
     if(G.offlineSeconds>5)addLog(`Welcome back! Away for ${Math.round(G.offlineSeconds/60)}m.`,'info');
   } else {
     $p('start-screen').style.display='flex';
@@ -2770,7 +2846,162 @@ function boot(){
   setInterval(warTick,30000);
   sbInit();
   let _rz;window.addEventListener('resize',()=>{clearTimeout(_rz);_rz=setTimeout(()=>{try{resizeCanvas();}catch(e){}try{drawMapCanvas();}catch(e){}},150);});
+  setInterval(()=>{try{tkTick();}catch(e){}},3000);
 }
+
+/* ===================== TASKS / GOALS SYSTEM (v0.23) ===================== */
+const TK_GATHER=(typeof GATHER_SKILLS!=='undefined')?GATHER_SKILLS:new Set(['woodcutting','mining','fishing','farming']);
+
+function tkEnsure(){
+  if(!G.tk)G.tk={};
+  const t=G.tk;
+  if(!t.goals)t.goals={};
+  if(!t.daily)t.daily={day:'',list:[],claimed:{}};
+  if(!t.weekly)t.weekly={week:'',list:[],claimed:{}};
+  if(!t.c)t.c={};
+  if(!t.ev)t.ev={};
+  if(!t.flags)t.flags={};
+  if(typeof t.lastGold!=='number')t.lastGold=G.gold||0;
+  return t;
+}
+function tkHash(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return function(){h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296;};}
+function tkPick(pool,n,seed){const r=tkHash(seed),a=pool.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n).map(x=>x.id);}
+function tkDayKey(){return new Date().toDateString();}
+function tkWeekKey(){const d=new Date(),o=new Date(d.getFullYear(),0,1),wk=Math.ceil((((d-o)/86400000)+o.getDay()+1)/7);return d.getFullYear()+'-W'+wk;}
+
+const GOALS=[
+  {id:'g_lvl5',e:'🌅',t:'First Steps',d:'Reach level 5 in any skill.',prog:()=>Math.max(0,...Object.keys(SKILLS).map(s=>xpToLevel(G.xp[s]||0))),goal:5,reward:{g:200,items:[{id:'scroll_basic',qty:1}],note:'a 📜 Basic Scroll — your first map!'}},
+  {id:'g_scroll',e:'📜',t:'Read the Map',d:'Open a scroll (use the Basic Scroll in your bag).',prog:()=>tkEnsure().ev.scroll||0,goal:1,reward:{g:300}},
+  {id:'g_travel',e:'🧭',t:'Into the Unknown',d:'Travel to a location you have discovered.',prog:()=>tkEnsure().flags.traveled?1:0,goal:1,reward:{g:400}},
+  {id:'g_claim',e:'🏴',t:'Stake Your Claim',d:'Claim a territory (POI) on the map.',prog:()=>(typeof playerTerritories==='function'&&playerTerritories().length>0)?1:0,goal:1,reward:{g:750}},
+  {id:'g_clan',e:'⚔️',t:'Strength in Numbers',d:'Join or create a clan.',prog:()=>G.clan?1:0,goal:1,reward:{g:500,items:[{id:'scroll_bounty',qty:1}]}},
+  {id:'g_siege',e:'🏰',t:'First Siege',d:'Win a siege for your clan.',prog:()=>tkEnsure().ev.siege||0,goal:1,reward:{g:1500,scroll:{id:'scroll_dungeon',ch:.5}}},
+];
+const DAILY_POOL=[
+  {id:'d_actions',e:'🎯',t:'Busy Hands',d:'Complete 20 actions.',ctr:'d_act',goal:20,g:150,scroll:{id:'scroll_basic',ch:.15}},
+  {id:'d_gather',e:'🪵',t:'Gatherer',d:'Gather 40 resources.',ctr:'d_gather',goal:40,g:150,scroll:{id:'scroll_basic',ch:.15}},
+  {id:'d_gold',e:'🪙',t:'Pocket Change',d:'Earn 600 gold.',ctr:'d_gold',goal:600,items:[{id:'coal',qty:5}]},
+  {id:'d_xp',e:'📈',t:'Quick Study',d:'Earn 1,500 XP.',ctr:'d_xp',goal:1500,g:150},
+  {id:'d_scroll',e:'📜',t:'Cartographer',d:'Open a scroll.',ctr:'d_scroll',goal:1,g:250,scroll:{id:'scroll_basic',ch:.25}},
+];
+const WEEKLY_POOL=[
+  {id:'w_actions',e:'🎯',t:'Relentless',d:'Complete 200 actions.',ctr:'w_act',goal:200,g:1000,scroll:{id:'scroll_basic',ch:.35}},
+  {id:'w_gather',e:'🪵',t:'Stockpiler',d:'Gather 400 resources.',ctr:'w_gather',goal:400,g:1000,scroll:{id:'scroll_perm',ch:.25}},
+  {id:'w_gold',e:'🪙',t:'Merchant',d:'Earn 12,000 gold.',ctr:'w_gold',goal:12000,items:[{id:'diamond',qty:1}]},
+  {id:'w_scroll',e:'📜',t:'Mapmaker',d:'Open 3 scrolls.',ctr:'w_scroll',goal:3,g:1200,scroll:{id:'scroll_perm',ch:.35}},
+  {id:'w_claim',e:'🏴',t:'Warlord',d:'Claim a territory this week.',ctr:'w_claim',goal:1,g:1500,scroll:{id:'scroll_dungeon',ch:.4}},
+];
+function tkDef(id){return DAILY_POOL.find(x=>x.id===id)||WEEKLY_POOL.find(x=>x.id===id);}
+
+function tkRollover(){
+  const t=tkEnsure(),dk=tkDayKey(),wk=tkWeekKey();
+  if(t.daily.day!==dk){t.daily.day=dk;t.daily.claimed={};t.daily.list=tkPick(DAILY_POOL,3,'D'+dk);['d_act','d_gather','d_gold','d_xp','d_scroll'].forEach(k=>t.c[k]=0);}
+  if(t.weekly.week!==wk){t.weekly.week=wk;t.weekly.claimed={};t.weekly.list=tkPick(WEEKLY_POOL,3,'W'+wk);['w_act','w_gather','w_gold','w_xp','w_scroll','w_claim','w_siege'].forEach(k=>t.c[k]=0);}
+}
+function tkBump(k,n){const t=tkEnsure();t.c[k]=(t.c[k]||0)+(n||1);}
+function tkOnAction(ac,gained){
+  tkRollover();tkBump('d_act');tkBump('w_act');
+  const xp=ac&&ac.xp?ac.xp:0;if(xp){tkBump('d_xp',xp);tkBump('w_xp',xp);}
+  if(ac&&TK_GATHER.has(ac.skill)&&gained&&gained.length){const q=gained.filter(g=>g.id!=='coins').reduce((s,g)=>s+(g.qty||0),0);if(q){tkBump('d_gather',q);tkBump('w_gather',q);}}
+  tkMaybeRefresh();
+}
+function tkOnGold(){const t=tkEnsure(),cur=G.gold||0,d=cur-t.lastGold;t.lastGold=cur;if(d>0){tkBump('d_gold',d);tkBump('w_gold',d);}}
+function tkOnScroll(){const t=tkEnsure();t.ev.scroll=(t.ev.scroll||0)+1;tkRollover();tkBump('d_scroll');tkBump('w_scroll');tkMaybeRefresh();}
+function tkEvent(type){const t=tkEnsure();t.ev[type]=(t.ev[type]||0)+1;tkRollover();if(type==='claim')tkBump('w_claim');if(type==='siege')tkBump('w_siege');tkMaybeRefresh();}
+function tkTravel(){tkEnsure().flags.traveled=true;tkMaybeRefresh();}
+
+function tkGiveReward(r,label){
+  if(!r)return;const parts=[];
+  if(r.g){G.gold+=r.g;parts.push(r.g.toLocaleString()+'g');}
+  if(r.xp){const sk=G.activeSkill||'woodcutting';G.xp[sk]=(G.xp[sk]||0)+r.xp;parts.push(r.xp.toLocaleString()+' '+SKILLS[sk].n+' XP');}
+  if(r.items)r.items.forEach(it=>{if(it.qty>0){addItem(it.id,it.qty);parts.push(it.qty+'x '+(ITEMS[it.id]?ITEMS[it.id].n:it.id));}});
+  if(r.scroll&&Math.random()<r.scroll.ch){addItem(r.scroll.id,1);parts.push('✨ '+ITEMS[r.scroll.id].n+'!');}
+  tkEnsure().lastGold=G.gold;
+  addLog(label+' → '+(parts.join(', ')||'reward'),'epic');
+}
+function tkGoalDone(g){return g.prog()>=g.goal;}
+function tkGoalIdx(){const t=tkEnsure();const i=GOALS.findIndex(g=>!t.goals[g.id]);return i<0?GOALS.length:i;}
+function tkClaimGoal(id){const t=tkEnsure(),g=GOALS.find(x=>x.id===id);if(!g||t.goals[id]||!tkGoalDone(g))return;t.goals[id]=true;tkGiveReward(g.reward,'⭐ Goal: '+g.t);saveGame();tkRender();renderInventory();updateGold();}
+function tkClaimTask(period,id){const t=tkEnsure(),slot=period==='daily'?t.daily:t.weekly,d=tkDef(id);if(!d||slot.claimed[id]||(t.c[d.ctr]||0)<d.goal)return;slot.claimed[id]=true;tkGiveReward({g:d.g,xp:d.xp,items:d.items,scroll:d.scroll},(period==='daily'?'☀️ Daily':'📅 Weekly')+': '+d.t);saveGame();tkRender();renderInventory();updateGold();}
+
+function tkClaimable(){
+  const t=tkEnsure();let n=0;
+  GOALS.forEach(g=>{if(!t.goals[g.id]&&tkGoalDone(g))n++;});
+  t.daily.list.forEach(id=>{const d=tkDef(id);if(d&&!t.daily.claimed[id]&&(t.c[d.ctr]||0)>=d.goal)n++;});
+  t.weekly.list.forEach(id=>{const d=tkDef(id);if(d&&!t.weekly.claimed[id]&&(t.c[d.ctr]||0)>=d.goal)n++;});
+  return n;
+}
+function tkInstallUI(){
+  if(document.getElementById('tk-overlay'))return;
+  const O=document.createElement('div');O.id='tk-overlay';
+  O.innerHTML='<div id="tk-win"><div id="tk-win-hd"><span>📋 Tasks &amp; Goals</span><button id="tk-close">✕</button></div>'
+    +'<div id="tk-tabs"><button class="tk-tabb" data-tab="goals" onclick="tkSetTab(\'goals\')">⭐ Goals</button><button class="tk-tabb" data-tab="daily" onclick="tkSetTab(\'daily\')">☀️ Daily</button><button class="tk-tabb" data-tab="weekly" onclick="tkSetTab(\'weekly\')">📅 Weekly</button></div>'
+    +'<div id="tk-win-body"></div></div>';
+  O.onclick=function(ev){if(ev.target===O)tkClose();};
+  document.body.appendChild(O);
+  O.querySelector('#tk-close').onclick=tkClose;
+}
+function tkRetract(){}
+let tkTab='goals';
+function tkSetTab(tab){tkTab=tab;tkRenderWin();}
+function tkOpen(){tkRollover();if(document.getElementById('tk-overlay')){tkRenderWin();document.getElementById('tk-overlay').classList.add('show');}}
+function tkClose(){document.getElementById('tk-overlay').classList.remove('show');}
+function tkRender(){
+  const n=tkClaimable();const b=document.getElementById('tk-l-badge');if(b){b.textContent=n||'';b.style.display=n?'inline-flex':'none';}
+  const tb=document.getElementById('tk-tab');if(tb)tb.classList.toggle('tk-has',n>0);
+  const ov=document.getElementById('tk-overlay');if(ov&&ov.classList.contains('show'))tkRenderWin();
+}
+let _tkLast=0;function tkMaybeRefresh(){const now=Date.now();if(now-_tkLast>700){_tkLast=now;tkRender();}}
+function tkTick(){tkRollover();tkRender();}
+function tkBar(cur,goal){const p=Math.min(100,Math.round(cur/goal*100));return '<div class="tk-bar"><div class="tk-bar-f" style="width:'+p+'%"></div></div><div class="tk-bar-n">'+Math.min(cur,goal).toLocaleString()+' / '+goal.toLocaleString()+'</div>';}
+function tkRewardTxt(r){const a=[];if(r.g)a.push(r.g.toLocaleString()+'g');if(r.xp)a.push(r.xp.toLocaleString()+' XP');if(r.items)r.items.forEach(it=>{if(it.qty>0)a.push(it.qty+'x '+(ITEMS[it.id]?ITEMS[it.id].n:it.id));});if(r.note)a.push(r.note);if(r.scroll)a.push(Math.round(r.scroll.ch*100)+'% '+(ITEMS[r.scroll.id]?ITEMS[r.scroll.id].n:r.scroll.id));return a.join(' · ');}
+function tkTabCount(tab){
+  const t=tkEnsure();let n=0;
+  if(tab==='goals'){GOALS.forEach(g=>{if(!t.goals[g.id]&&tkGoalDone(g))n++;});}
+  else{const slot=tab==='daily'?t.daily:t.weekly;slot.list.forEach(id=>{const d=tkDef(id);if(d&&!slot.claimed[id]&&(t.c[d.ctr]||0)>=d.goal)n++;});}
+  return n;
+}
+function tkRenderWin(){
+  const t=tkEnsure(),body=document.getElementById('tk-win-body');if(!body)return;
+  document.querySelectorAll('.tk-tabb').forEach(b=>{
+    const tab=b.getAttribute('data-tab');b.classList.toggle('on',tab===tkTab);
+    const n=tkTabCount(tab);let bd=b.querySelector('.tk-tc');
+    if(n){if(!bd){bd=document.createElement('span');bd.className='tk-tc';b.appendChild(bd);}bd.textContent=n;}else if(bd){bd.remove();}
+  });
+  let h='';
+  if(tkTab==='goals'){
+    h+='<div class="tk-intro">Complete these once — they walk you through the whole game.</div>';
+    const gi=tkGoalIdx();
+    GOALS.forEach((g,i)=>{
+      const done=t.goals[g.id],cur=g.prog(),ready=!done&&cur>=g.goal,locked=!done&&i>gi;
+      h+='<div class="tk-card '+(done?'tk-done':ready?'tk-ready':'')+(locked?' tk-lock':'')+'"><div class="tk-ico">'+g.e+'</div><div class="tk-mid"><div class="tk-t">'+g.t+(done?' ✓':'')+'</div><div class="tk-d">'+g.d+'</div>'+(done?'':tkBar(Math.min(cur,g.goal),g.goal))+'<div class="tk-rw">🎁 '+tkRewardTxt(g.reward)+'</div></div><div class="tk-act">'+(done?'<span class="tk-claimed">Claimed</span>':ready?'<button onclick="tkClaimGoal(\''+g.id+'\')">Claim</button>':'')+'</div></div>';
+    });
+  } else if(tkTab==='daily'){
+    h+='<div class="tk-intro">Three tasks, fresh every day at midnight.</div>';
+    t.daily.list.forEach(id=>h+=tkTaskCard('daily',id));
+  } else {
+    h+='<div class="tk-intro">Three bigger tasks, fresh each week.</div>';
+    t.weekly.list.forEach(id=>h+=tkTaskCard('weekly',id));
+  }
+  body.innerHTML=h;
+}
+function logSize(dir){const t=tkEnsure();let s=(typeof t.flags.logSz==='number')?t.flags.logSz:2;s=Math.max(0,Math.min(3,s+dir));t.flags.logSz=s;applyLogSize();saveGame();}
+function applyLogSize(){const w=document.getElementById('log-wrap');if(!w)return;const t=tkEnsure();const s=(typeof t.flags.logSz==='number')?t.flags.logSz:2;w.classList.remove('sz-0','sz-1','sz-2','sz-3');w.classList.add('sz-'+s);}
+function tkTaskCard(period,id){
+  const t=tkEnsure(),d=tkDef(id);if(!d)return '';
+  const slot=period==='daily'?t.daily:t.weekly,cur=t.c[d.ctr]||0,done=cur>=d.goal,claimed=slot.claimed[id];
+  return '<div class="tk-card '+(claimed?'tk-done':done?'tk-ready':'')+'"><div class="tk-ico">'+d.e+'</div><div class="tk-mid"><div class="tk-t">'+d.t+'</div><div class="tk-d">'+d.d+'</div>'+(claimed?'':tkBar(cur,d.goal))+'<div class="tk-rw">🎁 '+tkRewardTxt({g:d.g,xp:d.xp,items:d.items,scroll:d.scroll})+'</div></div><div class="tk-act">'+(claimed?'<span class="tk-claimed">Claimed</span>':done?'<button onclick="tkClaimTask(\''+period+'\',\''+id+'\')">Claim</button>':'')+'</div></div>';
+}
+function tkUnlockTxt(l){if(!l.scroll)return 'Starting area — always open';if(l.scroll==='basic')return 'Reveal with a 📜 Basic Scroll';if(l.scroll==='perm')return 'Reveal with a 🗺️ Permanent Scroll';if(l.scroll==='dungeon')return 'Reveal with a 🧧 Sealed Dungeon Scroll';return '';}
+function tkInstallMap(){
+  const cvs=document.getElementById('map-canvas');if(!cvs||cvs._tkHooked)return;cvs._tkHooked=true;
+  const tip=document.createElement('div');tip.id='tk-maptip';document.body.appendChild(tip);
+  function locAt(ev){const r=cvs.getBoundingClientRect();if(!r.width)return null;const sx=cvs.width/r.width,sy=cvs.height/r.height,mx=(ev.clientX-r.left)*sx,my=(ev.clientY-r.top)*sy;let best=null,bd=1e9;Object.entries(LOCATIONS).forEach(([id,l])=>{const dx=l.x*cvs.width-mx,dy=l.y*cvs.height-my,dd=Math.sqrt(dx*dx+dy*dy);if(dd<bd){bd=dd;best=id;}});return bd<38*sx?best:null;}
+  cvs.addEventListener('mousemove',function(ev){const id=locAt(ev);if(!id){tip.style.display='none';return;}const l=LOCATIONS[id],disc=G.unlockedLocations.has(id);tip.innerHTML='<b>'+(disc?l.e+' '+l.n:'❓ Undiscovered')+'</b><br>'+(disc?(l.desc||''):tkUnlockTxt(l));tip.style.display='block';tip.style.left=Math.min(ev.clientX+14,window.innerWidth-244)+'px';tip.style.top=(ev.clientY+14)+'px';});
+  cvs.addEventListener('mouseleave',function(){tip.style.display='none';});
+}
+function tkBoot(){tkEnsure();tkRollover();tkInstallUI();try{tkInstallMap();}catch(e){}try{applyLogSize();}catch(e){}tkRender();}
+
 boot();
 </script>
 </body>
